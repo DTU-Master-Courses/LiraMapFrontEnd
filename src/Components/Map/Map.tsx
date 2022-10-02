@@ -9,7 +9,7 @@ import {
   TileLayer,
   ZoomControl,
 } from "react-leaflet";
-import Appbar from "../Appbar/Appbar";
+import NavBar from "../NavBar/NavBar";
 import SlideDrawerBottom from "../Drawer/SlideDrawerBottom";
 import SlideDrawerLeft from "../Drawer/SlideDrawerLeft";
 import "./Map.css";
@@ -26,7 +26,7 @@ const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
   return (
     <>
       <div className="leaflet-container">
-        <Appbar showTrip={setShowTrip} showGraph={setShowGraph} />
+        <NavBar showTrip={setShowTrip} showGraph={setShowGraph} />
         <MapContainer
           center={position}
           zoom={13}

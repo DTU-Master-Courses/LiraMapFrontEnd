@@ -9,7 +9,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import "../Appbar/Appbar.css";
+import "../NavBar/NavBar.css";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -54,13 +54,13 @@ const StyledMenu = styled((props: MenuProps) => (
   },
 }));
 
-interface AppbarProps {
+interface NavBarProps {
   showTrip: Dispatch<SetStateAction<boolean>>;
   showGraph: Dispatch<SetStateAction<boolean>>;
 }
 
 // TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
-const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
+const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
   const dummyCategories = [
     "Trip Data",
     "Car Data",
@@ -170,4 +170,4 @@ const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
   );
 };
 
-export default Appbar;
+export default NavBar;
