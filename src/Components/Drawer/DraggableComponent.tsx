@@ -1,30 +1,27 @@
 import { Typography } from "@material-ui/core";
 import { Rnd } from "react-rnd";
+import '../Drawer/DraggableComponent.css';
 
-const style = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "solid 1px #000000",
-    background: "#ffffff",
-    zIndex: 9999,
-    position: 'absolute'
-  } as const;
+const x = 200;
+const y = 200;
 
 const DraggableComponent = () => (
     <Rnd
-        style={style}
+        className="draggable_component_container"
+        bounds='body'
+        dragHandleClassName={'draggable_handle'}
         default={{
-        x: 200,
-        y: 200,
-        width: 200,
-        height: 200
+        x: x,
+        y: y,
+        width: '60%',
+        height: '40%'
         }}
-        bounds="window"
     >
-        <Typography>
-            This is a test box.
-        </Typography>
+        <div className='draggable_handle'></div>
+        <div className='draggable_component_container_content'>
+            <button>Test</button>
+        </div>
+        
     </Rnd>
 );
 
