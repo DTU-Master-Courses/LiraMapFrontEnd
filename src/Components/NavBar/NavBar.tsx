@@ -3,7 +3,7 @@ import Icon from "@material-ui/core/Icon";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { alpha, Button, Menu, MenuProps, styled } from "@mui/material";
+import { alpha, Button, ListItemButton, Menu, MenuProps, styled } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -79,8 +79,7 @@ const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
   const drawer = (
     <div>
       <List>
-        <ListItem
-          button
+        <ListItemButton
           key={"errh button"}
           onClick={() => {
             handleClose();
@@ -88,7 +87,7 @@ const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
             showGraph(false);
           }}>
           <ListItemText primary={"errh button"} />
-        </ListItem>
+        </ListItemButton>
       </List>
     </div>
   );
