@@ -15,17 +15,18 @@ const App: FC = () => {
     setComponentsList([...componentsList, {component: ''}]);
   }
 
-  const removeComponent = (index) => {
+  const removeComponent = (index:number) => {
     const newComponentsList = [...componentsList];
     newComponentsList.splice(index, 1);
     setComponentsList(newComponentsList);
   }
+
   return (
     <div className="App">
       <NavBar addComponent={addComponent}></NavBar>
       <MapDemo position={position.getLatLng()} />
       {componentsList.map((component, index) => (
-        <DraggableComponent removeComponent={[removeComponent, index]}></DraggableComponent>
+        <DraggableComponent removeComponent={removeComponent} index={index}></DraggableComponent>
       ))}
     </div>
   );
