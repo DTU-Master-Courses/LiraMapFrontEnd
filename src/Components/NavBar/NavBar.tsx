@@ -79,45 +79,16 @@ const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
   const drawer = (
     <div>
       <List>
-        {dummyCategories.map((text, index) => {
-          if (text === "Trip Data") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showTrip(true);
-                  showGraph(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else if (text === "Data Visualization") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showGraph(true);
-                  showTrip(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else {
-            return (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          }
-        })}
+        <ListItem
+          button
+          key={"errh button"}
+          onClick={() => {
+            handleClose();
+            showTrip(true);
+            showGraph(false);
+          }}>
+          <ListItemText primary={"errh button"} />
+        </ListItem>
       </List>
     </div>
   );
