@@ -7,9 +7,12 @@ import { alpha, Button, Menu, MenuProps, styled } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import ListItemButton from "@mui/material/ListItemButton";
 import { useTheme } from "@mui/material/styles";
 import React, { Dispatch, FC, SetStateAction } from "react";
+import DraggableComponent from "../Drawer/DraggableComponent";
 import "../NavBar/NavBar.css";
+import App from '../../App';
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -55,12 +58,10 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 interface NavBarProps {
-  showTrip: Dispatch<SetStateAction<boolean>>;
-  showGraph: Dispatch<SetStateAction<boolean>>;
+  addComponent(): any
 }
-
 // TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
-const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
+const NavBar: FC<NavBarProps> = ({addComponent}) => {
   const dummyCategories = [
     "Trip Data",
     "Car Data",
@@ -79,45 +80,14 @@ const NavBar: FC<NavBarProps> = ({ showTrip, showGraph }) => {
   const drawer = (
     <div>
       <List>
-        {dummyCategories.map((text, index) => {
-          if (text === "Trip Data") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showTrip(true);
-                  showGraph(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else if (text === "Data Visualization") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showGraph(true);
-                  showTrip(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else {
-            return (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          }
-        })}
+        <ListItemButton
+            onClick={() => {
+              handleClose();
+              addComponent();
+            }}
+        >
+          <ListItemText primary={'Hello'} />
+        </ListItemButton>
       </List>
     </div>
   );

@@ -20,13 +20,11 @@ interface MapDemoProps {
 
 // TODO: Refactor this down, or scrap it. I'm having to work fast, so corners are getting cut for proof of concept
 const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
-  const [showTrip, setShowTrip] = useState(false);
-  const [showGraph, setShowGraph] = useState(false);
+
 
   return (
     <>
       <div className="leaflet-container">
-        <NavBar showTrip={setShowTrip} showGraph={setShowGraph} />
         <MapContainer
           center={position}
           zoom={13}
@@ -69,8 +67,6 @@ const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
               />
             </LayersControl.Overlay>
           </LayersControl>
-          {showTrip && <SlideDrawerLeft />}
-          {showGraph && <SlideDrawerBottom />}
         </MapContainer>
       </div>
     </>
