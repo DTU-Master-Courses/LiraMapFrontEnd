@@ -54,10 +54,11 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 interface NavBarProps {
-  addComponent(): any
+  addGraphComponent(): any,
+  addRidesComponent(): any
 }
 // TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
-const NavBar: FC<NavBarProps> = ({addComponent}) => {
+const NavBar: FC<NavBarProps> = ({addGraphComponent, addRidesComponent}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -73,10 +74,18 @@ const NavBar: FC<NavBarProps> = ({addComponent}) => {
         <ListItemButton
             onClick={() => {
               handleClose();
-              addComponent();
+              addGraphComponent();
             }}
         >
-          <ListItemText primary={'Hello'} />
+          <ListItemText primary={'Add Graph'} />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => {
+            handleClose();
+            addRidesComponent();
+          }}
+        >
+          <ListItemText primary={'Add Rides'}/>
         </ListItemButton>
       </List>
     </div>
@@ -95,7 +104,7 @@ const NavBar: FC<NavBarProps> = ({addComponent}) => {
       }}
     >
       <Toolbar>
-        <div className="wrap" style={{ display: "flex", alignItems: "center" }}>
+        <div className="wrap" style={{ display: "flex", alignItems: "center", width: '500px'}}>
           <div>
             <Button
               id="demo-customized-button"

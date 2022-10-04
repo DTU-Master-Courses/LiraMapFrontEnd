@@ -3,30 +3,32 @@ import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 
-const x = 200;
-const y = 200;
+const x = 10;
+const y = 100;
 
-interface DraggableComponentProps {
+interface RidesListComponentProps {
     index: number,
-    removeComponent(index: number): any;
+    removeRidesComponent(index: number): any;
 }
 
-const RidesListComponent: FC<DraggableComponentProps> = ({removeComponent, index}) => {
+const RidesListComponent: FC<RidesListComponentProps> = ({removeRidesComponent, index}) => {
     return(
         <Rnd
-            className="draggable_component_container"
+            className="draggable_component_container rides_list_component"
             bounds='body'
             dragHandleClassName={'draggable_handle'}
             default={{
             x: x,
             y: y,
-            width: '60%',
-            height: '40%'
+            width: '15%',
+            height: '80%'
             }}
         >
-            <div className='draggable_handle'></div>
+            <div className='draggable_handle'>
+                <button className='close_component_btn' onClick={() => removeRidesComponent(index)}></button>
+            </div>
             <div className='draggable_component_container_content'>
-                <button onClick={() => removeComponent(index)}>{index}</button>
+                
             </div>
         </Rnd>
     );
