@@ -4,7 +4,7 @@ import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 
 const x = 10;
-const y = 100;
+const y = 120;
 
 interface RidesListComponentProps {
     index: number,

@@ -1,30 +1,35 @@
 .draggable_component_container {
     display: flex;
     flex-direction: column;
-    background: #ffffff;
     z-index: 999;
     position: absolute;
-    /* border: solid 5px #ffffff; */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.35) 2px 2px 5px 5px; 
+    /* border-radius: 10px; */
+}
+
+.draggable_component_container::before {
+    filter: blur(5px)
 }
 
 .draggable_handle {
     display: flex;
     align-items: center;
-    background: rgba(152, 152, 152, 0.3);
-    box-shadow: 0px 2px 10px -6px rgba(0,0,0,0.75) inset;
+    background: rgba(41, 143, 194, 0.7);
+    backdrop-filter: blur(15px);
     width: 100%;
     height: 20px;
     border-radius: 10px 10px 0 0;
 }
 
 .draggable_component_container_content {
+    position: absolute;
     width: 100%;
     height: calc(100% - 20px);
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(15px);
+    border-radius: 0 0 10px 10px;
 }
 
 .graph_component {
@@ -38,18 +43,22 @@
 }
 
 .close_component_btn {
-    --height-clamp: calc(100% - 4px);
-    height: clamp(var(--height-clamp), var(--height-clamp), var(--height-clamp));
-    min-width: clamp(20px, 20px, 20px);
-    margin-left: calc(100% - 50px);
+    height: clamp(100%,100%,100%);
+    width: clamp(40px, 40px, 40px);
+    margin-left: calc(100% - 40px);
+    border-radius: 0 10px 0 10px;
     background-image: url('/public/close_btn.svg');
     background-repeat: no-repeat;
     background-position: center;
-    border: 0;
-    background-color: transparent;
+    filter: invert(100%);
+    
+    background-color: rgba(214,112,61, 0.7);
+    border-color: rgb(0, 226, 226);
+    border-width: 0px;
+    border-style: solid;
 }
 
 .close_component_btn:hover {
-    background-color: #ffffff;
-    border-radius: 2px;
+    background-color: rgba(0, 226, 226, 1);
+    cursor: pointer;
 }
