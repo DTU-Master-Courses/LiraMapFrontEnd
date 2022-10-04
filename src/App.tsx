@@ -4,7 +4,7 @@ import MapDemo from "./Components/Map/Map";
 import { FC, useState } from "react";
 import * as L from 'leaflet'; 
 import NavBar from "./Components/NavBar/NavBar";
-import DraggableComponent from "./Components/Drawer/DraggableComponent";
+import GraphComponent from "./Components/Drawer/GraphComponent";
 
 const App: FC = () => {
   const [componentsList, setComponentsList] = useState([{component: ''}]);
@@ -27,7 +27,7 @@ const App: FC = () => {
       <NavBar addComponent={addComponent}></NavBar>
       <MapDemo position={position.getLatLng()} />
       {componentsList.map((component, index) => (
-        <DraggableComponent key={component.component} removeComponent={removeComponent} index={index}></DraggableComponent>
+        <GraphComponent key={component.component} removeComponent={removeComponent} index={index}></GraphComponent>
       ))}
     </div>
   );

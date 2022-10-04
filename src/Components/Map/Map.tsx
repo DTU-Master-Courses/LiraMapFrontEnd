@@ -10,8 +10,6 @@ import {
   ZoomControl,
 } from "react-leaflet";
 import NavBar from "../NavBar/NavBar";
-import SlideDrawerBottom from "../Drawer/SlideDrawerBottom";
-import SlideDrawerLeft from "../Drawer/SlideDrawerLeft";
 import "./Map.css";
 
 interface MapDemoProps {

@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import { Rnd } from "react-rnd";
-import '../Drawer/DraggableComponent.css';
+import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 
 const x = 200;
@@ -11,7 +11,7 @@ interface DraggableComponentProps {
     removeComponent(index: number): any;
 }
 
-const DraggableComponent: FC<DraggableComponentProps> = ({removeComponent, index}) => {
+const RidesListComponent: FC<DraggableComponentProps> = ({removeComponent, index}) => {
     return(
         <Rnd
             className="draggable_component_container"
@@ -32,4 +32,4 @@ const DraggableComponent: FC<DraggableComponentProps> = ({removeComponent, index
     );
 };
 
-export default DraggableComponent;
+export default RidesListComponent;

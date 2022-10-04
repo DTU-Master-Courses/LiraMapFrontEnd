@@ -5,13 +5,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { alpha, Button, ListItemButton, Menu, MenuProps, styled } from "@mui/material";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import DraggableComponent from "../Drawer/DraggableComponent";
-import "../NavBar/NavBar.css";
-import App from '../../App';
+import React, { FC } from "react";
+import "../NavBar/NavBar.css";;
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -61,12 +58,6 @@ interface NavBarProps {
 }
 // TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
 const NavBar: FC<NavBarProps> = ({addComponent}) => {
-  const dummyCategories = [
-    "Trip Data",
-    "Car Data",
-    "Data Visualization",
-    "Data Exploration",
-  ];
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
