@@ -4,8 +4,8 @@ import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 
-const x = 400;
-const y = 400;
+const x = 500;
+const y = 500;
 
 interface GraphComponentProps {
     index: number,

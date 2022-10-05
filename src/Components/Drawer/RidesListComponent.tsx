@@ -7,11 +7,10 @@ const x = 10;
 const y = 120;
 
 interface RidesListComponentProps {
-    index: number,
-    removeRidesComponent(index: number): any;
+    setRidesIsRendered: any
 }
 
-const RidesListComponent: FC<RidesListComponentProps> = ({removeRidesComponent, index}) => {
+const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered}) => {
     return(
         <Rnd
             className="draggable_component_container rides_list_component"
@@ -25,7 +24,7 @@ const RidesListComponent: FC<RidesListComponentProps> = ({removeRidesComponent, 
             }}
         >
             <div className='draggable_handle'>
-                <button className='close_component_btn' onClick={() => removeRidesComponent(index)}></button>
+                <button className='close_component_btn' onClick={() => setRidesIsRendered(false)}></button>
             </div>
             <div className='draggable_component_container_content'>
                 
