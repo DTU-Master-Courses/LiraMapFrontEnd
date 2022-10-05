@@ -57,7 +57,6 @@ interface NavBarProps {
   addGraphComponent(): any,
   setRidesIsRendered: any
 }
-// TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
 const NavBar: FC<NavBarProps> = ({addGraphComponent, setRidesIsRendered}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

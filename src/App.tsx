@@ -1,5 +1,5 @@
 import "./App.css";
-import MapDemo from "./Components/Map/Map";
+import Map from "./Components/Map/Map";
 import { FC, useState } from "react";
 import * as L from 'leaflet'; 
 import NavBar from "./Components/NavBar/NavBar";
@@ -27,7 +27,7 @@ const App: FC = () => {
   return (
     <div className="App">
       <NavBar addGraphComponent={addGraphComponent} setRidesIsRendered={setRidesIsRendered}></NavBar>
-      <MapDemo position={position.getLatLng()} />
+      <Map position={position.getLatLng()} />
       {graphComponentsList.map((component, index) => (
         <GraphComponent key={component.component} removeGraphComponent={removeGraphComponent} index={index}></GraphComponent>
       ))}
