@@ -1,0 +1,4 @@
+.MuiPaper-root {
+    position: absolute;
+    z-index: 401 !important;
+}

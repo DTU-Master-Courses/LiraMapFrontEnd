@@ -3,13 +3,12 @@ import Icon from "@material-ui/core/Icon";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { alpha, Button, Menu, MenuProps, styled } from "@mui/material";
+import { alpha, Button, ListItemButton, Menu, MenuProps, styled } from "@mui/material";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import "../Appbar/Appbar.css";
+import React, { FC } from "react";
+import "../NavBar/NavBar.css";;
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -54,19 +53,12 @@ const StyledMenu = styled((props: MenuProps) => (
   },
 }));
 
-interface AppbarProps {
-  showTrip: Dispatch<SetStateAction<boolean>>;
-  showGraph: Dispatch<SetStateAction<boolean>>;
+interface NavBarProps {
+  addGraphComponent(): any,
+  addRidesComponent(): any
 }
-
 // TODO: This entire component needs refactoring due to changes to the app and to better reflect intent behind it
-const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
-  const dummyCategories = [
-    "Trip Data",
-    "Car Data",
-    "Data Visualization",
-    "Data Exploration",
-  ];
+const NavBar: FC<NavBarProps> = ({addGraphComponent, addRidesComponent}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -79,45 +71,22 @@ const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
   const drawer = (
     <div>
       <List>
-        {dummyCategories.map((text, index) => {
-          if (text === "Trip Data") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showTrip(true);
-                  showGraph(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else if (text === "Data Visualization") {
-            // This is a terrible way to toggle, but is Proof of Concept
-            return (
-              <ListItem
-                button
-                key={text}
-                onClick={() => {
-                  handleClose();
-                  showGraph(true);
-                  showTrip(false);
-                }}
-              >
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          } else {
-            return (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            );
-          }
-        })}
+        <ListItemButton
+            onClick={() => {
+              handleClose();
+              addGraphComponent();
+            }}
+        >
+          <ListItemText primary={'Add Graph'} />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => {
+            handleClose();
+            addRidesComponent();
+          }}
+        >
+          <ListItemText primary={'Add Rides'}/>
+        </ListItemButton>
       </List>
     </div>
   );
@@ -135,7 +104,7 @@ const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
       }}
     >
       <Toolbar>
-        <div className="wrap" style={{ display: "flex", alignItems: "center" }}>
+        <div className="wrap" style={{ display: "flex", alignItems: "center", width: '500px'}}>
           <div>
             <Button
               id="demo-customized-button"
@@ -170,4 +139,4 @@ const Appbar: FC<AppbarProps> = ({ showTrip, showGraph }) => {
   );
 };
 
-export default Appbar;
+export default NavBar;
