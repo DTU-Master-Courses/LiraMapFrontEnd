@@ -35,6 +35,10 @@ const App: FC = () => {
     const newGraphComponentsList = [...graphComponentsList];
     newGraphComponentsList.splice(index, 1);
     setGraphComponentsList(newGraphComponentsList);
+
+    const newTitleList = [...graphTitleList];
+    newTitleList.splice(index, 1);
+    setGraphTitleList(newTitleList);
   }
 
   return (

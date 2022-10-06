@@ -3,13 +3,10 @@ import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 import RideComponent from "./RideComponent";
-import { minHeight } from "@mui/system";
 
 const x = 10;
 const y = 120;
 const NUMBER_OF_RIDES = 100;
-
-
 
 interface RidesListComponentProps {
     addGraphComponent(title:string): any,
