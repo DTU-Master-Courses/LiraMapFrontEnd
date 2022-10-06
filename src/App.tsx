@@ -55,6 +55,8 @@ const App: FC = () => {
         <RidesListComponent 
           addGraphComponent={addGraphComponent} 
           setRidesIsRendered={setRidesIsRendered}
+          focusWindow={focusWindow}
+          newZ={newZ}
         />
       }
     </div>

@@ -78,8 +78,7 @@ const y = 500;
             style={{zIndex: 1000 + z}}
             onMouseDown={(e:MouseEvent) => {
                 setZ(newZ + 1);
-                console.log(z);
-                focusWindow(index);
+                focusWindow(index + 400000); //400.000 is to differentiate between other types of windows
             }}
         >
             <div className='draggable_handle'>

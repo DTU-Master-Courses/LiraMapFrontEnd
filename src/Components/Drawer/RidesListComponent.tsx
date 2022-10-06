@@ -1,7 +1,7 @@
 
 import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import RideComponent from "./RideComponent";
 import { minHeight } from "@mui/system";
 
@@ -14,6 +14,8 @@ const NUMBER_OF_RIDES = 100;
 interface RidesListComponentProps {
     addGraphComponent(title:string): any,
     setRidesIsRendered: any
+    focusWindow(windowId: number):any;
+    newZ: number,
 }
 
 const addRideComponentList = (addGraphComponent:any) => {
@@ -31,7 +33,8 @@ const addRideComponentList = (addGraphComponent:any) => {
     return rideComponents;
 }
 
-const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent}) => {
+const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent, focusWindow, newZ}) => {
+    const [z, setZ] = useState(0);
     return(
         <Rnd
             className="draggable_component_container rides_list_component"
@@ -42,6 +45,11 @@ const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, ad
             y: y,
             width: '20%',
             height: '80%'
+            }}
+            style={{zIndex: 1000 + z}}
+            onMouseDown={(e:MouseEvent) => {
+                setZ(newZ + 1);
+                focusWindow(-900); //Unique number for windows that only allows for one instance
             }}
         >
             <div className='draggable_handle'>
