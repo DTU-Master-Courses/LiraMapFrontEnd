@@ -26,12 +26,12 @@ const App: FC = () => {
 
   return (
     <div className="App">
-      <NavBar addGraphComponent={addGraphComponent} setRidesIsRendered={setRidesIsRendered}></NavBar>
+      <NavBar setRidesIsRendered={setRidesIsRendered}></NavBar>
       <Map position={position.getLatLng()} />
       {graphComponentsList.map((component, index) => (
         <GraphComponent key={component.component} removeGraphComponent={removeGraphComponent} index={index}></GraphComponent>
       ))}
-      {ridesIsRendered && <RidesListComponent setRidesIsRendered={setRidesIsRendered}></RidesListComponent>}
+      {ridesIsRendered && <RidesListComponent addGraphComponent={addGraphComponent} setRidesIsRendered={setRidesIsRendered}></RidesListComponent>}
     </div>
   );
 }

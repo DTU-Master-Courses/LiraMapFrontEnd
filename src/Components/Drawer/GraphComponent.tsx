@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -62,12 +62,15 @@ export const data = {
     ],
 };
 
+
+
 interface GraphComponentProps {
     index: number,
     removeGraphComponent(index: number): any;
 }
 
 const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index}) => {
+    const [titleTripID, setTitleTripID] = useState('');
     return(
         <Rnd
             className="draggable_component_container graph_component"

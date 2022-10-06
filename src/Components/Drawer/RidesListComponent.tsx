@@ -9,10 +9,11 @@ const y = 120;
 const NUMBER_OF_RIDES = 100;
 
 interface RidesListComponentProps {
+    addGraphComponent(): any,
     setRidesIsRendered: any
 }
 
-const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered}) => {
+const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent}) => {
     return(
         <Rnd
             className="draggable_component_container rides_list_component"
@@ -29,7 +30,7 @@ const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered}) =
                 <button className='close_component_btn' onClick={() => setRidesIsRendered(false)}></button>
             </div>
             <div className='draggable_component_container_content'>
-                <RideComponent tripID={'Trip ' + 123} startCity={'Lyngby'} endCity={'København'}/>
+                <RideComponent addGraphComponent={addGraphComponent} tripID={'Trip ' + 123} startCity={'Lyngby'} endCity={'København'}/>
             </div>
             <div>
                 <button>TRIP DETAILS</button>

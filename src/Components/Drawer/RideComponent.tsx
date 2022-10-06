@@ -3,12 +3,13 @@ import { FC, useState } from 'react';
 import '../Drawer/RideComponent.css';
 
 interface RideComponentProps {
-    tripID: any,
-    startCity: any,
-    endCity: any
+    addGraphComponent(): any,
+    tripID: string,
+    startCity: string,
+    endCity: string
 }
 
-const RideComponent: FC<RideComponentProps> = ({tripID, startCity, endCity}) => {
+const RideComponent: FC<RideComponentProps> = ({addGraphComponent, tripID, startCity, endCity}) => {
     const [rideIsSelected, setRideIsSelected] = useState(false);
     const switchSelectedState = () => {
         setRideIsSelected(current => !current);
@@ -19,7 +20,10 @@ const RideComponent: FC<RideComponentProps> = ({tripID, startCity, endCity}) => 
                 <Typography variant="h6">{tripID}</Typography>
                 <Typography variant="subtitle2">{startCity} &#8594; {endCity}</Typography>
             </div>
-            <button onClick={switchSelectedState} className={`select_ride_btn ${rideIsSelected ? 'ride_selected' : 'ride_unselected'}`}></button>
+            <button onClick={() => {
+                switchSelectedState();
+                addGraphComponent();
+            }} className={`select_ride_btn ${rideIsSelected ? 'ride_selected' : 'ride_unselected'}`}></button>
         </div>
 
     );

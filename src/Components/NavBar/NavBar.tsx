@@ -54,10 +54,9 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 interface NavBarProps {
-  addGraphComponent(): any,
   setRidesIsRendered: any
 }
-const NavBar: FC<NavBarProps> = ({addGraphComponent, setRidesIsRendered}) => {
+const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,14 +69,6 @@ const NavBar: FC<NavBarProps> = ({addGraphComponent, setRidesIsRendered}) => {
   const drawer = (
     <div>
       <List>
-        <ListItemButton
-            onClick={() => {
-              handleClose();
-              addGraphComponent();
-            }}
-        >
-          <ListItemText primary={'Add Graph'} />
-        </ListItemButton>
         <ListItemButton
           onClick={() => {
             handleClose();
