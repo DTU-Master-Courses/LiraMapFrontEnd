@@ -21,8 +21,8 @@ const addRideComponentList = (addGraphComponent:any) => {
         rideComponents.push(
             <RideComponent 
                 addGraphComponent={addGraphComponent} 
-                tripID={'Trip ' + i} 
-                startCity={'København'} 
+                tripID={'Trip ' + i}
+                startCity={'København'}
                 endCity={'Lyngby'}
             />
         )

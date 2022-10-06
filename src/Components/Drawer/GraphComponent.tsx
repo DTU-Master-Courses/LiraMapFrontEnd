@@ -1,8 +1,6 @@
-import { Typography } from "@material-ui/core";
-import Icon from "@material-ui/core/Icon";
 import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { Component, FC, useState } from 'react';
+import { FC, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -15,8 +13,7 @@ import {
   } from 'chart.js';
   import { Line } from 'react-chartjs-2';
   import * as faker from '@faker-js/faker';
-import zIndex from "@material-ui/core/styles/zIndex";
-import { render } from "@testing-library/react";
+
 
 
 
@@ -30,14 +27,14 @@ ChartJS.register(
     Legend
 );
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+const labels = [1,2,3,4,5,6,7,8,9,10];
 
 export const data = {
     labels,
     datasets: [
         {
             label: 'Dataset 1',
-            data: labels.map(() => faker.faker.datatype.number({ min: -1000, max: 1000 })),
+            data: labels.map(() => faker.faker.datatype.number({ min: 0, max: 1 })),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
@@ -58,10 +55,8 @@ interface GraphComponentProps {
 
 const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index, focusWindow, newZ}) => {
     const [z, setZ] = useState(0);
-    const [titleTripID, setTitleTripID] = useState('');
-
-const x = 500;
-const y = 500;
+    const x = 350;
+    const y = 300;
 
 
     return(
@@ -72,8 +67,8 @@ const y = 500;
             default={{
             x: x,
             y: y,
-            width: '60%',
-            height: '40%'
+            width: '70%',
+            height: '60%'
             }}
             style={{zIndex: 1000 + z}}
             onMouseDown={(e:MouseEvent) => {
