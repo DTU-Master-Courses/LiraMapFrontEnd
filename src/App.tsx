@@ -49,7 +49,6 @@ const App: FC = () => {
           graphTitle={graphTitleList[index].graphTitle}
           focusWindow={focusWindow}
           newZ={newZ}
-          windowInFocus={windowInFocus}
         />
       ))}
       {ridesIsRendered && 

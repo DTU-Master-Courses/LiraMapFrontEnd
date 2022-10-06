@@ -50,14 +50,13 @@ interface GraphComponentProps {
     removeGraphComponent(index: number): any;
     focusWindow(windowId: number):any;
     newZ: number,
-    windowInFocus:number,
 }
 
 
 
 
 
-const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index, focusWindow, newZ, windowInFocus}) => {
+const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index, focusWindow, newZ}) => {
     const [z, setZ] = useState(0);
     const [titleTripID, setTitleTripID] = useState('');
 
