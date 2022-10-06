@@ -1,0 +1,25 @@
+flowchart TB
+    AddRidesBtn -- "onClick(setRidesIsRendered(!current))" --> RidesListComponent
+    RideComponent -- "onClick(addGraphComponent(graphTitle))" --> GraphComponent
+
+    API --> RidesListComponent
+    API --> Line
+    subgraph Navbar
+        subgraph List
+        AddRidesBtn
+        end
+    end
+    subgraph Map
+    end
+    subgraph GraphComponent
+        subgraph RND 
+            Line
+        end
+    end
+    subgraph RidesListComponent
+        subgraph RND
+            RideComponent
+        end
+    end
+    subgraph API
+    end
