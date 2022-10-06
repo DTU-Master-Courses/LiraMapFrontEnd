@@ -12,6 +12,9 @@ const App: FC = () => {
   
   const position = L.marker([55.7856,12.5214]);
   const [uniqueId, setUniqueId] = useState(0);
+  const [newZ, setNewZ] = useState(0);
+  const [windowInFocus, setWindowInFocus] = useState(0);
+  //let windowInFocus:number;
 
   const [graphTitleList, setGraphTitleList] = useState<any[]>([]);
 
@@ -19,6 +22,13 @@ const App: FC = () => {
     setUniqueId(uniqueId + 1);
     setGraphComponentsList([...graphComponentsList, {component: `Draggable${uniqueId}`}]);
     setGraphTitleList([...graphTitleList, {graphTitle: title}]);
+  }
+
+  const focusWindow = (windowId:number) => {
+    if(windowInFocus != windowId){
+      setWindowInFocus(windowId);
+      setNewZ(newZ + 1);
+    }
   }
 
   const removeGraphComponent = (index:number) => {
@@ -37,8 +47,9 @@ const App: FC = () => {
           removeGraphComponent={removeGraphComponent} 
           index={index} 
           graphTitle={graphTitleList[index].graphTitle}
+          focusWindow={focusWindow}
+          newZ={newZ}
         />
-        
       ))}
       {ridesIsRendered && 
         <RidesListComponent 
