@@ -3,14 +3,32 @@ import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
 import { FC } from 'react';
 import RideComponent from "./RideComponent";
+import { minHeight } from "@mui/system";
 
 const x = 10;
 const y = 120;
 const NUMBER_OF_RIDES = 100;
 
+
+
 interface RidesListComponentProps {
     addGraphComponent(title:string): any,
     setRidesIsRendered: any
+}
+
+const addRideComponentList = (addGraphComponent:any) => {
+    const rideComponents = []
+    for(let i = 1; i <= NUMBER_OF_RIDES; i++) {
+        rideComponents.push(
+            <RideComponent 
+                addGraphComponent={addGraphComponent} 
+                tripID={'Trip ' + i} 
+                startCity={'København'} 
+                endCity={'Lyngby'}
+            />
+        )
+    }
+    return rideComponents;
 }
 
 const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent}) => {
@@ -30,8 +48,7 @@ const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, ad
                 <button className='close_component_btn' onClick={() => setRidesIsRendered(false)}></button>
             </div>
             <div className='draggable_component_container_content'>
-                <RideComponent addGraphComponent={addGraphComponent} tripID={'Trip ' + 123} startCity={'Lyngby'} endCity={'København'}/>
-                <RideComponent addGraphComponent={addGraphComponent} tripID={'Trip ' + 256} startCity={'Lyngby'} endCity={'København'}/>
+                {addRideComponentList(addGraphComponent)}
             </div>
             <div>
                 <button>TRIP DETAILS</button>
