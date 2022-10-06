@@ -10,10 +10,11 @@ const App: FC = () => {
   const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
   
-  const position = L.marker([55.7856,12.5214]);
+  const position = L.marker([55.677240026834134, 12.567320700469025]);
   const [uniqueId, setUniqueId] = useState(0);
   const [newZ, setNewZ] = useState(0);
   const [windowInFocus, setWindowInFocus] = useState(0);
+  const [selectedRide, setSelectedRide] = useState(false);
   //let windowInFocus:number;
 
   const [graphTitleList, setGraphTitleList] = useState<any[]>([]);
@@ -22,6 +23,7 @@ const App: FC = () => {
     setUniqueId(uniqueId + 1);
     setGraphComponentsList([...graphComponentsList, {component: `Draggable${uniqueId}`}]);
     setGraphTitleList([...graphTitleList, {graphTitle: title}]);
+    setSelectedRide(true);
   }
 
   const focusWindow = (windowId:number) => {
@@ -44,7 +46,7 @@ const App: FC = () => {
   return (
     <div className="App">
       <NavBar setRidesIsRendered={setRidesIsRendered}/>
-      <Map position={position.getLatLng()} />
+      <Map position={position.getLatLng()} selectedRide={selectedRide} />
       {graphComponentsList.map((component, index) => (
         <GraphComponent 
           key={component.component} 
