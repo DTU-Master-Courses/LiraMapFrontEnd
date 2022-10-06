@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import '../Drawer/RideComponent.css';
 
 interface RideComponentProps {
-    addGraphComponent(): any,
+    addGraphComponent(title:string): any,
     tripID: string,
     startCity: string,
     endCity: string
@@ -22,7 +22,7 @@ const RideComponent: FC<RideComponentProps> = ({addGraphComponent, tripID, start
             </div>
             <button onClick={() => {
                 switchSelectedState();
-                addGraphComponent();
+                addGraphComponent(tripID);
             }} className={`select_ride_btn ${rideIsSelected ? 'ride_selected' : 'ride_unselected'}`}></button>
         </div>
 

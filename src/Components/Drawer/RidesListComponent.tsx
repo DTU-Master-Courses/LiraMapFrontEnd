@@ -9,7 +9,7 @@ const y = 120;
 const NUMBER_OF_RIDES = 100;
 
 interface RidesListComponentProps {
-    addGraphComponent(): any,
+    addGraphComponent(title:string): any,
     setRidesIsRendered: any
 }
 
@@ -31,6 +31,7 @@ const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, ad
             </div>
             <div className='draggable_component_container_content'>
                 <RideComponent addGraphComponent={addGraphComponent} tripID={'Trip ' + 123} startCity={'Lyngby'} endCity={'København'}/>
+                <RideComponent addGraphComponent={addGraphComponent} tripID={'Trip ' + 256} startCity={'Lyngby'} endCity={'København'}/>
             </div>
             <div>
                 <button>TRIP DETAILS</button>
