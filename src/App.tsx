@@ -12,10 +12,20 @@ const App: FC = () => {
   
   const position = L.marker([55.7856,12.5214]);
   const [uniqueId, setUniqueId] = useState(0);
+  const [newZ, setNewZ] = useState(0);
+  const [windowInFocus, setWindowInFocus] = useState(0);
+  //let windowInFocus:number;
 
   const addGraphComponent = () => {
     setUniqueId(uniqueId + 1);
     setGraphComponentsList([...graphComponentsList, {component: `Draggable${uniqueId}`}]);
+  }
+
+  const focusWindow = (windowId:number) => {
+    if(windowInFocus != windowId){
+      setWindowInFocus(windowId);
+      setNewZ(newZ + 1);
+    }
   }
 
   const removeGraphComponent = (index:number) => {
@@ -29,7 +39,7 @@ const App: FC = () => {
       <NavBar setRidesIsRendered={setRidesIsRendered}></NavBar>
       <Map position={position.getLatLng()} />
       {graphComponentsList.map((component, index) => (
-        <GraphComponent key={component.component} removeGraphComponent={removeGraphComponent} index={index}></GraphComponent>
+        <GraphComponent key={component.component} removeGraphComponent={removeGraphComponent} index={index} focusWindow={focusWindow} newZ={newZ} windowInFocus={windowInFocus}></GraphComponent>
       ))}
       {ridesIsRendered && <RidesListComponent addGraphComponent={addGraphComponent} setRidesIsRendered={setRidesIsRendered}></RidesListComponent>}
     </div>

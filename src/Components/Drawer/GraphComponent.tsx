@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import Icon from "@material-ui/core/Icon";
 import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { Component, FC, useState } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -15,6 +15,8 @@ import {
   } from 'chart.js';
   import { Line } from 'react-chartjs-2';
   import * as faker from '@faker-js/faker';
+import zIndex from "@material-ui/core/styles/zIndex";
+import { render } from "@testing-library/react";
 
 const x = 500;
 const y = 500;
@@ -67,9 +69,16 @@ export const data = {
 interface GraphComponentProps {
     index: number,
     removeGraphComponent(index: number): any;
+    focusWindow(windowId: number):any;
+    newZ: number,
+    windowInFocus:number,
 }
 
-const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index}) => {
+
+
+
+const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index, focusWindow, newZ, windowInFocus}) => {
+    const [z, setZ] = useState(0);
     const [titleTripID, setTitleTripID] = useState('');
     return(
         <Rnd
@@ -81,6 +90,12 @@ const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index}) 
             y: y,
             width: '60%',
             height: '40%'
+            }}
+            style={{zIndex: 1000 + z}}
+            onMouseDown={(e:MouseEvent) => {
+                setZ(newZ + 1);
+                console.log(z);
+                focusWindow(index);
             }}
         >
             <div className='draggable_handle'>
