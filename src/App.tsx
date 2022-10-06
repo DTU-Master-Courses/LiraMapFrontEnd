@@ -13,9 +13,12 @@ const App: FC = () => {
   const position = L.marker([55.7856,12.5214]);
   const [uniqueId, setUniqueId] = useState(0);
 
-  const addGraphComponent = () => {
+  const [graphTitleList, setGraphTitleList] = useState<any[]>([]);
+
+  const addGraphComponent = (title:string) => {
     setUniqueId(uniqueId + 1);
     setGraphComponentsList([...graphComponentsList, {component: `Draggable${uniqueId}`}]);
+    setGraphTitleList([...graphTitleList, {graphTitle: title}]);
   }
 
   const removeGraphComponent = (index:number) => {
@@ -26,12 +29,23 @@ const App: FC = () => {
 
   return (
     <div className="App">
-      <NavBar setRidesIsRendered={setRidesIsRendered}></NavBar>
+      <NavBar setRidesIsRendered={setRidesIsRendered}/>
       <Map position={position.getLatLng()} />
       {graphComponentsList.map((component, index) => (
-        <GraphComponent key={component.component} removeGraphComponent={removeGraphComponent} index={index}></GraphComponent>
+        <GraphComponent 
+          key={component.component} 
+          removeGraphComponent={removeGraphComponent} 
+          index={index} 
+          graphTitle={graphTitleList[index].graphTitle}
+        />
+        
       ))}
-      {ridesIsRendered && <RidesListComponent addGraphComponent={addGraphComponent} setRidesIsRendered={setRidesIsRendered}></RidesListComponent>}
+      {ridesIsRendered && 
+        <RidesListComponent 
+          addGraphComponent={addGraphComponent} 
+          setRidesIsRendered={setRidesIsRendered}
+        />
+      }
     </div>
   );
 }

@@ -16,8 +16,7 @@ import {
   import { Line } from 'react-chartjs-2';
   import * as faker from '@faker-js/faker';
 
-const x = 500;
-const y = 500;
+
 
 ChartJS.register(
     CategoryScale,
@@ -28,19 +27,6 @@ ChartJS.register(
     Tooltip,
     Legend
 );
-
-export const options = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top' as const,
-        },
-        title: {
-            display: true,
-            text: 'Chart.js Line Chart',
-        },
-    },
-};
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
@@ -53,24 +39,19 @@ export const data = {
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
-        {
-            label: 'Dataset 2',
-            data: labels.map(() => faker.faker.datatype.number({ min: -1000, max: 1000 })),
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
     ],
 };
 
-
-
 interface GraphComponentProps {
+    graphTitle: string,
     index: number,
     removeGraphComponent(index: number): any;
 }
 
-const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index}) => {
-    const [titleTripID, setTitleTripID] = useState('');
+const x = 500;
+const y = 500;
+
+const GraphComponent: FC<GraphComponentProps> = ({graphTitle, removeGraphComponent, index}) => {
     return(
         <Rnd
             className="draggable_component_container graph_component"
@@ -87,7 +68,18 @@ const GraphComponent: FC<GraphComponentProps> = ({removeGraphComponent, index}) 
             <button className='close_component_btn' onClick={() => removeGraphComponent(index)}></button>
             </div>
             <div className='draggable_component_container_content'>
-                <Line options={options} data={data} />;
+                <Line options={{
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top' as const,
+                        },
+                        title: {
+                            display: true,
+                            text: graphTitle,
+                        },
+                    },
+                }} data={data} />;
             </div>
         </Rnd>
     );
