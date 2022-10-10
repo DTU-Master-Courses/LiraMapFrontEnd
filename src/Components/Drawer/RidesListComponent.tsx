@@ -1,18 +1,12 @@
-
-import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import RideComponent from "./RideComponent";
 
-const x = 10;
-const y = 120;
 const NUMBER_OF_RIDES = 100;
 
 interface RidesListComponentProps {
     addGraphComponent(title:string): any,
-    setRidesIsRendered: any
-    focusWindow(windowId: number):any;
-    newZ: number,
+    setRidesIsRendered: any;
 }
 
 const addRideComponentList = (addGraphComponent:any) => {
@@ -20,6 +14,7 @@ const addRideComponentList = (addGraphComponent:any) => {
     for(let i = 1; i <= NUMBER_OF_RIDES; i++) {
         rideComponents.push(
             <RideComponent 
+                key={'Trip ' + i}
                 addGraphComponent={addGraphComponent} 
                 tripID={'Trip ' + i}
                 startCity={'København'}
@@ -30,25 +25,9 @@ const addRideComponentList = (addGraphComponent:any) => {
     return rideComponents;
 }
 
-const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent, focusWindow, newZ}) => {
-    const [z, setZ] = useState(0);
+const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent}) => {
     return(
-        <Rnd
-            className="draggable_component_container rides_list_component"
-            bounds='body'
-            dragHandleClassName={'draggable_handle'}
-            default={{
-            x: x,
-            y: y,
-            width: '20%',
-            height: '80%'
-            }}
-            style={{zIndex: 1000 + z}}
-            onMouseDown={(e:MouseEvent) => {
-                setZ(newZ + 1);
-                focusWindow(-900); //Unique number for windows that only allows for one instance
-            }}
-        >
+        <div className='wrapper'>
             <div className='draggable_handle'>
                 <button className='close_component_btn' onClick={() => setRidesIsRendered(false)}></button>
             </div>
@@ -59,7 +38,7 @@ const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, ad
                 <button>TRIP DETAILS</button>
                 <button>CLEAR</button>
             </div>
-        </Rnd>
+        </div>
     );
 };
 

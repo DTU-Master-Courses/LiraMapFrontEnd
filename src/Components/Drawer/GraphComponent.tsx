@@ -1,6 +1,5 @@
-import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -11,11 +10,8 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
-  import { Line } from 'react-chartjs-2';
-  import * as faker from '@faker-js/faker';
-
-
-
+import { Line } from 'react-chartjs-2';
+import * as faker from '@faker-js/faker';
 
 ChartJS.register(
     CategoryScale,
@@ -45,37 +41,11 @@ interface GraphComponentProps {
     graphTitle: string,
     index: number,
     removeGraphComponent(index: number): any;
-    focusWindow(windowId: number):any;
-    newZ: number,
 }
 
-
-
-
-
-const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index, focusWindow, newZ}) => {
-    const [z, setZ] = useState(0);
-    const x = 350;
-    const y = 300;
-
-
+const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index}) => {
     return(
-        <Rnd
-            className="draggable_component_container graph_component"
-            bounds='body'
-            dragHandleClassName={'draggable_handle'}
-            default={{
-            x: x,
-            y: y,
-            width: '70%',
-            height: '60%'
-            }}
-            style={{zIndex: 1000 + z}}
-            onMouseDown={(e:MouseEvent) => {
-                setZ(newZ + 1);
-                focusWindow(index + 400000); //400.000 is to differentiate between other types of windows
-            }}
-        >
+        <div className='wrapper'>
             <div className='draggable_handle'>
             <button className='close_component_btn' onClick={() => removeGraphComponent(index)}></button>
             </div>
@@ -93,7 +63,7 @@ const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponen
                     },
                 }} data={data} />;
             </div>
-        </Rnd>
+        </div>
     );
 };
 

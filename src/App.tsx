@@ -5,6 +5,7 @@ import * as L from 'leaflet';
 import NavBar from "./Components/NavBar/NavBar";
 import GraphComponent from "./Components/Drawer/GraphComponent";
 import RidesListComponent from "./Components/Drawer/RidesListComponent";
+import DraggableWindow from "./Components/Base/DraggableWindow";
 
 const App: FC = () => {
   const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
@@ -12,33 +13,28 @@ const App: FC = () => {
   
   const position = L.marker([55.7856,12.5214]);
   const [uniqueId, setUniqueId] = useState(0);
-  const [newZ, setNewZ] = useState(0);
-  const [windowInFocus, setWindowInFocus] = useState(0);
-  //let windowInFocus:number;
+  const [uniqueZ, setUniqueZ] = useState(0);
 
-  const [graphTitleList, setGraphTitleList] = useState<any[]>([]);
-
-  const addGraphComponent = (title:string) => {
-    setUniqueId(uniqueId + 1);
-    setGraphComponentsList([...graphComponentsList, {component: `Draggable${uniqueId}`}]);
-    setGraphTitleList([...graphTitleList, {graphTitle: title}]);
-  }
-
-  const focusWindow = (windowId:number) => {
-    if(windowInFocus != windowId){
-      setWindowInFocus(windowId);
-      setNewZ(newZ + 1);
+  const focusWindow = (windowId: number) => {
+    if (windowInFocus !== windowId) {
+        setWindowInFocus(windowId);
+        setUniqueZ(uniqueZ + 100);
+        return uniqueZ
     }
+    return 0
+  }
+  const [windowInFocus, setWindowInFocus] = useState(0);
+
+  const addGraphComponent = (title: string) => {
+    setUniqueId(uniqueId + 1);
+    setUniqueZ(uniqueZ + 1);
+    setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTitle: title}]);
   }
 
-  const removeGraphComponent = (index:number) => {
+  const removeGraphComponent = (index: number) => {
     const newGraphComponentsList = [...graphComponentsList];
     newGraphComponentsList.splice(index, 1);
     setGraphComponentsList(newGraphComponentsList);
-
-    const newTitleList = [...graphTitleList];
-    newTitleList.splice(index, 1);
-    setGraphTitleList(newTitleList);
   }
 
   return (
@@ -46,22 +42,38 @@ const App: FC = () => {
       <NavBar setRidesIsRendered={setRidesIsRendered}/>
       <Map position={position.getLatLng()} />
       {graphComponentsList.map((component, index) => (
-        <GraphComponent 
-          key={component.component} 
-          removeGraphComponent={removeGraphComponent} 
-          index={index} 
-          graphTitle={graphTitleList[index].graphTitle}
+        <DraggableWindow
+          key={component.componentId}
+          id={component.componentId}
+          componentName = {"graph_component"}
+          x={350}
+          y={300}
+          width={'70%'}
+          height={'60%'}
           focusWindow={focusWindow}
-          newZ={newZ}
-        />
+        >
+          <GraphComponent 
+            removeGraphComponent={removeGraphComponent} 
+            index={index} 
+            graphTitle={component.graphTitle}
+          />
+        </DraggableWindow>
       ))}
       {ridesIsRendered && 
-        <RidesListComponent 
-          addGraphComponent={addGraphComponent} 
-          setRidesIsRendered={setRidesIsRendered}
+        <DraggableWindow
+          id={uniqueId}
+          componentName={"rides_list_component"}
+          x={10}
+          y={120}
+          width={'20%'}
+          height={'80%'}
           focusWindow={focusWindow}
-          newZ={newZ}
-        />
+        >
+          <RidesListComponent
+            addGraphComponent={addGraphComponent} 
+            setRidesIsRendered={setRidesIsRendered}
+          />
+        </DraggableWindow>
       }
     </div>
   );
