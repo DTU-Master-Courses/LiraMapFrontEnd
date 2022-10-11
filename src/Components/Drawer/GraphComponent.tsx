@@ -1,6 +1,5 @@
-import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -11,11 +10,8 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
-  import { Line } from 'react-chartjs-2';
-  import * as faker from '@faker-js/faker';
-
-
-
+import { Line } from 'react-chartjs-2';
+import * as faker from '@faker-js/faker';
 
 ChartJS.register(
     CategoryScale,
@@ -42,20 +38,10 @@ export const data = {
 };
 
 interface GraphComponentProps {
-    graphTitle: string,
-    index: number,
+    graphTitle: string
 }
 
-
-
-
-
-const GraphComponent: FC<GraphComponentProps> = ({graphTitle, index}) => {
-    const [z, setZ] = useState(0);
-    const x = 350;
-    const y = 300;
-
-
+const GraphComponent: FC<GraphComponentProps> = ({ graphTitle }) => {
     return(
         <Line options={{
             responsive: true,
