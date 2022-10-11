@@ -2,9 +2,6 @@ import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
 import { FC, useState } from 'react';
 
-
-
-
 interface Props {
     index: number,
     closeWindow(index: number): any;
@@ -13,15 +10,10 @@ interface Props {
     children: JSX.Element,
 }
 
-
-
-
-
 const Window: FC<Props> = ({closeWindow, index, focusWindow, newZ, children}) => {
     const [z, setZ] = useState(0);
     const x = 350;
     const y = 300;
-
 
     return(
         <Rnd

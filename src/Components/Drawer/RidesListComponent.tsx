@@ -1,8 +1,10 @@
 
 import { Rnd } from "react-rnd";
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import RideComponent from "./RideComponent";
+import axios from 'axios';
+import { json } from "stream/consumers";
 
 const x = 10;
 const y = 120;
@@ -15,7 +17,7 @@ interface RidesListComponentProps {
     newZ: number,
 }
 
-const addRideComponentList = (addGraphComponent:any) => {
+const addRideComponentList = (addGraphComponent:any, tripID:any) => {
     const rideComponents = []
     for(let i = 1; i <= NUMBER_OF_RIDES; i++) {
         rideComponents.push(
@@ -30,12 +32,26 @@ const addRideComponentList = (addGraphComponent:any) => {
     return rideComponents;
 }
 
+const fetchRides = async() => {
+    try {
+        const res = await axios.get(`http://localhost:8000/trips`);
+        return res.data;
+    } catch (err) {
+        console.log(err);   
+    }
+}
+
 const RidesListComponent: FC<RidesListComponentProps> = ({setRidesIsRendered, addGraphComponent, focusWindow, newZ}) => {
     const [z, setZ] = useState(0);
+    let rides = useRef({});
+    useEffect(() => {
+        rides.current = fetchRides();
+    }, []);
+    
+    
     return(
-        
             <div className='draggable_component_container_content'>
-                {addRideComponentList(addGraphComponent)}
+                {addRideComponentList(addGraphComponent, rides)}
             </div>
     );
 };
