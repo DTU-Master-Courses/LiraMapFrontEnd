@@ -87,7 +87,7 @@ const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
       style={{
         background: "white",
         boxShadow: "none",
-        maxWidth: "15%",
+        maxWidth: "285px",
         left: "0",
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
