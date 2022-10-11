@@ -38,32 +38,23 @@ export const data = {
 };
 
 interface GraphComponentProps {
-    graphTitle: string,
-    index: number,
-    removeGraphComponent(index: number): any;
+    graphTitle: string
 }
 
-const GraphComponent: FC<GraphComponentProps> = ({graphTitle,removeGraphComponent, index}) => {
+const GraphComponent: FC<GraphComponentProps> = ({ graphTitle }) => {
     return(
-        <div className='wrapper'>
-            <div className='draggable_handle'>
-            <button className='close_component_btn' onClick={() => removeGraphComponent(index)}></button>
-            </div>
-            <div className='draggable_component_container_content'>
-                <Line options={{
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top' as const,
-                        },
-                        title: {
-                            display: true,
-                            text: graphTitle,
-                        },
-                    },
-                }} data={data} />;
-            </div>
-        </div>
+        <Line options={{
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top' as const,
+                },
+                title: {
+                    display: true,
+                    text: graphTitle,
+                },
+            },
+        }} data={data} />
     );
 };
 

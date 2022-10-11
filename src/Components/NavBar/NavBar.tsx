@@ -3,7 +3,7 @@ import Icon from "@material-ui/core/Icon";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { alpha, Button, ListItemButton, Menu, MenuProps, styled } from "@mui/material";
+import { alpha, Button, ListItemButton, Menu, MenuProps, styled, ThemeProvider } from "@mui/material";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
@@ -75,7 +75,7 @@ const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
             setRidesIsRendered(true);
           }}
         >
-          <ListItemText primary={'Add Rides'}/>
+          <ListItemText primary={'Trips'}/>
         </ListItemButton>
       </List>
     </div>
@@ -83,49 +83,52 @@ const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
   const theme = useTheme();
 
   return (
-    <AppBar
-      style={{
-        background: "white",
-        boxShadow: "none",
-        maxWidth: "15%",
-        left: "0",
-        marginTop: theme.spacing(2),
-        marginLeft: theme.spacing(2),
-      }}
-    >
-      <Toolbar>
-        <div className="wrap" style={{ display: "flex", alignItems: "center", width: '500px'}}>
-          <div>
-            <Button
-              id="demo-customized-button"
-              aria-controls={open ? "demo-customized-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              variant="text"
-              disableElevation
-              onClick={handleClick}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              <MenuIcon />
-            </Button>
-            <StyledMenu
-              id="demo-customized-menu"
-              MenuListProps={{
-                "aria-labelledby": "demo-customized-button",
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
-              {drawer}
-            </StyledMenu>
+    <ThemeProvider theme={theme}>
+      <AppBar
+        style={{
+          background: "white",
+          maxWidth: "305px",
+          borderRadius: "10px",
+          left: "0",
+          marginTop: theme.spacing(2),
+          marginLeft: theme.spacing(2),
+        }}
+        elevation={1}
+      >
+        <Toolbar>
+          <div className="wrap" style={{ display: "flex", alignItems: "center", width: '700px'}}>
+            <div>
+              <Button
+                id="demo-customized-button"
+                aria-controls={open ? "demo-customized-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                variant="text"
+                disableElevation
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
+                <MenuIcon />
+              </Button>
+              <StyledMenu
+                id="demo-customized-menu"
+                MenuListProps={{
+                  "aria-labelledby": "demo-customized-button",
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              >
+                {drawer}
+              </StyledMenu>
+            </div>
+            <Icon style={{ minHeight: "59px", minWidth: "194px" }}>
+              <img src="/lira-logo.svg" alt="app logo" />
+            </Icon>
           </div>
-          <Icon style={{ minHeight: "59px", minWidth: "194px" }}>
-            <img src="/lira-logo.svg" alt="app logo" />
-          </Icon>
-        </div>
-      </Toolbar>
-    </AppBar>
+        </Toolbar>
+      </AppBar>
+    </ThemeProvider>
   );
 };
 
