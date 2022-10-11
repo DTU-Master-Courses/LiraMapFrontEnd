@@ -1,5 +1,7 @@
 import '../Drawer/DrawerComponents.css';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import { json } from "stream/consumers";
 import { theme } from '../Theme/Theme'
 import { ThemeProvider } from '@mui/material/styles';
 import { 
@@ -45,6 +47,15 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+const fetchRides = async() => {
+    try {
+        const res = await axios.get(`http://localhost:8000/trips`);
+        return res.data;
+    } catch (err) {
+        console.log(err);   
+    }
+}
+
 interface RidesMeasurementComponentProps {
     addGraphComponent(title: string): any,
     setRidesIsRendered: any;
@@ -73,6 +84,11 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
         if (tab === 0) setSelectedRides([]);
         if (tab === 1) setSelectedMeasurements([]);
     };
+
+    let rides = useRef({});
+    useEffect(() => {
+        rides.current = fetchRides();
+    }, []);
 
     return(
         <ThemeProvider theme={theme}>

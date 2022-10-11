@@ -4,8 +4,8 @@ import { FC, useState } from "react";
 import * as L from 'leaflet'; 
 import NavBar from "./Components/NavBar/NavBar";
 import GraphComponent from "./Components/Drawer/GraphComponent";
-import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import Window from "./Components/Base/Window";
+import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 
 const App: FC = () => {
   	const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);

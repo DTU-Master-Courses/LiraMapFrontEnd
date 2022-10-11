@@ -34,7 +34,7 @@
 }
 
 .ride_selected {
-    background-image: url('/public/checkmark_ride.svg');
+    background-image: url('/public/chart-line.svg');
     background-color: var(--inverse-background-blue);
     filter: invert(100%);
 }
