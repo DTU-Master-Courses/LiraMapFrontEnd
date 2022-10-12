@@ -11,9 +11,11 @@ const App: FC = () => {
   	const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
   	const [ridesIsRendered, setRidesIsRendered] = useState(false);
   
-  	const position = L.marker([55.7856,12.5214]);
+  	const position = L.marker([55.677240026834134, 12.567320700469025]);
   	const [uniqueId, setUniqueId] = useState(0);
   	const [uniqueZ, setUniqueZ] = useState(0);
+
+	const [plottedTrip, setPlottedTrip] = useState<{ tripId: string, measurementType: string }>({ tripId: "", measurementType: ""});
 
   	const focusWindow = (windowId: number) => {
 		if (windowInFocus !== windowId) {
@@ -34,7 +36,7 @@ const App: FC = () => {
 	const removeGraphComponent = (index: number) => {
 		const newGraphComponentsList = [...graphComponentsList];
 		const findIndex = newGraphComponentsList.findIndex((value) => {
-		return value.componentId === index
+			return value.componentId === index
 		})
 		if (findIndex !== -1) {
 			newGraphComponentsList.splice(findIndex, 1);
@@ -46,10 +48,14 @@ const App: FC = () => {
 		setRidesIsRendered(false);
 	}
 
+	const plotLine = (tripID: string, measurementType: string) => {
+		setPlottedTrip({ tripId: tripID, measurementType: measurementType })
+	}
+
 	return(
 		<div className="App">
 			<NavBar setRidesIsRendered={setRidesIsRendered}/>
-			<Map position={position.getLatLng()} />
+			<Map position={position.getLatLng()} plottedTrip={plottedTrip} />
 			{graphComponentsList.map((component, _) => (
 				<Window
 					key={component.componentId}
@@ -61,10 +67,10 @@ const App: FC = () => {
 					closeWindow={removeGraphComponent}
 					focusWindow={focusWindow}
 				>
-				<GraphComponent 
-					graphTaskID={component.graphTaskID}
-					graphTripID={component.graphTripID}
-				/>
+					<GraphComponent 
+						graphTaskID={component.graphTaskID}
+						graphTripID={component.graphTripID}
+					/>
 				</Window>
 			))}
 			{ridesIsRendered && 
@@ -77,9 +83,10 @@ const App: FC = () => {
 					closeWindow={removeTripComponent}
 					focusWindow={focusWindow}
 				>
-				<RidesMeasurementComponent
-					addGraphComponent={addGraphComponent}
-				/>
+					<RidesMeasurementComponent
+						addGraphComponent={addGraphComponent}
+						plotLine={plotLine}
+					/>
 				</Window>
 			}
 		</div>

@@ -1,5 +1,5 @@
 import '../Drawer/DrawerComponents.css';
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { theme } from '../Theme/Theme'
 import { ThemeProvider } from '@mui/material/styles';
 import {
@@ -46,9 +46,10 @@ function TabPanel(props: TabPanelProps) {
 
 interface RidesMeasurementComponentProps {
     addGraphComponent(index: number, tripID: string): any,
+    plotLine(tripID: string, measurementType: string): any,
 }
 
-const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGraphComponent }) => {
+const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGraphComponent, plotLine }) => {
     const [tab, setTab] = useState(0);
     const [selectedRides, setSelectedRides] = useState<any[]>([]);
     const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
@@ -59,11 +60,11 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
 
     const handleRideItemClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, taskID: number, tripID: string) => {
         addGraphComponent(taskID, tripID);
-        setSelectedRides([...selectedRides, taskID]);
+        setSelectedRides([...selectedRides, { taskId: taskID, tripId: tripID }]);
     };
 
-    const handleMeasurementItemClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-        // TODO: handle measurement clicks
+    const handleMeasurementItemClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number, tripID: string, measurementType: string) => {
+        plotLine(tripID, measurementType);
         setSelectedMeasurements([...selectedMeasurements, index]);
     };
 
@@ -118,9 +119,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                 >
                     {ridesLoading &&
                         <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
-                            {Array.from(Array(15)).map(() => {
+                            {Array.from(Array(15)).map((_, i) => {
                                 return(
-                                    <Skeleton variant="rounded" height={72} />
+                                    <Skeleton key={'Skeleton ' + i} variant="rounded" height={72} />
                                 )
                             })}
                         </Stack>
@@ -136,7 +137,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                 >
                                     <ListItemButton
                                         sx={{ borderRadius: '10px' }}
-                                        selected={selectedRides.includes(rideInfos[i]['task_id'])}
+                                        selected={selectedRides.find(element => {
+                                            return element.taskId === rideInfos[i]['task_id']
+                                        })}
                                         onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
                                     >
                                         <ListItemText 
@@ -158,9 +161,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                 >
                     {measurementsLoading &&
                         <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
-                            {Array.from(Array(15)).map(() => {
+                            {Array.from(Array(15)).map((_, i) => {
                                 return(
-                                    <Skeleton variant="rounded" height={72} />
+                                    <Skeleton key={'Skeleton ' + i} variant="rounded" height={72} />
                                 )
                             })}
                         </Stack>
@@ -177,7 +180,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                     <ListItemButton
                                         sx={{ borderRadius: '10px' }}
                                         selected={selectedMeasurements.includes(i)}
-                                        onClick={(event) => handleMeasurementItemClick(event, i)}
+                                        onClick={(event) => handleMeasurementItemClick(event, i, selectedRides[0].tripId, measurementInfos[i]['type'])}
                                     >
                                         <ListItemText primary={`Measurement ${i + 1}`} secondary={measurementInfos[i]['type']} sx={{ wordWrap: 'break-word' }} />
                                         <IconButton aria-label="icon">
