@@ -48,7 +48,7 @@ function TabPanel(props: TabPanelProps) {
 
 
 interface RidesMeasurementComponentProps {
-    addGraphComponent(index:number): any,
+    addGraphComponent(index:number, tripID: string): any,
     setRidesIsRendered: any;
 }
 
@@ -58,9 +58,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
     const [selectedMeasurements, setSelectedMeasurements] = useState<number[]>([]);
     const [rideInfos, setRideInfos] = useState([]);
 
-    const handleRideItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-        addGraphComponent(index);
-        setSelectedRides([...selectedRides, index]);
+    const handleRideItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, taskID: number, tripID: string) => {
+        addGraphComponent(taskID, tripID);
+        setSelectedRides([...selectedRides, taskID]);
     };
 
     const handleMeasurementItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
@@ -110,7 +110,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                                     <ListItemButton
                                         sx={{ borderRadius: '10px' }}
                                         selected={selectedRides.includes(i)}
-                                        onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'])}
+                                        onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
                                     >
                                         <ListItemText primary={`Trip ${rideInfos[i]['task_id']}`} secondary={`København -> Lyngby`} /> 
                                         <IconButton aria-label="icon">
