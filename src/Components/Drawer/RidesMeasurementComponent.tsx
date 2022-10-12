@@ -18,8 +18,6 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
-const NUMBER_OF_RIDES = 100;
-
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -55,6 +53,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
     const [selectedRides, setSelectedRides] = useState<any[]>([]);
     const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
     const [rideInfos, setRideInfos] = useState([]);
+    const [measurementInfos, setMeasurementInfos] = useState([]);
     const [ridesLoading, setRidesLoading] = useState(false);
     const [measurementsLoading, setMeasurementsLoading] = useState(false);
 
@@ -79,6 +78,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
 
     useEffect(() => {
         fetchRides();
+        fetchMeasurements();
     }, []);
 
     const fetchRides = async () => {
@@ -94,6 +94,19 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
         }
     }
 
+    const fetchMeasurements = async () => {
+        try {
+            setMeasurementsLoading(true);
+            await fetch(`http://localhost:8000/measurement/types`).then((response) => response.json()).then((json_response) => {
+                setMeasurementInfos(json_response);
+                setMeasurementsLoading(false);
+            });
+        } catch (err) {
+            console.log(err);
+            setMeasurementsLoading(false);
+        }
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <Paper
@@ -103,8 +116,17 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                     value={tab}
                     index={0}
                 >
+                    {ridesLoading &&
+                        <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
+                            {Array.from(Array(15)).map(() => {
+                                return(
+                                    <Skeleton variant="rounded" height={72} />
+                                )
+                            })}
+                        </Stack>
+                    }
                     <List
-                        sx={{ width: '100%', marginTop: '48px', overflow: 'scroll' }}
+                        sx={{ width: '100%', marginTop: '48px', marginBottom: '48px', overflow: 'scroll' }}
                     >
                         <>
                             {Array.from(Array(rideInfos.length)).map((_, i) => {
@@ -117,7 +139,10 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                         selected={selectedRides.includes(rideInfos[i]['task_id'])}
                                         onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
                                     >
-                                        <ListItemText primary={`Trip ${rideInfos[i]['task_id']}`} secondary={`København -> Lyngby`} />
+                                        <ListItemText 
+                                            primary={`Trip ${rideInfos[i]['task_id']}`} 
+                                            secondary={`${JSON.parse(rideInfos[i]['start_position_display'])['city'] ?? 'Empty'} -> ${JSON.parse(rideInfos[i]['end_position_display'])['city'] ?? 'Empty'}`} 
+                                            sx={{ wordWrap: 'break-word' }} />
                                         <IconButton aria-label="icon">
                                             <Add />
                                         </IconButton>
@@ -126,8 +151,13 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                             })}
                         </>
                     </List>
-                    {ridesLoading &&
-                        <Stack sx={{ margin: 'auto', width: '90%' }} spacing={1}>
+                </TabPanel>
+                <TabPanel
+                    value={tab}
+                    index={1}
+                >
+                    {measurementsLoading &&
+                        <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
                             {Array.from(Array(15)).map(() => {
                                 return(
                                     <Skeleton variant="rounded" height={72} />
@@ -135,16 +165,11 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                             })}
                         </Stack>
                     }
-                </TabPanel>
-                <TabPanel
-                    value={tab}
-                    index={1}
-                >
                     <List
-                        sx={{ width: '100%', marginTop: '48px', overflow: 'scroll' }}
+                        sx={{ width: '100%', marginTop: '48px', marginBottom: '48px', overflow: 'scroll' }}
                     >
                         <>
-                            {Array.from(Array(NUMBER_OF_RIDES)).map((_, i) => {
+                            {Array.from(Array(measurementInfos.length)).map((_, i) => {
                                 return (<ListItem
                                     key={'Measurement ' + i}
                                     sx={{ width: '100%', bgcolor: 'background.paper' }}
@@ -154,7 +179,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                         selected={selectedMeasurements.includes(i)}
                                         onClick={(event) => handleMeasurementItemClick(event, i)}
                                     >
-                                        <ListItemText primary={`Measurement ${i}`} secondary={`acc.xyz`} />
+                                        <ListItemText primary={`Measurement ${i + 1}`} secondary={measurementInfos[i]['type']} sx={{ wordWrap: 'break-word' }} />
                                         <IconButton aria-label="icon">
                                             {/*
                                                 TODO: change icon for editing measurement
@@ -163,18 +188,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                         </IconButton>
                                     </ListItemButton>
                                 </ListItem>)
-                            })};
+                            })}
                         </>
                     </List>
-                    {measurementsLoading &&
-                        <Stack sx={{ margin: 'auto', width: '90%' }} spacing={1}>
-                            {Array.from(Array(15)).map(() => {
-                                return(
-                                    <Skeleton variant="rounded" height={72} />
-                                )
-                            })}
-                        </Stack>
-                    }
                 </TabPanel>
             </Paper>
             <Paper
