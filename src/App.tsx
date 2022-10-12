@@ -25,10 +25,10 @@ const App: FC = () => {
   	}
   	const [windowInFocus, setWindowInFocus] = useState(0);
 
-	const addGraphComponent = (title: string) => {
+	const addGraphComponent = (index: number) => {
 		setUniqueId(uniqueId + 1);
 		setUniqueZ(uniqueZ + 1);
-		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTitle: title}]);
+		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTripID: index}]);
 	}
 
 	const removeGraphComponent = (index: number) => {
@@ -62,7 +62,7 @@ const App: FC = () => {
 					focusWindow={focusWindow}
 				>
 				<GraphComponent 
-					graphTitle={component.graphTitle}
+					graphTripID={component.graphTripID}
 				/>
 				</Window>
 			))}

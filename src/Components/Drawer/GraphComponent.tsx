@@ -38,10 +38,10 @@ export const data = {
 };
 
 interface GraphComponentProps {
-    graphTitle: string
+    graphTripID: number
 }
 
-const GraphComponent: FC<GraphComponentProps> = ({ graphTitle }) => {
+const GraphComponent: FC<GraphComponentProps> = ({ graphTripID }) => {
     return(
         <Line options={{
             responsive: true,
@@ -51,7 +51,7 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTitle }) => {
                 },
                 title: {
                     display: true,
-                    text: graphTitle,
+                    text: `Trip: ${graphTripID}`,
                 },
             },
         }} data={data} />

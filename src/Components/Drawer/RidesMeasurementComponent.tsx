@@ -1,7 +1,5 @@
 import '../Drawer/DrawerComponents.css';
 import { FC, useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import { json } from "stream/consumers";
 import { theme } from '../Theme/Theme'
 import { ThemeProvider } from '@mui/material/styles';
 import { 
@@ -47,17 +45,10 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-const fetchRides = async() => {
-    try {
-        const res = await axios.get(`http://localhost:8000/trips`);
-        return res.data;
-    } catch (err) {
-        console.log(err);   
-    }
-}
+
 
 interface RidesMeasurementComponentProps {
-    addGraphComponent(title: string): any,
+    addGraphComponent(index:number): any,
     setRidesIsRendered: any;
 }
 
@@ -65,9 +56,10 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
     const [tab, setTab] = useState(0);
     const [selectedRides, setSelectedRides] = useState<number[]>([]);
     const [selectedMeasurements, setSelectedMeasurements] = useState<number[]>([]);
+    const [rideInfos, setRideInfos] = useState([]);
 
     const handleRideItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
-        addGraphComponent(`Trip ${index}`);
+        addGraphComponent(index);
         setSelectedRides([...selectedRides, index]);
     };
 
@@ -85,10 +77,17 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
         if (tab === 1) setSelectedMeasurements([]);
     };
 
-    let rides = useRef({});
     useEffect(() => {
-        rides.current = fetchRides();
+        fetchRides();
     }, []);
+
+    const fetchRides = async() => {
+        try {
+            await fetch(`http://localhost:8000/trips`).then((response) => response.json()).then((json_response) => setRideInfos(json_response));
+        } catch (err) {
+            console.log(err);   
+        }
+    }
 
     return(
         <ThemeProvider theme={theme}>
@@ -103,17 +102,17 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                         sx={{ width: '100%', marginTop: '48px', overflow: 'scroll' }}
                     >
                         <>
-                            {Array.from(Array(NUMBER_OF_RIDES)).map((_, i) => {
+                            {Array.from(Array(rideInfos.length)).map((_, i) => {
                                 return(<ListItem
-                                    key={'Trip ' + i}
+                                    key={'Trip ' + rideInfos[i]['task_id']}
                                     sx={{ width: '100%', bgcolor: 'background.paper' }}
                                 >
                                     <ListItemButton
                                         sx={{ borderRadius: '10px' }}
                                         selected={selectedRides.includes(i)}
-                                        onClick={(event) => handleRideItemClick(event, i)}
+                                        onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'])}
                                     >
-                                        <ListItemText primary={`Trip ${i}`} secondary={`København -> Lyngby`} /> 
+                                        <ListItemText primary={`Trip ${rideInfos[i]['task_id']}`} secondary={`København -> Lyngby`} /> 
                                         <IconButton aria-label="icon">
                                             <Add />
                                         </IconButton>
