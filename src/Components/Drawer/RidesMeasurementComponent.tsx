@@ -2,33 +2,34 @@ import '../Drawer/DrawerComponents.css';
 import { FC, useEffect, useState, useRef } from 'react';
 import { theme } from '../Theme/Theme'
 import { ThemeProvider } from '@mui/material/styles';
-import { 
-    List, 
-    ListItem, 
-    ListItemButton, 
-    ListItemText, 
-    Paper, 
-    IconButton, 
-    Tab, 
+import {
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Paper,
+    IconButton,
+    Tab,
     Tabs,
-    Stack, 
+    Stack,
     Button,
-    Box
+    Box,
+    Skeleton
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 const NUMBER_OF_RIDES = 100;
 
 interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
+    children?: React.ReactNode;
+    index: number;
+    value: number;
 }
 
 function TabPanel(props: TabPanelProps) {
     const { children, value, index, ...other } = props;
 
-    return(
+    return (
         <div
             role="tabpanel"
             hidden={value !== index}
@@ -45,25 +46,24 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-
-
 interface RidesMeasurementComponentProps {
-    addGraphComponent(index:number, tripID: string): any,
-    setRidesIsRendered: any;
+    addGraphComponent(index: number, tripID: string): any,
 }
 
-const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRidesIsRendered, addGraphComponent}) => {
+const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGraphComponent }) => {
     const [tab, setTab] = useState(0);
-    const [selectedRides, setSelectedRides] = useState<number[]>([]);
-    const [selectedMeasurements, setSelectedMeasurements] = useState<number[]>([]);
+    const [selectedRides, setSelectedRides] = useState<any[]>([]);
+    const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
     const [rideInfos, setRideInfos] = useState([]);
+    const [ridesLoading, setRidesLoading] = useState(false);
+    const [measurementsLoading, setMeasurementsLoading] = useState(false);
 
-    const handleRideItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, taskID: number, tripID: string) => {
+    const handleRideItemClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, taskID: number, tripID: string) => {
         addGraphComponent(taskID, tripID);
         setSelectedRides([...selectedRides, taskID]);
     };
 
-    const handleMeasurementItemClick = ( _: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+    const handleMeasurementItemClick = (_: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
         // TODO: handle measurement clicks
         setSelectedMeasurements([...selectedMeasurements, index]);
     };
@@ -81,15 +81,20 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
         fetchRides();
     }, []);
 
-    const fetchRides = async() => {
+    const fetchRides = async () => {
         try {
-            await fetch(`http://localhost:8000/trips`).then((response) => response.json()).then((json_response) => setRideInfos(json_response));
+            setRidesLoading(true);
+            await fetch(`http://localhost:8000/trips`).then((response) => response.json()).then((json_response) => {
+                setRideInfos(json_response);
+                setRidesLoading(false);
+            });
         } catch (err) {
-            console.log(err);   
+            console.log(err);
+            setRidesLoading(false);
         }
     }
 
-    return(
+    return (
         <ThemeProvider theme={theme}>
             <Paper
                 sx={{ width: '100%', height: '100%', display: 'inline-block', borderRadius: '10px', bgcolor: 'background.paper', overflow: 'auto' }}
@@ -103,27 +108,36 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                     >
                         <>
                             {Array.from(Array(rideInfos.length)).map((_, i) => {
-                                return(<ListItem
+                                return (<ListItem
                                     key={'Trip ' + rideInfos[i]['task_id']}
                                     sx={{ width: '100%', bgcolor: 'background.paper' }}
                                 >
                                     <ListItemButton
                                         sx={{ borderRadius: '10px' }}
-                                        selected={selectedRides.includes(i)}
+                                        selected={selectedRides.includes(rideInfos[i]['task_id'])}
                                         onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
                                     >
-                                        <ListItemText primary={`Trip ${rideInfos[i]['task_id']}`} secondary={`København -> Lyngby`} /> 
+                                        <ListItemText primary={`Trip ${rideInfos[i]['task_id']}`} secondary={`København -> Lyngby`} />
                                         <IconButton aria-label="icon">
                                             <Add />
                                         </IconButton>
                                     </ListItemButton>
                                 </ListItem>)
-                            })};
+                            })}
                         </>
                     </List>
+                    {ridesLoading &&
+                        <Stack sx={{ margin: 'auto', width: '90%' }} spacing={1}>
+                            {Array.from(Array(15)).map(() => {
+                                return(
+                                    <Skeleton variant="rounded" height={72} />
+                                )
+                            })}
+                        </Stack>
+                    }
                 </TabPanel>
                 <TabPanel
-                    value={tab} 
+                    value={tab}
                     index={1}
                 >
                     <List
@@ -131,7 +145,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                     >
                         <>
                             {Array.from(Array(NUMBER_OF_RIDES)).map((_, i) => {
-                                return(<ListItem
+                                return (<ListItem
                                     key={'Measurement ' + i}
                                     sx={{ width: '100%', bgcolor: 'background.paper' }}
                                 >
@@ -140,7 +154,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                                         selected={selectedMeasurements.includes(i)}
                                         onClick={(event) => handleMeasurementItemClick(event, i)}
                                     >
-                                        <ListItemText primary={`Measurement ${i}`} secondary={`acc.xyz`} /> 
+                                        <ListItemText primary={`Measurement ${i}`} secondary={`acc.xyz`} />
                                         <IconButton aria-label="icon">
                                             {/*
                                                 TODO: change icon for editing measurement
@@ -152,13 +166,22 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                             })};
                         </>
                     </List>
+                    {measurementsLoading &&
+                        <Stack sx={{ margin: 'auto', width: '90%' }} spacing={1}>
+                            {Array.from(Array(15)).map(() => {
+                                return(
+                                    <Skeleton variant="rounded" height={72} />
+                                )
+                            })}
+                        </Stack>
+                    }
                 </TabPanel>
             </Paper>
             <Paper
                 elevation={1}
                 sx={{ width: '100%', height: '48px', position: 'absolute', top: 0, borderRadius: '0 0 0 0' }}
             >
-                <Tabs 
+                <Tabs
                     value={tab}
                     onChange={handleChange}
                     selectionFollowsFocus>
@@ -171,9 +194,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({setRides
                 elevation={4}
                 sx={{ width: '100%', height: '57px', position: 'absolute', bottom: 0, my: '0px', borderRadius: '0px 0px 10px 10px', display: 'inline-block' }}
             >
-                <Stack 
+                <Stack
                     sx={{ padding: '10px', overflow: 'auto' }}
-                    spacing={1} 
+                    spacing={1}
                     direction="row"
                     justifyContent="center"
                     alignItems="stretch">

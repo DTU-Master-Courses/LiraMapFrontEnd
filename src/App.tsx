@@ -78,8 +78,7 @@ const App: FC = () => {
 					focusWindow={focusWindow}
 				>
 				<RidesMeasurementComponent
-					addGraphComponent={addGraphComponent} 
-					setRidesIsRendered={setRidesIsRendered}
+					addGraphComponent={addGraphComponent}
 				/>
 				</Window>
 			}
