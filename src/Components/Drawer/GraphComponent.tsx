@@ -44,13 +44,15 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
     }
     let xValues = [];
     let yValues = [];
+    let timestamps = [];
+    let date;
     try {
         if (graphContent !== undefined && graphContent !== null) {
+            date = graphContent["acceleration"][0]['created_date'].split('T')[0];
             for (let i = 0; i < graphContent["acceleration"].length; i++) {
                 xValues[i] = graphContent["acceleration"][i]["x"];
-            }
-            for (let i = 0; i < graphContent["acceleration"].length; i++) {
                 yValues[i] = graphContent["acceleration"][i]["y"];
+                timestamps[i] = graphContent["acceleration"][i]["created_date"].split('T')[1];
             }
         }
     } catch (err) {
@@ -58,14 +60,20 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
     }
 
     const data = {
-        labels: xValues,
+        labels: timestamps,
         datasets: [
             {
-                label: 'Dataset 1',
-                data: yValues,
+                label: 'Acceleration-x',
+                data: xValues,
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
+            {
+                label: 'Acceleration-y',
+                data: yValues,
+                borderColor: 'rgb(100, 99, 158)',
+                backgroundColor: 'rgba(100, 99, 158, 0.5)',
+            }
         ],
     };
     
@@ -79,7 +87,7 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
                 },
                 title: {
                     display: true,
-                    text: `Trip: ${graphTaskID}`,
+                    text: [`Trip: ${graphTaskID}`, date]
                 },
             },
         }} data={data} />

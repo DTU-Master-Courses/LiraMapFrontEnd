@@ -141,7 +141,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                                     >
                                         <ListItemText 
                                             primary={`Trip ${rideInfos[i]['task_id']}`} 
-                                            secondary={`${JSON.parse(rideInfos[i]['start_position_display'])['city'] ?? 'Empty'} -> ${JSON.parse(rideInfos[i]['end_position_display'])['city'] ?? 'Empty'}`} 
+                                            secondary={`${JSON.parse(rideInfos[i]['start_position_display'])['city'] ?? 'Empty'} → ${JSON.parse(rideInfos[i]['end_position_display'])['city'] ?? 'Empty'}`} 
                                             sx={{ wordWrap: 'break-word' }} />
                                         <IconButton aria-label="icon">
                                             <Add />
