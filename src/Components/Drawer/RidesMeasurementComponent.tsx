@@ -112,28 +112,29 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
             <ThemeProvider theme={theme}>
                 <Paper
                     sx={{background: 'transparent', width: '100%', top: "48px", height: 'calc(100% - (57px + 48px))', display: 'absolute', overflow: 'auto' }}
+                    square={true}
                 >
                     <TabPanel
                         value={tab}
                         index={0}
                     >
                         {ridesLoading &&
-                            <Stack sx={{ margin: 'auto', width: '100%', marginTop: '64px' }} spacing={1}>
+                            <Stack sx={{ margin: 'auto', width: '100%' }} spacing={0.1}>
                                 {Array.from(Array(15)).map(() => {
                                     return(
-                                        <Skeleton variant="rounded" height={72} />
+                                        <Skeleton variant="rectangular" height={72} />
                                     )
                                 })}
                             </Stack>
                         }
                         <List
-                            sx={{background: 'transparent', width: '100%'}}
+                            sx={{background: 'transparent', width: '100%', padding: '0'}}
                         >
                             <>
                                 {Array.from(Array(rideInfos.length)).map((_, i) => {
                                     return (<ListItem
                                         key={'Trip ' + rideInfos[i]['task_id']}
-                                        sx={{ paddingBottom: 0,paddingTop: 0, width: '100%', background: 'transparent'}}
+                                        sx={{ padding: '0', width: '100%', background: 'transparent'}}
                                     >
                                         <ListItemButton
                                             sx={{ width: '100%', backgroundColor: "transparent", borderBottom: 1, borderColor: "rgba(0,0,0,0.3)"}}
@@ -158,25 +159,25 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                         index={1}
                     >
                         {measurementsLoading &&
-                            <Stack sx={{ margin: 'auto', width: '100%', marginTop: '64px' }} spacing={1}>
+                            <Stack sx={{ margin: 'auto', width: '100%' }} spacing={0.1}>
                                 {Array.from(Array(15)).map(() => {
                                     return(
-                                        <Skeleton variant="rounded" height={72} />
+                                        <Skeleton variant="rectangular" height={72} />
                                     )
                                 })}
                             </Stack>
                         }
                         <List
-                            sx={{ width: '100%', marginTop: '48px', marginBottom: '150px', overflow: 'scroll' }}
+                            sx={{background: 'transparent', width: '100%', padding: '0'}}
                         >
                             <>
                                 {Array.from(Array(measurementInfos.length)).map((_, i) => {
                                     return (<ListItem
                                         key={'Measurement ' + i}
-                                        sx={{ width: '100%' }}
+                                        sx={{ padding: '0', width: '100%', background: 'transparent'}}
                                     >
                                         <ListItemButton
-                                            sx={{ borderRadius: '10px' }}
+                                            sx={{ backgroundColor: "transparent", borderBottom: 1, borderColor: "rgba(0,0,0,0.3)" }}
                                             selected={selectedMeasurements.includes(i)}
                                             onClick={(event) => handleMeasurementItemClick(event, i)}
                                         >
