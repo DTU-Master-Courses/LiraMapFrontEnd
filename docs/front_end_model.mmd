@@ -1,26 +1,36 @@
 flowchart TB
-    AddRidesBtn -- "onClick(setRidesIsRendered(!current))" --> RidesListComponent
-    RideComponent -- "onClick(addGraphComponent(graphTitle))" --> GraphComponent
-
-    API --> RidesListComponent
-    API --> Line
-    API --> Map
-    subgraph Navbar
-        subgraph List
-        AddRidesBtn
+    subgraph App
+    graphComponentList([graphComponentList])
+    polyLinePoints([polyLinePoints])
+    rideIsRendered([rideIsRendered])
+    uniqueID([uniqueID])
+    uniqueZ([uniqueZ])
+    
+    rideIsRendered<-- setRideIsRendered -->ListItemButton
+    rideIsRendered --> Window
+        subgraph NavBar
+            ListItemButton
         end
-    end
-    subgraph Map
-    end
-    subgraph GraphComponent
-        subgraph RND 
-            Line
+        subgraph Window List
+            subgraph GraphComponent
+                subgraph LineChart
+                end
+            end
         end
-    end
-    subgraph RidesListComponent
-        subgraph RND
-            RideComponent
+        subgraph Window
+            subgraph RidesMeasurementComponent
+                subgraph ListItemButton Ride
+                end
+                subgraph ListItemButton Measurement
+                end
+            end
         end
-    end
-    subgraph API
+        subgraph MapComponent
+            subgraph Map
+            end
+            subgraph Zoom/Layer controls
+            end
+            subgraph PolyLine List
+            end
+        end
     end

@@ -9,13 +9,15 @@ import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementCompo
 
 const App: FC = () => {
   	const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
+  	const [polyLinePoints, setPolyLinePoints] = useState<[number, number][][]>([]);
+
   	const [ridesIsRendered, setRidesIsRendered] = useState(false);
   
   	const position = L.marker([55.7856,12.5214]);
   	const [uniqueId, setUniqueId] = useState(0);
   	const [uniqueZ, setUniqueZ] = useState(0);
 
-  	const focusWindow = (windowId: number) => {
+  	const focusWindow = (windowId : number) => {
 		if (windowInFocus !== windowId) {
 			setWindowInFocus(windowId);
 			setUniqueZ(uniqueZ + 100);
@@ -25,20 +27,37 @@ const App: FC = () => {
   	}
   	const [windowInFocus, setWindowInFocus] = useState(0);
 
-	const addGraphComponent = (taskID: number, tripID: string) => {
+	const addGraphComponent = async(taskID: number, tripID: string) => {
 		setUniqueId(uniqueId + 1);
 		setUniqueZ(uniqueZ + 1);
 		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID}]);
+		let points;
+		try {
+            points = await fetch(`http://localhost:8000/trips/segments/${tripID}`).then((response) => response.json());
+        } catch (err) {
+            console.log(err);   
+        }	
+
+    	let newPolyPoints:[number, number][] = [];
+		for (let i = 0; i < points.length; i++) {
+      		newPolyPoints.push([points[i]["lat"],points[i]["lon"]])
+		}
+		setPolyLinePoints([...polyLinePoints, newPolyPoints]);
 	}
 
 	const removeGraphComponent = (index: number) => {
 		const newGraphComponentsList = [...graphComponentsList];
+		const newPolyLinePoints = [...polyLinePoints];
 		const findIndex = newGraphComponentsList.findIndex((value) => {
 		return value.componentId === index
 		})
 		if (findIndex !== -1) {
 			newGraphComponentsList.splice(findIndex, 1);
 			setGraphComponentsList(newGraphComponentsList);
+
+      
+			newPolyLinePoints.splice(findIndex, 1);
+			setPolyLinePoints(newPolyLinePoints);
 		}
 	}
 
@@ -49,7 +68,7 @@ const App: FC = () => {
 	return(
 		<div className="App">
 			<NavBar setRidesIsRendered={setRidesIsRendered}/>
-			<Map position={position.getLatLng()} />
+			<Map position={position.getLatLng()} polyLinePoints={polyLinePoints} />
 			{graphComponentsList.map((component, _) => (
 				<Window
 					key={component.componentId}

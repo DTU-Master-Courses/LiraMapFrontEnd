@@ -6,6 +6,7 @@ import {
   Circle,
   LayersControl,
   MapContainer,
+  Polyline,
   TileLayer,
   ZoomControl,
 } from "react-leaflet";
@@ -13,9 +14,10 @@ import "./Map.css";
 
 interface MapDemoProps {
   position: LatLng;
+  polyLinePoints: [number, number][][];
 }
 
-const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
+const MapDemo: FC<MapDemoProps> = ({ position, polyLinePoints }: MapDemoProps) => {
   return (
     <>
       <div className="leaflet-container">
@@ -61,6 +63,9 @@ const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
               />
             </LayersControl.Overlay>
           </LayersControl>
+          {polyLinePoints.map((component, _) => (
+            <Polyline positions={component} color={'rgb(255, 99, 132)'} />
+          ))}
         </MapContainer>
       </div>
     </>
