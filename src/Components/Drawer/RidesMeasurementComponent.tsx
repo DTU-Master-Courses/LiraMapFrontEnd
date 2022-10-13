@@ -120,9 +120,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                     >
                         {ridesLoading &&
                             <Stack sx={{ margin: 'auto', width: '100%' }} spacing={0.1}>
-                                {Array.from(Array(15)).map(() => {
+                                {Array.from(Array(15)).map((_, i) => {
                                     return(
-                                        <Skeleton variant="rectangular" height={72} />
+                                        <Skeleton key={`Skeleton ${i}`} variant="rectangular" height={72} />
                                     )
                                 })}
                             </Stack>
@@ -160,9 +160,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                     >
                         {measurementsLoading &&
                             <Stack sx={{ margin: 'auto', width: '100%' }} spacing={0.1}>
-                                {Array.from(Array(15)).map(() => {
+                                {Array.from(Array(15)).map((_, i) => {
                                     return(
-                                        <Skeleton variant="rectangular" height={72} />
+                                        <Skeleton key={`Skeleton ${i}`} variant="rectangular" height={72} />
                                     )
                                 })}
                             </Stack>

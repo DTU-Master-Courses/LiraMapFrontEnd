@@ -42,8 +42,8 @@ const MapDemo: FC<MapDemoProps> = ({ position, polyLinePoints }: MapDemoProps) =
               />
             </LayersControl.BaseLayer>
           </LayersControl>
-          {polyLinePoints.map((component, _) => (
-            <Polyline positions={component} color={'rgb(255, 99, 132)'} />
+          {polyLinePoints.map((component, i) => (
+            <Polyline key={`Poly ${i}`} positions={component} color={'rgb(255, 99, 132)'} />
           ))}
         </MapContainer>
       </div>
