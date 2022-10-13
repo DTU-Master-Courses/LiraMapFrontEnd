@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: liramap-front-end-prod
+    image: liramap-front-end-prod
+    build:
+      context: .
+      target: production
+    ports:
+      - 8080:8080

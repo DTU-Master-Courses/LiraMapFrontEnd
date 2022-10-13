@@ -34,7 +34,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "api": "docker-compose -f ../LiraMapBackEnd/lira_backend_api/deploy/docker-compose.yml --project-directory ../LiraMapBackEnd/lira_backend_api up -d --build",
+    "api-debug": "docker-compose -f ../LiraMapBackEnd/lira_backend_api/deploy/docker-compose.yml --project-directory ../LiraMapBackEnd/lira_backend_api up --build",
+    "fullstack": ""
   },
   "eslintConfig": {
     "extends": [
