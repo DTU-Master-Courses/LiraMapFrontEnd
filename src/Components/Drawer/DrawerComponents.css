@@ -46,10 +46,14 @@
     min-height: 40%;
 }
 
+.window_name{
+    cursor: default;
+    margin-left: 10px;
+}
+
 .close_component_btn {
     height: clamp(100%,100%,100%);
     width: clamp(40px, 40px, 40px);
-    margin-left: calc(100% - 40px);
     border-radius: 0 10px 0 10px;
     background-image: url('/public/close_btn.svg');
     background-repeat: no-repeat;
@@ -58,6 +62,7 @@
     border-color: #d32f2f;
     border-width: 0px;
     border-style: solid;
+    float: right;
 }
 
 .close_component_btn:hover {
