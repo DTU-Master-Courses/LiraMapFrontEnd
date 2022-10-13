@@ -1,6 +1,15 @@
 flowchart TB
     subgraph App
+    graphComponentList([graphComponentList])
+    polyLinePoints([polyLinePoints])
+    rideIsRendered([rideIsRendered])
+    uniqueID([uniqueID])
+    uniqueZ([uniqueZ])
+    
+    rideIsRendered<-- setRideIsRendered -->ListItemButton
+    rideIsRendered --> Window
         subgraph NavBar
+            ListItemButton
         end
         subgraph Window List
             subgraph GraphComponent
@@ -8,7 +17,7 @@ flowchart TB
                 end
             end
         end
-        subgraph Window 
+        subgraph Window
             subgraph RidesMeasurementComponent
                 subgraph ListItemButton Ride
                 end
