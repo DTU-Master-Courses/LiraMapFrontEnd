@@ -13,7 +13,7 @@ const App: FC = () => {
 
   	const [ridesIsRendered, setRidesIsRendered] = useState(false);
   
-  	const position = L.marker([55.7856,12.5214]);
+  	const position = L.marker([55.677240026834134, 12.567320700469025]);
   	const [uniqueId, setUniqueId] = useState(0);
   	const [uniqueZ, setUniqueZ] = useState(0);
 
