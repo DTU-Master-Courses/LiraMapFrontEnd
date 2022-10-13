@@ -41,27 +41,6 @@ const MapDemo: FC<MapDemoProps> = ({ position, polyLinePoints }: MapDemoProps) =
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
             </LayersControl.BaseLayer>
-            <LayersControl.Overlay name={"road conditions".toUpperCase()}>
-              <Circle
-                center={position}
-                pathOptions={{ fillColor: "blue" }}
-                radius={200}
-              />
-            </LayersControl.Overlay>
-            <LayersControl.Overlay name={"lorem ipsum".toUpperCase()}>
-              <Circle
-                center={position}
-                pathOptions={{ fillColor: "blue" }}
-                radius={200}
-              />
-            </LayersControl.Overlay>
-            <LayersControl.Overlay name={"ipsum lorem".toUpperCase()}>
-              <Circle
-                center={position}
-                pathOptions={{ fillColor: "blue" }}
-                radius={200}
-              />
-            </LayersControl.Overlay>
           </LayersControl>
           {polyLinePoints.map((component, _) => (
             <Polyline positions={component} color={'rgb(255, 99, 132)'} />
