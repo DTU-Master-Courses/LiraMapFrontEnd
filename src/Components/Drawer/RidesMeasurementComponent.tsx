@@ -108,120 +108,121 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Paper
-                sx={{ width: '100%', height: '100%', display: 'inline-block', borderRadius: '10px', bgcolor: 'background.paper', overflow: 'auto' }}
-            >
-                <TabPanel
-                    value={tab}
-                    index={0}
+          
+            <ThemeProvider theme={theme}>
+                <Paper
+                    sx={{background: 'transparent', width: '100%', top: "48px", height: 'calc(100% - (57px + 48px))', display: 'absolute', overflow: 'auto' }}
                 >
-                    {ridesLoading &&
-                        <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
-                            {Array.from(Array(15)).map(() => {
-                                return(
-                                    <Skeleton variant="rounded" height={72} />
-                                )
-                            })}
-                        </Stack>
-                    }
-                    <List
-                        sx={{ width: '100%', marginTop: '48px', marginBottom: '48px', overflow: 'scroll' }}
+                    <TabPanel
+                        value={tab}
+                        index={0}
                     >
-                        <>
-                            {Array.from(Array(rideInfos.length)).map((_, i) => {
-                                return (<ListItem
-                                    key={'Trip ' + rideInfos[i]['task_id']}
-                                    sx={{ width: '100%', bgcolor: 'background.paper' }}
-                                >
-                                    <ListItemButton
-                                        sx={{ borderRadius: '10px' }}
-                                        selected={selectedRides.includes(rideInfos[i]['task_id'])}
-                                        onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
+                        {ridesLoading &&
+                            <Stack sx={{ margin: 'auto', width: '100%', marginTop: '64px' }} spacing={1}>
+                                {Array.from(Array(15)).map(() => {
+                                    return(
+                                        <Skeleton variant="rounded" height={72} />
+                                    )
+                                })}
+                            </Stack>
+                        }
+                        <List
+                            sx={{background: 'transparent', width: '100%'}}
+                        >
+                            <>
+                                {Array.from(Array(rideInfos.length)).map((_, i) => {
+                                    return (<ListItem
+                                        key={'Trip ' + rideInfos[i]['task_id']}
+                                        sx={{ paddingBottom: 0,paddingTop: 0, width: '100%', background: 'transparent'}}
                                     >
-                                        <ListItemText 
-                                            primary={`Trip ${rideInfos[i]['task_id']}`} 
-                                            secondary={`${JSON.parse(rideInfos[i]['start_position_display'])['city'] ?? 'Empty'} → ${JSON.parse(rideInfos[i]['end_position_display'])['city'] ?? 'Empty'}`} 
-                                            sx={{ wordWrap: 'break-word' }} />
-                                        <IconButton aria-label="icon">
-                                            <Add />
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>)
-                            })}
-                        </>
-                    </List>
-                </TabPanel>
-                <TabPanel
-                    value={tab}
-                    index={1}
+                                        <ListItemButton
+                                            sx={{ width: '100%', backgroundColor: "transparent", borderBottom: 1, borderColor: "rgba(0,0,0,0.3)"}}
+                                            selected={selectedRides.includes(rideInfos[i]['task_id'])}
+                                            onClick={(event) => handleRideItemClick(event, rideInfos[i]['task_id'], rideInfos[i]['id'])}
+                                        >
+                                            <ListItemText 
+                                                primary={`Trip ${rideInfos[i]['task_id']}`} 
+                                                secondary={`${JSON.parse(rideInfos[i]['start_position_display'])['city'] ?? 'Empty'} → ${JSON.parse(rideInfos[i]['end_position_display'])['city'] ?? 'Empty'}`} 
+                                                sx={{ wordWrap: 'break-word' }} />
+                                            <IconButton aria-label="icon">
+                                                <Add />
+                                            </IconButton>
+                                        </ListItemButton>
+                                    </ListItem>)
+                                })}
+                            </>
+                        </List>
+                    </TabPanel>
+                    <TabPanel
+                        value={tab}
+                        index={1}
+                    >
+                        {measurementsLoading &&
+                            <Stack sx={{ margin: 'auto', width: '100%', marginTop: '64px' }} spacing={1}>
+                                {Array.from(Array(15)).map(() => {
+                                    return(
+                                        <Skeleton variant="rounded" height={72} />
+                                    )
+                                })}
+                            </Stack>
+                        }
+                        <List
+                            sx={{ width: '100%', marginTop: '48px', marginBottom: '150px', overflow: 'scroll' }}
+                        >
+                            <>
+                                {Array.from(Array(measurementInfos.length)).map((_, i) => {
+                                    return (<ListItem
+                                        key={'Measurement ' + i}
+                                        sx={{ width: '100%' }}
+                                    >
+                                        <ListItemButton
+                                            sx={{ borderRadius: '10px' }}
+                                            selected={selectedMeasurements.includes(i)}
+                                            onClick={(event) => handleMeasurementItemClick(event, i)}
+                                        >
+                                            <ListItemText primary={`Measurement ${i + 1}`} secondary={measurementInfos[i]['type']} sx={{ wordWrap: 'break-word' }} />
+                                            <IconButton aria-label="icon">
+                                                {/*
+                                                    TODO: change icon for editing measurement
+                                                */}
+                                                <Add />
+                                            </IconButton>
+                                        </ListItemButton>
+                                    </ListItem>)
+                                })}
+                            </>
+                        </List>
+                    </TabPanel>
+                </Paper>
+                <Paper
+                    elevation={1}
+                    sx={{ width: '100%', height: '48px', position: 'absolute', top: 0, borderRadius: '0 0 0 0' }}
                 >
-                    {measurementsLoading &&
-                        <Stack sx={{ margin: 'auto', width: '90%', marginTop: '64px' }} spacing={1}>
-                            {Array.from(Array(15)).map(() => {
-                                return(
-                                    <Skeleton variant="rounded" height={72} />
-                                )
-                            })}
-                        </Stack>
-                    }
-                    <List
-                        sx={{ width: '100%', marginTop: '48px', marginBottom: '48px', overflow: 'scroll' }}
-                    >
-                        <>
-                            {Array.from(Array(measurementInfos.length)).map((_, i) => {
-                                return (<ListItem
-                                    key={'Measurement ' + i}
-                                    sx={{ width: '100%', bgcolor: 'background.paper' }}
-                                >
-                                    <ListItemButton
-                                        sx={{ borderRadius: '10px' }}
-                                        selected={selectedMeasurements.includes(i)}
-                                        onClick={(event) => handleMeasurementItemClick(event, i)}
-                                    >
-                                        <ListItemText primary={`Measurement ${i + 1}`} secondary={measurementInfos[i]['type']} sx={{ wordWrap: 'break-word' }} />
-                                        <IconButton aria-label="icon">
-                                            {/*
-                                                TODO: change icon for editing measurement
-                                            */}
-                                            <Add />
-                                        </IconButton>
-                                    </ListItemButton>
-                                </ListItem>)
-                            })}
-                        </>
-                    </List>
-                </TabPanel>
-            </Paper>
-            <Paper
-                elevation={1}
-                sx={{ width: '100%', height: '48px', position: 'absolute', top: 0, borderRadius: '0 0 0 0' }}
-            >
-                <Tabs
-                    value={tab}
-                    onChange={handleChange}
-                    selectionFollowsFocus>
-                    <Tab label="Trips" />
-                    <Tab label="Measurements" />
-                </Tabs>
-            </Paper>
+                    <Tabs
+                        value={tab}
+                        onChange={handleChange}
+                        selectionFollowsFocus>
+                        <Tab label="Trips" />
+                        <Tab label="Measurements" />
+                    </Tabs>
+                </Paper>
 
-            <Paper
-                elevation={4}
-                sx={{ width: '100%', height: '57px', position: 'absolute', bottom: 0, my: '0px', borderRadius: '0px 0px 10px 10px', display: 'inline-block' }}
-            >
-                <Stack
-                    sx={{ padding: '10px', overflow: 'auto' }}
-                    spacing={1}
-                    direction="row"
-                    justifyContent="center"
-                    alignItems="stretch">
-                    {tab === 0 && <Button variant="outlined" fullWidth>Trip Details</Button>}
-                    {tab === 1 && <Button variant="outlined" fullWidth>Create</Button>}
-                    <Button variant="text" color="error" onClick={clear} disabled={tab === 0 ? selectedRides.length < 1 : selectedMeasurements.length < 1} fullWidth>Clear</Button>
-                </Stack>
-            </Paper>
-        </ThemeProvider>
+                <Paper
+                    elevation={4}
+                    sx={{ width: '100%', height: '57px', position: 'absolute', bottom: 0, my: '0px', borderRadius: '0px 0px 10px 10px', display: 'inline-block' }}
+                >
+                    <Stack
+                        sx={{ padding: '10px', overflow: 'auto' }}
+                        spacing={1}
+                        direction="row"
+                        justifyContent="center"
+                        alignItems="stretch">
+                        {tab === 0 && <Button variant="outlined" fullWidth>Trip Details</Button>}
+                        {tab === 1 && <Button variant="outlined" fullWidth>Create</Button>}
+                        <Button variant="text" color="error" onClick={clear} disabled={tab === 0 ? selectedRides.length < 1 : selectedMeasurements.length < 1} fullWidth>Clear</Button>
+                    </Stack>
+                </Paper>
+            </ThemeProvider>
     );
 };
 
