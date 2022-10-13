@@ -8,12 +8,13 @@ interface WindowProps {
     y: number,
     width: string,
     height: string,
+    windowName?: string,
     closeWindow: (windowId: number) => any,
     focusWindow: (windowId: number) => number,
     children: React.ReactNode;
 }
 
-const Window = ({id, x, y, width, height, closeWindow, focusWindow, children}: WindowProps) => {
+const Window = ({id, x, y, width, height, windowName, closeWindow, focusWindow, children}: WindowProps) => {
     const [uniqueZ, setUniqueZ] = useState(0);
 
     return(
@@ -34,6 +35,7 @@ const Window = ({id, x, y, width, height, closeWindow, focusWindow, children}: W
             }}
         >
             <div className='draggable_handle'>
+                <span className="window_name">{windowName}</span>
                 <button className='close_component_btn' onClick={() => closeWindow(id)}></button>
             </div>
             <div className="draggable_component_container_content">

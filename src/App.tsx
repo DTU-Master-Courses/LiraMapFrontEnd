@@ -58,6 +58,7 @@ const App: FC = () => {
 					y={300}
 					width={'70%'}
 					height={'60%'}
+					windowName="Trip graph"
 					closeWindow={removeGraphComponent}
 					focusWindow={focusWindow}
 				>
@@ -74,6 +75,7 @@ const App: FC = () => {
 					y={100}
 					width={'20%'}
 					height={'80%'}
+					windowName="Trips"
 					closeWindow={removeTripComponent}
 					focusWindow={focusWindow}
 				>
