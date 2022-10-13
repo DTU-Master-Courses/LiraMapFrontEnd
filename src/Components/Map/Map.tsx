@@ -1,7 +1,7 @@
 import { LatLng } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
-import React, { FC, useState } from "react";
+import { FC } from "react";
 import {
   Circle,
   LayersControl,
@@ -9,17 +9,13 @@ import {
   TileLayer,
   ZoomControl,
 } from "react-leaflet";
-import NavBar from "../NavBar/NavBar";
 import "./Map.css";
 
 interface MapDemoProps {
   position: LatLng;
 }
 
-// TODO: Refactor this down, or scrap it. I'm having to work fast, so corners are getting cut for proof of concept
 const MapDemo: FC<MapDemoProps> = ({ position }: MapDemoProps) => {
-
-
   return (
     <>
       <div className="leaflet-container">
