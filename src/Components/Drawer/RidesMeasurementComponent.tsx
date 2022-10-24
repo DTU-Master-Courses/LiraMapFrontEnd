@@ -54,8 +54,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
   const [rideInfos, setRideInfos] = useState<any[]>([]);
   const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
-  const [ridesLoading, setRidesLoading] = useState(true);
-  const [measurementsLoading, setMeasurementsLoading] = useState(true);
 
   const handleRideItemClick = (
     _: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -84,16 +82,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   };
 
   const fetchRides = async () => {
-    // try {
-    //     setRidesLoading(true);
-    //     await fetch(`http://localhost:8000/trips`).then((response) => response.json()).then((json_response) => {
-    //         setRideInfos(json_response);
-    //         setRidesLoading(false);
-    //     });
-    // } catch (err) {
-    //     console.log(err);
-    //     setRidesLoading(false);
-    // }
     const ridesResponse = await fetch(`http://localhost:8000/trips`);
 
     const rides = await ridesResponse.json();
@@ -102,16 +90,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   };
 
   const fetchMeasurements = async () => {
-    // try {
-    //     setMeasurementsLoading(true);
-    //     await fetch(`http://localhost:8000/measurement/types`).then((response) => response.json()).then((json_response) => {
-    //         setMeasurementInfos(json_response);
-    //         setMeasurementsLoading(false);
-    //     });
-    // } catch (err) {
-    //     console.log(err);
-    //     setMeasurementsLoading(false);
-    // }
     const measurementResponse = await fetch(
       `http://localhost:8000/measurement/types`
     );
@@ -120,25 +98,21 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     return Promise.all(measurementTypes);
   };
 
-  const ridesQuery = useQuery(["rides"], fetchRides);
-  const measurementQuery = useQuery(["measurements"], fetchMeasurements);
+  const { data: ridesQuery, isLoading: ridesIsLoading } = useQuery(
+    ["rides"],
+    fetchRides
+  );
+  const { data: measurementQuery, isLoading: measurementsIsLoading } = useQuery(
+    ["measurements"],
+    fetchMeasurements
+  );
 
   useEffect(() => {
-    // fetchRides();
-    // fetchMeasurements();
-
-    if (ridesQuery.data) {
-      setRideInfos(ridesQuery.data);
-      setRidesLoading(false);
-    }
-    if (measurementQuery.data) {
-      setMeasurementInfos(measurementQuery.data);
-      setMeasurementsLoading(false);
+    if (ridesQuery && measurementQuery) {
+      setRideInfos(ridesQuery);
+      setMeasurementInfos(measurementQuery);
     }
   }, [ridesQuery, measurementQuery]);
-
-  // if (isLoading) return null;
-  // if (error) return null;
 
   return (
     <ThemeProvider theme={theme}>
@@ -154,7 +128,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
         square={true}
       >
         <TabPanel value={tab} index={0}>
-          {ridesLoading && (
+          {ridesIsLoading && (
             <Stack sx={{ margin: "auto", width: "100%" }} spacing={0.1}>
               {Array.from(Array(15)).map((_, i) => {
                 return (
@@ -219,7 +193,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           </List>
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          {measurementsLoading && (
+          {measurementsIsLoading && (
             <Stack sx={{ margin: "auto", width: "100%" }} spacing={0.1}>
               {Array.from(Array(15)).map((_, i) => {
                 return (

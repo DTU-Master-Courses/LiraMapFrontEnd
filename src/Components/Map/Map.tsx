@@ -17,7 +17,10 @@ interface MapDemoProps {
   polyLinePoints: [number, number][][];
 }
 
-const MapDemo: FC<MapDemoProps> = ({ position, polyLinePoints }: MapDemoProps) => {
+const MapDemo: FC<MapDemoProps> = ({
+  position,
+  polyLinePoints,
+}: MapDemoProps) => {
   return (
     <>
       <div className="leaflet-container">
@@ -43,7 +46,11 @@ const MapDemo: FC<MapDemoProps> = ({ position, polyLinePoints }: MapDemoProps) =
             </LayersControl.BaseLayer>
           </LayersControl>
           {polyLinePoints.map((component, i) => (
-            <Polyline key={`Poly ${i}`} positions={component} color={'rgb(255, 99, 132)'} />
+            <Polyline
+              key={`Poly ${i}`}
+              positions={component}
+              color={"rgb(255, 99, 132)"}
+            />
           ))}
         </MapContainer>
       </div>
