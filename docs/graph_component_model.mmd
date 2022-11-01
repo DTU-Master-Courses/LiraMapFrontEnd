@@ -1,0 +1,15 @@
+flowchart BT
+    API
+
+    API <-- trips/acceleration/graphTripID --> fetchGraphContent
+    subgraph WindowGraph
+        subgraph GraphComponent
+        graphContent{{graphContent}}
+        fetchGraphContent([fetchGraphContent])
+
+        fetchGraphContent -- setGraphContent --> graphContent
+
+        graphContent --> Line
+            Line
+        end
+    end

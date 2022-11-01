@@ -17,6 +17,8 @@ const App: FC = () => {
   	const [uniqueId, setUniqueId] = useState(0);
   	const [uniqueZ, setUniqueZ] = useState(0);
 
+	const [windowInFocus, setWindowInFocus] = useState(0);
+
   	const focusWindow = (windowId : number) => {
 		if (windowInFocus !== windowId) {
 			setWindowInFocus(windowId);
@@ -25,7 +27,7 @@ const App: FC = () => {
 		}
 		return 0
   	}
-  	const [windowInFocus, setWindowInFocus] = useState(0);
+  	
 
 	const addGraphComponent = async(taskID: number, tripID: string) => {
 		setUniqueId(uniqueId + 1);
@@ -54,7 +56,6 @@ const App: FC = () => {
 		if (findIndex !== -1) {
 			newGraphComponentsList.splice(findIndex, 1);
 			setGraphComponentsList(newGraphComponentsList);
-
       
 			newPolyLinePoints.splice(findIndex, 1);
 			setPolyLinePoints(newPolyLinePoints);

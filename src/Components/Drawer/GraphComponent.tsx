@@ -38,7 +38,7 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
         try {
             await fetch(`http://localhost:8000/trips/acceleration/${graphTripID}`).then((response) => response.json()).then((json_response) => setGraphContent(json_response));
         } catch (err) {
-            console.log(err);   
+            console.log(err);    
         }
     }
     let xValues = [];

@@ -89,7 +89,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({ addGrap
                 setRidesLoading(false);
             });
         } catch (err) {
-            console.log(err);
+            console.log(err); 
             setRidesLoading(false);
         }
     }
