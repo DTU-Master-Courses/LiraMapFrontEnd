@@ -13,18 +13,25 @@ flowchart BT
         subgraph Map
         end
 
-        addGraphComponent([addGraphComponent]) <--> RidesMeasurementsComponent
-        addGraphComponent -- UniqueID --> graphComponentsList{{graphComponentsList}}
-        addGraphComponent -- Add lat lon data as PolyLine --> polyLinePoints{{polyLinePoints}}
+        addGraphComponent([addGraphComponent]) 
+        removeGraphComponent([removeGraphComponent])
+
+        graphComponentsList{{graphComponentsList}}
+        polyLinePoints{{polyLinePoints}}
+        setRidesIsRendered{{setRidesIsRendered}}
+
+        addGraphComponent <--> RidesMeasurementsComponent
+        addGraphComponent -- UniqueID --> graphComponentsList
+        addGraphComponent -- Add lat lon data as PolyLine --> polyLinePoints
         
         polyLinePoints -- Show list of PolyLines --> Map
 
-        removeGraphComponent([removeGraphComponent]) -- Remove GraphComponent --> graphComponentsList
+        removeGraphComponent -- Remove GraphComponent --> graphComponentsList
         removeGraphComponent -- Remove PolyLine --> polyLinePoints
 
         graphComponentsList -- Add GraphComponent --> WindowGraph
 
-        NavBar --> setRidesIsRendered{{setRidesIsRendered}}
+        NavBar --> setRidesIsRendered
 
         setRidesIsRendered <-- True / False --> WindowRides
 

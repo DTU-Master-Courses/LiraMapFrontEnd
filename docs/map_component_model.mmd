@@ -1,0 +1,11 @@
+flowchart BT
+    polyLinePoints{{polyLinePoints}}
+    polyLinePoints --> PolyLine
+    subgraph MapContainer
+        ZoomControl
+        subgraph LayersControl
+            satellite
+            osm
+        end
+        PolyLine
+    end

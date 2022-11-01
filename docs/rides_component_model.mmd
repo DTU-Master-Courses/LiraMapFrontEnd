@@ -1,27 +1,42 @@
 flowchart BT
-    handleRideItemClick -- tripID --> addGraphComponent([addGraphComponent])
 
+    addGraphComponent([addGraphComponent])
+    API
+    setRideIsRendered{{setRideIsRendered}}
+
+    handleRideItemClick -- tripID --> addGraphComponent
     API <-- /trips --> fetchRides
     API <-- /measurement/types --> fetchMeasurements
+    WindowRides --> setRideIsRendered
 
     subgraph WindowRides
         subgraph RidesMeasurementsComponent
-            
-            fetchRides([fetchRides]) -- setRidesInfo --> rideInfos{{rideInfos}}
 
-            fetchMeasurements([fetchMeasurements]) -- setMeasurementsInfo --> measurementInfos{{measurementInfos}}
-            
-            ListItemRide -- tripID --> handleRideItemClick([handleRideItemClick])
-            
-            ListItemMeasurement --> handleMeasurementItemClick([handleMeasurementItemClick])
+            rideInfos{{rideInfos}}
+            measurementInfos{{measurementInfos}}
+            selectedMeasurements{{selectedMeasurements}}
+            selectedRides{{selectedRides}}
 
-            rideInfos{{rideInfos}} -- Show Rides --> ListRides
-
-            measurementInfos{{measurementInfos}} -- Show Measurements --> ListMeasurements
+            handleRideItemClick([handleRideItemClick])
+            handleMeasurementItemClick([handleMeasurementItemClick])
+            fetchRides([fetchRides])
+            fetchMeasurements([fetchMeasurements])
             
-            handleMeasurementItemClick -- setSelectedMeasurements --> selectedMeasurements{{selectedMeasurements}}
+            fetchRides -- setRidesInfo --> rideInfos
 
-            handleRideItemClick -- setSelectedRides --> selectedRides{{selectedRides}}
+            fetchMeasurements -- setMeasurementsInfo --> measurementInfos
+            
+            ListItemRide -- tripID --> handleRideItemClick
+            
+            ListItemMeasurement --> handleMeasurementItemClick
+
+            rideInfos -- Show Rides --> ListRides
+
+            measurementInfos -- Show Measurements --> ListMeasurements
+            
+            handleMeasurementItemClick -- setSelectedMeasurements --> selectedMeasurements
+
+            handleRideItemClick -- setSelectedRides --> selectedRides
             subgraph ListRides
                 ListItemRide
             end

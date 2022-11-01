@@ -1,15 +1,23 @@
 flowchart BT
     API
+    removeGraphComponent([removeGraphComponent])
 
     API <-- trips/acceleration/graphTripID --> fetchGraphContent
+    WindowGraph --> removeGraphComponent
     subgraph WindowGraph
         subgraph GraphComponent
+
         graphContent{{graphContent}}
+        graphTripID{{graphTripID}}
+        graphTaskID{{graphTaskID}}
+
         fetchGraphContent([fetchGraphContent])
 
+        graphTripID --> fetchGraphContent
         fetchGraphContent -- setGraphContent --> graphContent
 
         graphContent --> Line
+        graphTaskID --> Line
             Line
         end
     end
