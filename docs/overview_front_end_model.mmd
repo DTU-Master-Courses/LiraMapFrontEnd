@@ -39,7 +39,8 @@ flowchart BT
         
     end
 
-    API -- /trips AND /measurement/types --> RidesMeasurementsComponent
+    API -- /trips --> RidesMeasurementsComponent
+    API -- /measurement/types --> RidesMeasurementsComponent
     API -- /trips/acceleration/tripID --> GraphComponent
     API -- /trips/segments/tripID --> addGraphComponent
     
