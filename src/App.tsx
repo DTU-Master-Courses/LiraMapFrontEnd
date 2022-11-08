@@ -5,6 +5,7 @@ import * as L from "leaflet";
 import NavBar from "./Components/NavBar/NavBar";
 import GraphComponent from "./Components/Drawer/GraphComponent";
 import Window from "./Components/Base/Window";
+import FilterModal from "./Components/Base/FilterModal";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -24,6 +25,7 @@ const App: FC = () => {
   );
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
+  const [showFiltering, setShowFiltering] = useState(false);
 
   const position = L.marker([55.677240026834134, 12.567320700469025]);
   const [uniqueId, setUniqueId] = useState(0);
@@ -81,6 +83,11 @@ const App: FC = () => {
     setRidesIsRendered(false);
   };
 
+  const showFilteringModal = () => {
+    setShowFiltering(!showFiltering);
+    console.log(showFiltering);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
@@ -94,6 +101,7 @@ const App: FC = () => {
             y={300}
             width={"70%"}
             height={"60%"}
+            minHeight={"0"}
             windowName="Trip graph"
             closeWindow={removeGraphComponent}
             focusWindow={focusWindow}
@@ -111,13 +119,15 @@ const App: FC = () => {
             y={100}
             width={"20%"}
             height={"80%"}
+            minHeight={"30%"}
             windowName="Trips"
             closeWindow={removeTripComponent}
             focusWindow={focusWindow}
           >
-            <RidesMeasurementComponent addGraphComponent={addGraphComponent} />
+            <RidesMeasurementComponent addGraphComponent={addGraphComponent} showFilteringModal={showFilteringModal} />
           </Window>
         )}
+        {showFiltering && (<FilterModal toggleVisibility={showFilteringModal}/>)}
       </div>
     </QueryClientProvider>
   );

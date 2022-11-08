@@ -46,10 +46,12 @@ function TabPanel(props: TabPanelProps) {
 
 interface RidesMeasurementComponentProps {
   addGraphComponent(index: number, tripID: string): any;
+  showFilteringModal(): any;
 }
 
 const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   addGraphComponent,
+  showFilteringModal,
 }) => {
   const [tab, setTab] = useState(0);
   const [selectedRides, setSelectedRides] = useState<any[]>([]);
@@ -88,6 +90,10 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     // TODO: do something with search
     //console.log(event.target.value);
     setFilterBy(event.target.value);
+  };
+
+  const onFilter = (event: any) => {
+    showFilteringModal();
   };
 
   const fetchRides = async () => {
@@ -132,7 +138,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           top: "48px",
           height: "calc(100% - (57px + 48px))",
           display: "absolute",
-          overflow: "auto",
+          overflow: "auto"
         }}
         square={true}
       >
@@ -306,6 +312,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             color="primary"
             sx={{ p: "10px" }}
             aria-label="directions"
+            onClick={onFilter}
           >
             <FilterList />
           </IconButton>

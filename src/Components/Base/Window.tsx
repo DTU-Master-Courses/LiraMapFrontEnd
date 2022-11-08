@@ -8,6 +8,7 @@ interface WindowProps {
   y: number;
   width: string;
   height: string;
+  minHeight: string;
   windowName?: string;
   closeWindow: (windowId: number) => any;
   focusWindow: (windowId: number) => number;
@@ -20,6 +21,7 @@ const Window = ({
   y,
   width,
   height,
+  minHeight,
   windowName,
   closeWindow,
   focusWindow,
@@ -39,6 +41,7 @@ const Window = ({
         height: height,
       }}
       minWidth={300}
+      minHeight={minHeight}
       style={{ zIndex: 1000 + uniqueZ }}
       onMouseDown={(_: MouseEvent) => {
         setUniqueZ(uniqueZ + focusWindow(id));
