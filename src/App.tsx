@@ -29,31 +29,28 @@ const App: FC = () => {
   const [uniqueId, setUniqueId] = useState(0);
   const [uniqueZ, setUniqueZ] = useState(0);
 
-  const focusWindow = (windowId: number) => {
-    if (windowInFocus !== windowId) {
-      setWindowInFocus(windowId);
-      setUniqueZ(uniqueZ + 100);
-      return uniqueZ;
-    }
-    return 0;
-  };
-  const [windowInFocus, setWindowInFocus] = useState(0);
+	const [windowInFocus, setWindowInFocus] = useState(0);
 
-  const addGraphComponent = async (taskID: number, tripID: string) => {
-    setUniqueId(uniqueId + 1);
-    setUniqueZ(uniqueZ + 1);
-    setGraphComponentsList([
-      ...graphComponentsList,
-      { componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID },
-    ]);
-    let points;
-    try {
-      points = await fetch(
-        `http://localhost:8000/trips/segments/${tripID}`
-      ).then((response) => response.json());
-    } catch (err) {
-      console.log(err);
-    }
+  	const focusWindow = (windowId : number) => {
+		if (windowInFocus !== windowId) {
+			setWindowInFocus(windowId);
+			setUniqueZ(uniqueZ + 100);
+			return uniqueZ
+		}
+		return 0
+  	}
+  	
+
+	const addGraphComponent = async(taskID: number, tripID: string) => {
+		setUniqueId(uniqueId + 1);
+		setUniqueZ(uniqueZ + 1);
+		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID}]);
+		let points;
+		try {
+            points = await fetch(`http://localhost:8000/trips/segments/${tripID}`).then((response) => response.json());
+        } catch (err) {
+            console.log(err);   
+        }	
 
     let newPolyPoints: [number, number][] = [];
     for (let i = 0; i < points.length; i++) {

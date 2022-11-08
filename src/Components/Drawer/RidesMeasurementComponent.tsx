@@ -1,5 +1,5 @@
 import "../Drawer/DrawerComponents.css";
-import { FC, useEffect, useState, useRef } from "react";
+import { FC, useEffect, useState } from "react";
 import { theme } from "../Theme/Theme";
 import { ThemeProvider } from "@mui/material/styles";
 import {

@@ -72,7 +72,7 @@ const NavBar: FC<NavBarProps> = ({ setRidesIsRendered }) => {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
+  }; 
 
   const drawer = (
     <div>
