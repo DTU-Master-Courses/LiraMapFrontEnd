@@ -1,5 +1,5 @@
 :root {
-  --inverse-background-blue: rgba(214,112,61, 0.7);
+  --inverse-background-blue: rgba(214, 112, 61, 0.7);
   --background-blue: rgba(41, 143, 194, 0.7);
 }
 
@@ -8,4 +8,3 @@ body {
   padding: 0;
   overflow: hidden;
 }
-

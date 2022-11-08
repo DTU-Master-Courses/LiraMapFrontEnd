@@ -3,12 +3,20 @@ import Icon from "@material-ui/core/Icon";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { alpha, Button, ListItemButton, Menu, MenuProps, styled, ThemeProvider } from "@mui/material";
+import {
+  alpha,
+  Button,
+  ListItemButton,
+  Menu,
+  MenuProps,
+  styled,
+  ThemeProvider,
+} from "@mui/material";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import { useTheme } from "@mui/material/styles";
 import React, { FC } from "react";
-import "../NavBar/NavBar.css";;
+import "../NavBar/NavBar.css";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -54,9 +62,9 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 interface NavBarProps {
-  setRidesIsRendered: any
+  setRidesIsRendered: any;
 }
-const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
+const NavBar: FC<NavBarProps> = ({ setRidesIsRendered }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,7 +83,7 @@ const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
             setRidesIsRendered(true);
           }}
         >
-          <ListItemText primary={'Trips'}/>
+          <ListItemText primary={"Trips"} />
         </ListItemButton>
       </List>
     </div>
@@ -96,7 +104,10 @@ const NavBar: FC<NavBarProps> = ({setRidesIsRendered}) => {
         elevation={1}
       >
         <Toolbar>
-          <div className="wrap" style={{ display: "flex", alignItems: "center", width: '700px'}}>
+          <div
+            className="wrap"
+            style={{ display: "flex", alignItems: "center", width: "700px" }}
+          >
             <div>
               <Button
                 id="demo-customized-button"
