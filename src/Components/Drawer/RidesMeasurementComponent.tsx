@@ -285,28 +285,42 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
       >
         <Paper
           component="form"
-          sx={{ display: 'flex', alignItems: 'center', width: '100%', height: '100%' }}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
         >
           <InputBase
             sx={{ ml: 2, flex: 1 }}
             placeholder="Search"
-            inputProps={{ 'aria-label': '' }}
+            inputProps={{ "aria-label": "" }}
             onChange={onSearch}
           />
-          <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <Search />
           </IconButton>
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
+          <IconButton
+            color="primary"
+            sx={{ p: "10px" }}
+            aria-label="directions"
+          >
             <FilterList />
           </IconButton>
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton color="error" sx={{ p: '10px', mr: 1 }} aria-label="directions" disabled={
+          <IconButton
+            color="error"
+            sx={{ p: "10px", mr: 1 }}
+            aria-label="directions"
+            disabled={
               tab === 0
                 ? selectedRides.length < 1
                 : selectedMeasurements.length < 1
             }
-            onClick={clear}>
+            onClick={clear}
+          >
             <Clear />
           </IconButton>
         </Paper>
