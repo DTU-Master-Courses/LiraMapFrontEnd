@@ -1,4 +1,5 @@
 import "../Drawer/DrawerComponents.css";
+import "../Utils/client-request-headers";
 import { FC, useState, useEffect } from "react";
 import {
   Chart as ChartJS,
@@ -12,6 +13,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useQuery } from "@tanstack/react-query";
+import ClientRequestHeaders from "../Utils/client-request-headers";
 
 ChartJS.register(
   CategoryScale,
@@ -36,11 +38,12 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://localhost:8000/trips/acceleration/${graphTripID}`
+      `http://localhost:8000/trips/list_of_variables/${graphTripID}`,
+      { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
 
-    return Promise.all(acceleration);
+    return Promise.resolve(acceleration);
   };
 
   const query = useQuery(["accelGraph"], fetchGraphContent);
@@ -55,12 +58,12 @@ const GraphComponent: FC<GraphComponentProps> = ({
   let date;
   try {
     if (graphContent !== undefined && graphContent !== null) {
-      date = graphContent["acceleration"][0]["created_date"].split("T")[0];
-      for (let i = 0; i < graphContent["acceleration"].length; i++) {
-        xValues[i] = graphContent["acceleration"][i]["x"];
-        yValues[i] = graphContent["acceleration"][i]["y"];
+      date = graphContent["variables"][0]["created_date"].split("T")[0];
+      for (let i = 0; i < graphContent["variables"].length; i++) {
+        xValues[i] = graphContent["variables"][i]["x"];
+        yValues[i] = graphContent["variables"][i]["y"];
         timestamps[i] =
-          graphContent["acceleration"][i]["created_date"].split("T")[1];
+          graphContent["variables"][i]["created_date"].split("T")[1];
       }
     }
   } catch (err) {
