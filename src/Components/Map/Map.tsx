@@ -32,9 +32,16 @@ const MapDemo: FC<MapDemoProps> = ({
         >
           <ZoomControl position="bottomright" />
           <LayersControl position="bottomright">
+          <LayersControl.BaseLayer name={"light gray".toUpperCase()}>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Carto</a>'
+                url="http://cartodb-basemaps-c.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"
+                // http://cartodb-basemaps-c.global.ssl.fastly.net/light_all/12/1205/1540.png
+              />
+            </LayersControl.BaseLayer>
             <LayersControl.BaseLayer name={"satellite".toUpperCase()}>
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">ArcGIS</a>'
                 url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
               />
             </LayersControl.BaseLayer>

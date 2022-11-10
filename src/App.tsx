@@ -7,6 +7,7 @@ import GraphComponent from "./Components/Drawer/GraphComponent";
 import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ClientRequestHeaders from "./Components/Utils/client-request-headers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,8 @@ const App: FC = () => {
   const [uniqueId, setUniqueId] = useState(0);
   const [uniqueZ, setUniqueZ] = useState(0);
 
+  const [windowInFocus, setWindowInFocus] = useState(0);
+
   const focusWindow = (windowId: number) => {
     if (windowInFocus !== windowId) {
       setWindowInFocus(windowId);
@@ -37,7 +40,6 @@ const App: FC = () => {
     }
     return 0;
   };
-  const [windowInFocus, setWindowInFocus] = useState(0);
 
   const addGraphComponent = async (taskID: number, tripID: string) => {
     setUniqueId(uniqueId + 1);
@@ -47,10 +49,11 @@ const App: FC = () => {
       { componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID },
     ]);
     let points;
+    // TODO: Need to migrate to React Query
     try {
-      points = await fetch(
-        `http://localhost:8000/trips/segments/${tripID}`
-      ).then((response) => response.json());
+      points = await fetch(`http://localhost:8000/trips/segments/${tripID}`, {
+        headers: ClientRequestHeaders,
+      }).then((response) => response.json());
     } catch (err) {
       console.log(err);
     }

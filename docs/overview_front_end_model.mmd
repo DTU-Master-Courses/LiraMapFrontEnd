@@ -1,0 +1,46 @@
+flowchart BT
+    subgraph App
+        subgraph NavBar
+        end
+        subgraph WindowRides
+            subgraph RidesMeasurementsComponent
+            end
+        end
+        subgraph WindowGraph
+            subgraph GraphComponent
+            end
+        end
+        subgraph Map
+        end
+
+        addGraphComponent([addGraphComponent]) 
+        removeGraphComponent([removeGraphComponent])
+
+        graphComponentsList{{graphComponentsList}}
+        polyLinePoints{{polyLinePoints}}
+        setRidesIsRendered{{setRidesIsRendered}}
+
+        addGraphComponent <--> RidesMeasurementsComponent
+        addGraphComponent -- UniqueID --> graphComponentsList
+        addGraphComponent -- Add lat lon data as PolyLine --> polyLinePoints
+        
+        polyLinePoints -- Show list of PolyLines --> Map
+
+        removeGraphComponent -- Remove GraphComponent --> graphComponentsList
+        removeGraphComponent -- Remove PolyLine --> polyLinePoints
+
+        graphComponentsList -- Add GraphComponent --> WindowGraph
+
+        NavBar --> setRidesIsRendered
+
+        setRidesIsRendered <-- True / False --> WindowRides
+
+        WindowGraph --> removeGraphComponent
+        
+    end
+
+    API -- /trips --> RidesMeasurementsComponent
+    API -- /measurement/types --> RidesMeasurementsComponent
+    API -- /trips/acceleration/tripID --> GraphComponent
+    API -- /trips/segments/tripID --> addGraphComponent
+    

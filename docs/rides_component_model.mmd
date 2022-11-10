@@ -1,0 +1,47 @@
+flowchart BT
+
+    addGraphComponent([addGraphComponent])
+    API
+    setRideIsRendered{{setRideIsRendered}}
+
+    handleRideItemClick -- tripID --> addGraphComponent
+    API <-- /trips --> fetchRides
+    API <-- /measurement/types --> fetchMeasurements
+    WindowRides --> setRideIsRendered
+
+    subgraph WindowRides
+        subgraph RidesMeasurementsComponent
+
+            rideInfos{{rideInfos}}
+            measurementInfos{{measurementInfos}}
+            selectedMeasurements{{selectedMeasurements}}
+            selectedRides{{selectedRides}}
+
+            handleRideItemClick([handleRideItemClick])
+            handleMeasurementItemClick([handleMeasurementItemClick])
+            fetchRides([fetchRides])
+            fetchMeasurements([fetchMeasurements])
+            
+            fetchRides -- setRidesInfo --> rideInfos
+
+            fetchMeasurements -- setMeasurementsInfo --> measurementInfos
+            
+            ListItemRide -- tripID --> handleRideItemClick
+            
+            ListItemMeasurement --> handleMeasurementItemClick
+
+            rideInfos -- Show Rides --> ListRides
+
+            measurementInfos -- Show Measurements --> ListMeasurements
+            
+            handleMeasurementItemClick -- setSelectedMeasurements --> selectedMeasurements
+
+            handleRideItemClick -- setSelectedRides --> selectedRides
+            subgraph ListRides
+                ListItemRide
+            end
+            subgraph ListMeasurements
+                ListItemMeasurement
+            end
+        end
+    end

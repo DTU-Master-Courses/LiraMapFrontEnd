@@ -1,0 +1,25 @@
+flowchart BT
+    setRideIsRendered{{setRideIsRendered}}
+    ListItemButton -- True --> setRideIsRendered
+
+    subgraph NavBar
+        handleClose([handleClose])
+        handleClick([handleClick])
+        anchorEl{{anchorEl}}
+
+        ListItemButton --> handleClose
+        handleClose -- null --> anchorEl
+
+        Button --> handleClick
+        handleClick -- setAnchorEl --> anchorEl
+         
+        subgraph AppBar
+            subgraph Toolbar
+                subgraph Button
+                end
+                subgraph List
+                    ListItemButton
+                end
+            end
+        end
+    end
