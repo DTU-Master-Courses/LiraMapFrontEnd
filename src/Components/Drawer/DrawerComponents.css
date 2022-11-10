@@ -115,3 +115,7 @@
 .trip_value_column p {
   border-bottom: 1px solid grey;
 }
+
+.MuiAccordionDetails-root {
+  display: grid !important;
+}
