@@ -22,6 +22,7 @@ const App: FC = () => {
   const [polyLinePoints, setPolyLinePoints] = useState<[number, number][][]>(
     []
   );
+  const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
 
@@ -31,7 +32,7 @@ const App: FC = () => {
 
 	const [windowInFocus, setWindowInFocus] = useState(0);
 
-  	const focusWindow = (windowId : number) => {
+  const focusWindow = (windowId : number) => {
 		if (windowInFocus !== windowId) {
       console.log(windowId);
 			setWindowInFocus(windowId);
@@ -39,7 +40,7 @@ const App: FC = () => {
 			return uniqueZ
 		}
 		return 0
-  	}
+  }
   	
 
 	const addGraphComponent = async(taskID: number, tripID: string) => {
@@ -79,6 +80,8 @@ const App: FC = () => {
     setRidesIsRendered(false);
   };
 
+  const hideGraphComponent = (index: number) => {};
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
@@ -95,6 +98,7 @@ const App: FC = () => {
             windowName="Trip graph"
             closeWindow={removeGraphComponent}
             focusWindow={focusWindow}
+            hidable={true}
           >
             <GraphComponent
               graphTaskID={component.graphTaskID}

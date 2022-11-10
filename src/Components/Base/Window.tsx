@@ -9,6 +9,7 @@ interface WindowProps {
   width: string;
   height: string;
   windowName?: string;
+  hidable?: boolean;
   closeWindow: (windowId: number) => any;
   focusWindow: (windowId: number) => number;
   children: React.ReactNode;
@@ -21,8 +22,10 @@ const Window = ({
   width,
   height,
   windowName,
+  hidable,
   closeWindow,
   focusWindow,
+
   children,
 }: WindowProps) => {
   const [uniqueZ, setUniqueZ] = useState(0);
@@ -47,10 +50,12 @@ const Window = ({
       <div className="draggable_handle">
         <span className="window_name">{windowName}</span>
         <button
+        style={{display: hidable ? 'inline-block' : 'none' }}
           className="hide_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
         <button
+        style={{marginRight: hidable ? '-70px' : '0px' }}
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
