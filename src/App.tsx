@@ -106,7 +106,11 @@ const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        <NavBar setRidesIsRendered={setRidesIsRendered} openGraphs={graphComponentsList} showGraphWindow={showGraphComponent} />
+        <NavBar
+          setRidesIsRendered={setRidesIsRendered}
+          openGraphs={graphComponentsList}
+          showGraphWindow={showGraphComponent}
+        />
         <Map position={position.getLatLng()} polyLinePoints={polyLinePoints} />
         {graphComponentsList.map((component, _) => (
           <Window

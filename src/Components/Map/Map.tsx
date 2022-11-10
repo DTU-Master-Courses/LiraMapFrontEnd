@@ -32,7 +32,7 @@ const MapDemo: FC<MapDemoProps> = ({
         >
           <ZoomControl position="bottomright" />
           <LayersControl position="bottomright">
-          <LayersControl.BaseLayer name={"light gray".toUpperCase()}>
+            <LayersControl.BaseLayer name={"light gray".toUpperCase()}>
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">Carto</a>'
                 url="http://cartodb-basemaps-c.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png"

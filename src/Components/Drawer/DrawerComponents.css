@@ -78,8 +78,8 @@
   margin-right: -70px;
 }
 .close_component_btn:hover {
-    background-color: #e57373;
-    cursor: pointer;
+  background-color: #e57373;
+  cursor: pointer;
 }
 
 .hide_component_btn {
@@ -97,8 +97,8 @@
   margin-right: 30px;
 }
 .hide_component_btn:hover {
-    background-color: #8ce1e8;
-    cursor: pointer;
+  background-color: #8ce1e8;
+  cursor: pointer;
 }
 
 .trip_details_wrapper {

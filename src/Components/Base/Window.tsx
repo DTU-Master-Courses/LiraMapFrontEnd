@@ -46,7 +46,10 @@ const Window = ({
         height: height,
       }}
       minWidth={300}
-      style={{ zIndex: 1000 + uniqueZ, display: hidden ? 'none' : 'inline-block'  }}
+      style={{
+        zIndex: 1000 + uniqueZ,
+        display: hidden ? "none" : "inline-block",
+      }}
       onMouseDown={(_: MouseEvent) => {
         setUniqueZ(uniqueZ + focusWindow(id));
       }}
@@ -54,12 +57,12 @@ const Window = ({
       <div className="draggable_handle">
         <span className="window_name">{windowName}</span>
         <button
-        style={{display: hidable ? 'inline-block' : 'none' }}
+          style={{ display: hidable ? "inline-block" : "none" }}
           className="hide_component_btn"
           onClick={() => hideWindow!(id)}
         ></button>
         <button
-        style={{marginRight: hidable ? '-70px' : '0px' }}
+          style={{ marginRight: hidable ? "-70px" : "0px" }}
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
