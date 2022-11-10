@@ -12,13 +12,15 @@ import {
   Tab,
   Tabs,
   Stack,
-  Button,
   Box,
   Skeleton,
+  InputBase,
+  Divider,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
 import { useQuery } from "@tanstack/react-query";
+import { Clear, FilterList, Search } from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 
 interface TabPanelProps {
@@ -55,6 +57,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
   const [rideInfos, setRideInfos] = useState<any[]>([]);
   const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
+  const [filterBy, setFilterBy] = useState("");
 
   const handleRideItemClick = (
     _: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -80,6 +83,12 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const clear = () => {
     if (tab === 0) setSelectedRides([]);
     if (tab === 1) setSelectedMeasurements([]);
+  };
+
+  const onSearch = (event: any) => {
+    // TODO: do something with search
+    //console.log(event.target.value);
+    setFilterBy(event.target.value);
   };
 
   const fetchRides = async () => {
@@ -278,37 +287,47 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           display: "inline-block",
         }}
       >
-        <Stack
-          sx={{ padding: "10px", overflow: "auto" }}
-          spacing={1}
-          direction="row"
-          justifyContent="center"
-          alignItems="stretch"
+        <Paper
+          component="form"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            height: "100%",
+          }}
         >
-          {tab === 0 && (
-            <Button variant="outlined" fullWidth>
-              Trip Details
-            </Button>
-          )}
-          {tab === 1 && (
-            <Button variant="outlined" fullWidth>
-              Create
-            </Button>
-          )}
-          <Button
-            variant="text"
+          <InputBase
+            sx={{ ml: 2, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "" }}
+            onChange={onSearch}
+          />
+          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+            <Search />
+          </IconButton>
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <IconButton
+            color="primary"
+            sx={{ p: "10px" }}
+            aria-label="directions"
+          >
+            <FilterList />
+          </IconButton>
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <IconButton
             color="error"
-            onClick={clear}
+            sx={{ p: "10px", mr: 1 }}
+            aria-label="directions"
             disabled={
               tab === 0
                 ? selectedRides.length < 1
                 : selectedMeasurements.length < 1
             }
-            fullWidth
+            onClick={clear}
           >
-            Clear
-          </Button>
-        </Stack>
+            <Clear />
+          </IconButton>
+        </Paper>
       </Paper>
     </ThemeProvider>
   );
