@@ -26,6 +26,7 @@ const Window = ({
   windowName,
   hidable,
   hidden,
+  hideWindow,
   closeWindow,
   focusWindow,
 
@@ -55,7 +56,7 @@ const Window = ({
         <button
         style={{display: hidable ? 'inline-block' : 'none' }}
           className="hide_component_btn"
-          onClick={() => closeWindow(id)}
+          onClick={() => hideWindow!(id)}
         ></button>
         <button
         style={{marginRight: hidable ? '-70px' : '0px' }}

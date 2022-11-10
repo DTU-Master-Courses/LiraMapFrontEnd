@@ -89,10 +89,19 @@ const App: FC = () => {
     setGraphComponentsList(newGraphComponentsList);
   };
 
+  const showGraphComponent = (index: number) => {
+    const newGraphComponentsList = [...graphComponentsList];
+    const findIndex = newGraphComponentsList.findIndex((value) => {
+      return value.componentId === index;
+    });
+    newGraphComponentsList[findIndex].hidden = false;
+    setGraphComponentsList(newGraphComponentsList);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        <NavBar setRidesIsRendered={setRidesIsRendered} />
+        <NavBar setRidesIsRendered={setRidesIsRendered} openGraphs={graphComponentsList} showGraphWindow={showGraphComponent} />
         <Map position={position.getLatLng()} polyLinePoints={polyLinePoints} />
         {graphComponentsList.map((component, _) => (
           <Window
@@ -102,11 +111,12 @@ const App: FC = () => {
             y={300}
             width={"70%"}
             height={"60%"}
-            windowName="Trip graph"
+            windowName={`Trip: ${component.graphTaskID}`}
             hideWindow={hideGraphComponent}
             closeWindow={removeGraphComponent}
             focusWindow={focusWindow}
             hidable={true}
+            hidden={component.hidden}
           >
             <GraphComponent
               graphTaskID={component.graphTaskID}
