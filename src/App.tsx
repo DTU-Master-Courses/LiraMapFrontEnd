@@ -7,6 +7,7 @@ import GraphComponent from "./Components/Drawer/GraphComponent";
 import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ClientRequestHeaders from "./Components/Utils/client-request-headers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,6 +23,7 @@ const App: FC = () => {
   const [polyLinePoints, setPolyLinePoints] = useState<[number, number][][]>(
     []
   );
+  const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
 
@@ -29,28 +31,33 @@ const App: FC = () => {
   const [uniqueId, setUniqueId] = useState(0);
   const [uniqueZ, setUniqueZ] = useState(0);
 
-	const [windowInFocus, setWindowInFocus] = useState(0);
+  const [windowInFocus, setWindowInFocus] = useState(0);
 
-  	const focusWindow = (windowId : number) => {
-		if (windowInFocus !== windowId) {
-			setWindowInFocus(windowId);
-			setUniqueZ(uniqueZ + 100);
-			return uniqueZ
-		}
-		return 0
-  	}
-  	
+  const focusWindow = (windowId: number) => {
+    if (windowInFocus !== windowId) {
+      setWindowInFocus(windowId);
+      setUniqueZ(uniqueZ + 100);
+      return uniqueZ;
+    }
+    return 0;
+  };
 
-	const addGraphComponent = async(taskID: number, tripID: string) => {
-		setUniqueId(uniqueId + 1);
-		setUniqueZ(uniqueZ + 1);
-		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID}]);
-		let points;
-		try {
-            points = await fetch(`http://localhost:8000/trips/segments/${tripID}`).then((response) => response.json());
-        } catch (err) {
-            console.log(err);   
-        }	
+  const addGraphComponent = async (taskID: number, tripID: string) => {
+    setUniqueId(uniqueId + 1);
+    setUniqueZ(uniqueZ + 1);
+    setGraphComponentsList([
+      ...graphComponentsList,
+      { componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID },
+    ]);
+    let points;
+    // TODO: Need to migrate to React Query
+    try {
+      points = await fetch(`http://localhost:8000/trips/segments/${tripID}`, {
+        headers: ClientRequestHeaders,
+      }).then((response) => response.json());
+    } catch (err) {
+      console.log(err);
+    }
 
     let newPolyPoints: [number, number][] = [];
     for (let i = 0; i < points.length; i++) {
@@ -78,10 +85,32 @@ const App: FC = () => {
     setRidesIsRendered(false);
   };
 
+  const hideGraphComponent = (index: number) => {
+    const newGraphComponentsList = [...graphComponentsList];
+    const findIndex = newGraphComponentsList.findIndex((value) => {
+      return value.componentId === index;
+    });
+    newGraphComponentsList[findIndex].hidden = true;
+    setGraphComponentsList(newGraphComponentsList);
+  };
+
+  const showGraphComponent = (index: number) => {
+    const newGraphComponentsList = [...graphComponentsList];
+    const findIndex = newGraphComponentsList.findIndex((value) => {
+      return value.componentId === index;
+    });
+    newGraphComponentsList[findIndex].hidden = false;
+    setGraphComponentsList(newGraphComponentsList);
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App">
-        <NavBar setRidesIsRendered={setRidesIsRendered} />
+        <NavBar
+          setRidesIsRendered={setRidesIsRendered}
+          openGraphs={graphComponentsList}
+          showGraphWindow={showGraphComponent}
+        />
         <Map position={position.getLatLng()} polyLinePoints={polyLinePoints} />
         {graphComponentsList.map((component, _) => (
           <Window
@@ -91,9 +120,12 @@ const App: FC = () => {
             y={300}
             width={"70%"}
             height={"60%"}
-            windowName="Trip graph"
+            windowName={`Trip: ${component.graphTaskID}`}
+            hideWindow={hideGraphComponent}
             closeWindow={removeGraphComponent}
             focusWindow={focusWindow}
+            hidable={true}
+            hidden={component.hidden}
           >
             <GraphComponent
               graphTaskID={component.graphTaskID}
