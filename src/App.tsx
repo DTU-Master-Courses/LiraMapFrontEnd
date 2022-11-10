@@ -33,6 +33,7 @@ const App: FC = () => {
 
   	const focusWindow = (windowId : number) => {
 		if (windowInFocus !== windowId) {
+      console.log(windowId);
 			setWindowInFocus(windowId);
 			setUniqueZ(uniqueZ + 100);
 			return uniqueZ

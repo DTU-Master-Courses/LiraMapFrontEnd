@@ -47,6 +47,10 @@ const Window = ({
       <div className="draggable_handle">
         <span className="window_name">{windowName}</span>
         <button
+          className="hide_component_btn"
+          onClick={() => closeWindow(id)}
+        ></button>
+        <button
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
