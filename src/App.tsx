@@ -46,7 +46,7 @@ const App: FC = () => {
 	const addGraphComponent = async(taskID: number, tripID: string) => {
 		setUniqueId(uniqueId + 1);
 		setUniqueZ(uniqueZ + 1);
-		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID}]);
+		setGraphComponentsList([...graphComponentsList, {componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID, hidden: false}]);
 		let points;
 		try {
             points = await fetch(`http://localhost:8000/trips/segments/${tripID}`).then((response) => response.json());
@@ -80,7 +80,14 @@ const App: FC = () => {
     setRidesIsRendered(false);
   };
 
-  const hideGraphComponent = (index: number) => {};
+  const hideGraphComponent = (index: number) => {
+    const newGraphComponentsList = [...graphComponentsList];
+    const findIndex = newGraphComponentsList.findIndex((value) => {
+      return value.componentId === index;
+    });
+    newGraphComponentsList[findIndex].hidden = true;
+    setGraphComponentsList(newGraphComponentsList);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -96,6 +103,7 @@ const App: FC = () => {
             width={"70%"}
             height={"60%"}
             windowName="Trip graph"
+            hideWindow={hideGraphComponent}
             closeWindow={removeGraphComponent}
             focusWindow={focusWindow}
             hidable={true}

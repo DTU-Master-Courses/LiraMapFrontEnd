@@ -10,6 +10,8 @@ interface WindowProps {
   height: string;
   windowName?: string;
   hidable?: boolean;
+  hidden?: boolean;
+  hideWindow?: (windowId: number) => any;
   closeWindow: (windowId: number) => any;
   focusWindow: (windowId: number) => number;
   children: React.ReactNode;
@@ -23,6 +25,7 @@ const Window = ({
   height,
   windowName,
   hidable,
+  hidden,
   closeWindow,
   focusWindow,
 
@@ -42,7 +45,7 @@ const Window = ({
         height: height,
       }}
       minWidth={300}
-      style={{ zIndex: 1000 + uniqueZ }}
+      style={{ zIndex: 1000 + uniqueZ, display: hidden ? 'none' : 'inline-block'  }}
       onMouseDown={(_: MouseEvent) => {
         setUniqueZ(uniqueZ + focusWindow(id));
       }}
