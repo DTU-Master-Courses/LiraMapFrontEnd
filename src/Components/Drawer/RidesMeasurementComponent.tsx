@@ -19,6 +19,7 @@ import {
 import { Add } from "@mui/icons-material";
 
 import { useQuery } from "@tanstack/react-query";
+import ClientRequestHeaders from "../Utils/client-request-headers";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -82,7 +83,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   };
 
   const fetchRides = async () => {
-    const ridesResponse = await fetch(`http://localhost:8000/trips`);
+    const ridesResponse = await fetch(`http://localhost:8000/trips`, {
+      headers: ClientRequestHeaders,
+    });
 
     const rides = await ridesResponse.json();
 
@@ -91,7 +94,8 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
 
   const fetchMeasurements = async () => {
     const measurementResponse = await fetch(
-      `http://localhost:8000/measurement/types`
+      `http://localhost:8000/measurement/types`,
+      { headers: ClientRequestHeaders }
     );
     const measurementTypes = await measurementResponse.json();
 

@@ -1,19 +1,21 @@
-import '../Drawer/DrawerComponents.css';
-import { FC, useState, useEffect } from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Typography }  from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useQuery } from "@tanstack/react-query";
+import "../Drawer/DrawerComponents.css";
+import "../Utils/client-request-headers";
+import { FC, useState, useEffect } from "react";
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-  } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { useQuery } from "@tanstack/react-query";
+import ClientRequestHeaders from "../Utils/client-request-headers";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@material-ui/core";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 ChartJS.register(
     CategoryScale,
@@ -34,37 +36,42 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
     const [graphContent, setGraphContent] = useState<any>();
     const [tripDetails, setTripDetailsContent] = useState<any>();
 
-    useEffect(() => {
-        fetchGraphContent();
-        fetchTripDetails();
-    }, []);
+  const fetchGraphContent = async () => {
+    const accelerationResponse = await fetch(
+      `http://localhost:8000/trips/acceleration/${graphTripID}`,
+      { headers: ClientRequestHeaders }
+    );
+    const acceleration = await accelerationResponse.json();
 
-    const fetchGraphContent = async() => {
-        try {
-            await fetch(`http://localhost:8000/trips/acceleration/${graphTripID}`).then((response) => response.json()).then((json_response) => setGraphContent(json_response));
-        } catch (err) {
-            console.log(err);    
-        }
-    }
-    const fetchTripDetails = async() => {
-        try {
-            await fetch(`http://localhost:8000/trips/id/${graphTripID}`).then((response) => response.json()).then((json_response) => setTripDetailsContent(json_response));
-        } catch (err) {
-            console.log(err);    
-        }
-    }
+    return Promise.resolve(acceleration);
+  };
+
+  const fetchTripDetails = async() => {
+      const tripDetailsResponse = await fetch(`http://localhost:8000/trips/id/${graphTripID}`, {headers: ClientRequestHeaders})
+      const tripDetails = await tripDetailsResponse.json();
+
+      return Promise.resolve(tripDetails);
+  };
+
+  const {data: query, isLoading: isQueryLoading} = useQuery(["accelGraph"], fetchGraphContent);
+  const {data: tripQuery, isLoading: isTripQueryLoading} = useQuery(["tripDetails"], fetchTripDetails);
+
+  useEffect(() => {
+    if (query) setGraphContent(query);
+    if (tripQuery)  setTripDetailsContent(tripQuery); 
+  }, [query, tripQuery]);
 
     let xValues = [];
     let yValues = [];
     let timestamps = [];
     let date;
     try {
-        if (graphContent !== undefined && graphContent !== null) {
-            date = graphContent["acceleration"][0]['created_date'].split('T')[0];
-            for (let i = 0; i < graphContent["acceleration"].length; i++) {
-                xValues[i] = graphContent["acceleration"][i]["x"];
-                yValues[i] = graphContent["acceleration"][i]["y"];
-                timestamps[i] = graphContent["acceleration"][i]["created_date"].split('T')[1];
+        if (!isQueryLoading && graphContent) {
+            date = graphContent["variables"][0]['created_date'].split('T')[0];
+            for (let i = 0; i < graphContent["variables"].length; i++) {
+                xValues[i] = graphContent["variables"][i]["x"];
+                yValues[i] = graphContent["variables"][i]["y"];
+                timestamps[i] = graphContent["variables"][i]["created_date"].split('T')[1];
             }
         }
     } catch (err) {
@@ -90,7 +97,7 @@ const GraphComponent: FC<GraphComponentProps> = ({ graphTaskID, graphTripID }) =
         });
     }
     try {
-        if (tripDetails !== undefined && tripDetails !== null) {
+        if (!isTripQueryLoading && tripDetails) {
             Object.entries(tripDetails).forEach(([key, value]) => {
                 tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
                 if (value == null) {
