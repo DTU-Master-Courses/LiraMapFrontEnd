@@ -86,7 +86,7 @@
   height: clamp(100%, 100%, 100%);
   width: clamp(40px, 40px, 40px);
   border-radius: 0 10px 0 10px;
-  background-image: url("/public/close_btn.svg");
+  background-image: url("/public/minus-solid.svg");
   background-repeat: no-repeat;
   background-position: center;
   background-color: #16dad0;
