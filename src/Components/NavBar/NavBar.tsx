@@ -63,8 +63,10 @@ const StyledMenu = styled((props: MenuProps) => (
 
 interface NavBarProps {
   setRidesIsRendered: any;
+  openGraphs: any[];
+  showGraphWindow: (windowId: number) => any;
 }
-const NavBar: FC<NavBarProps> = ({ setRidesIsRendered }) => {
+const NavBar: FC<NavBarProps> = ({ setRidesIsRendered, openGraphs, showGraphWindow }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -85,6 +87,16 @@ const NavBar: FC<NavBarProps> = ({ setRidesIsRendered }) => {
         >
           <ListItemText primary={"Trips"} />
         </ListItemButton>
+        {openGraphs.map((component, _) => (
+          <ListItemButton
+          onClick={() => {
+            handleClose();
+            showGraphWindow(component.componentId)
+          }}
+        >
+          <ListItemText primary={`Trip: ${component.graphTaskID}`} />
+        </ListItemButton>
+        ))}
       </List>
     </div>
   );
