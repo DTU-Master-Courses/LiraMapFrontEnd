@@ -76,8 +76,22 @@
   border-style: solid;
   float: right;
 }
-
 .close_component_btn:hover {
-  background-color: #e57373;
-  cursor: pointer;
+    background-color: #e57373;
+    cursor: pointer;
+}
+
+.trip_details_wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.trip_key_column p {
+  border-bottom: 1px solid grey;
+}
+
+.trip_value_column p {
+  border-bottom: 1px solid grey;
 }
