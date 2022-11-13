@@ -51,7 +51,9 @@ const GraphComponent: FC<GraphComponentProps> = ({
     );
     const acceleration = await accelerationResponse.json();
 
-    return Promise.resolve(acceleration);
+    setGraphContent(acceleration);
+
+    // return Promise.resolve(acceleration);
   };
 
   const fetchTripDetails = async () => {
@@ -61,29 +63,32 @@ const GraphComponent: FC<GraphComponentProps> = ({
     );
     const tripDetails = await tripDetailsResponse.json();
 
-    return Promise.resolve(tripDetails);
+    setTripDetailsContent(tripDetails);
+
+    // return Promise.resolve(tripDetails);
   };
 
-  const { data: query, isLoading: isQueryLoading } = useQuery(
-    ["accelGraph"],
-    fetchGraphContent
-  );
-  const { data: tripQuery, isLoading: isTripQueryLoading } = useQuery(
-    ["tripDetails"],
-    fetchTripDetails
-  );
+  // const { data: query, isLoading: isQueryLoading } = useQuery(
+  //   ["accelGraph"],
+  //   fetchGraphContent
+  // );
+  // const { data: tripQuery, isLoading: isTripQueryLoading } = useQuery(
+  //   ["tripDetails"],
+  //   fetchTripDetails
+  // );
 
   useEffect(() => {
-    if (query) setGraphContent(query);
-    if (tripQuery) setTripDetailsContent(tripQuery);
-  }, [query, tripQuery]);
+    fetchGraphContent();
+    fetchTripDetails();
+  }, []);
 
   let xValues = [];
   let yValues = [];
   let timestamps = [];
   let date;
   try {
-    if (!isQueryLoading && graphContent) {
+    // if (!isQueryLoading && graphContent) {
+    if (graphContent) {
       date = graphContent["variables"][0]["created_date"].split("T")[0];
       for (let i = 0; i < graphContent["variables"].length; i++) {
         xValues[i] = graphContent["variables"][i]["x"];
@@ -115,7 +120,8 @@ const GraphComponent: FC<GraphComponentProps> = ({
     });
   };
   try {
-    if (!isTripQueryLoading && tripDetails) {
+    // if (!isTripQueryLoading && tripDetails) {
+    if (tripDetails) {
       Object.entries(tripDetails).forEach(([key, value]) => {
         tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
         if (value == null) {
