@@ -12,7 +12,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useQuery } from "@tanstack/react-query";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import {
   Accordion,
@@ -46,14 +45,12 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://localhost:8000/trips/acceleration/${graphTripID}`,
+      `http://localhost:8000/trips/list_of_variables/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
 
     setGraphContent(acceleration);
-
-    // return Promise.resolve(acceleration);
   };
 
   const fetchTripDetails = async () => {
@@ -64,18 +61,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
     const tripDetails = await tripDetailsResponse.json();
 
     setTripDetailsContent(tripDetails);
-
-    // return Promise.resolve(tripDetails);
   };
-
-  // const { data: query, isLoading: isQueryLoading } = useQuery(
-  //   ["accelGraph"],
-  //   fetchGraphContent
-  // );
-  // const { data: tripQuery, isLoading: isTripQueryLoading } = useQuery(
-  //   ["tripDetails"],
-  //   fetchTripDetails
-  // );
 
   useEffect(() => {
     fetchGraphContent();
@@ -88,15 +74,14 @@ const GraphComponent: FC<GraphComponentProps> = ({
   let timestamps = [];
   let date;
   try {
-    // if (!isQueryLoading && graphContent) {
     if (graphContent) {
-      date = graphContent["variables"][0]["created_date"].split("T")[0];
-      for (let i = 0; i < graphContent["variables"].length; i++) {
-        xValues[i] = graphContent["variables"][i]["x"];
-        yValues[i] = graphContent["variables"][i]["y"];
-        zValues[i] = graphContent["variables"][i]["z"];
+      date = graphContent[0]["ts_date"];
+      for (let i = 0; i < graphContent.length; i++) {
+        xValues[i] = graphContent[i]["ax"];
+        yValues[i] = graphContent[i]["ay"];
+        zValues[i] = graphContent[i]["az"];
         timestamps[i] =
-          graphContent["variables"][i]["created_date"].split("T")[1];
+          graphContent[i]["ts_time"];
       }
     }
   } catch (err) {
@@ -122,7 +107,6 @@ const GraphComponent: FC<GraphComponentProps> = ({
     });
   };
   try {
-    // if (!isTripQueryLoading && tripDetails) {
     if (tripDetails) {
       Object.entries(tripDetails).forEach(([key, value]) => {
         tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
@@ -131,13 +115,13 @@ const GraphComponent: FC<GraphComponentProps> = ({
         } else {
           tripDetailsValuesHTML.push(<Typography>{String(value)}</Typography>);
         }
-        if (key == "start_position_display") {
+        if (key == "start_position_city") {
           handleSubAccordion(
             key,
             startPositionKeysHTML,
             startPositionValuesHTML
           );
-        } else if (key == "end_position_display") {
+        } else if (key == "end_position_city") {
           handleSubAccordion(key, endPositionKeysHTML, endPositionValuesHTML);
         }
       });

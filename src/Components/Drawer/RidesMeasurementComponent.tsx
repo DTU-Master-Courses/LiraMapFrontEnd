@@ -185,13 +185,9 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
                       <ListItemText
                         primary={`Trip ${rideInfos[i]["task_id"]}`}
                         secondary={`${
-                          JSON.parse(rideInfos[i]["start_position_display"])[
-                            "city"
-                          ] ?? "Empty"
+                          rideInfos[i]["start_position_city"] ?? "Empty"
                         } → ${
-                          JSON.parse(rideInfos[i]["end_position_display"])[
-                            "city"
-                          ] ?? "Empty"
+                        rideInfos[i]["end_position_city"]?? "Empty"
                         }`}
                         sx={{ wordWrap: "break-word" }}
                       />
