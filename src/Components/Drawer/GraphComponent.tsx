@@ -84,6 +84,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   let xValues = [];
   let yValues = [];
+  let zValues = [];
   let timestamps = [];
   let date;
   try {
@@ -93,6 +94,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
       for (let i = 0; i < graphContent["variables"].length; i++) {
         xValues[i] = graphContent["variables"][i]["x"];
         yValues[i] = graphContent["variables"][i]["y"];
+        zValues[i] = graphContent["variables"][i]["z"];
         timestamps[i] =
           graphContent["variables"][i]["created_date"].split("T")[1];
       }
@@ -157,6 +159,12 @@ const GraphComponent: FC<GraphComponentProps> = ({
         borderColor: "rgb(100, 99, 158)",
         backgroundColor: "rgba(100, 99, 158, 0.5)",
       },
+      {
+        label: "Acceleration-z",
+        data: zValues,
+        borderColor: "rgb(0, 255, 0)",
+        backgroundColor: "rgba(0, 255, 0, 0.5)",
+      },
     ],
   };
 
@@ -177,7 +185,6 @@ const GraphComponent: FC<GraphComponentProps> = ({
         }}
         data={data}
       />
-      {/* TODO: Make component to set in, instead of redundency */}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Trip Details</Typography>
