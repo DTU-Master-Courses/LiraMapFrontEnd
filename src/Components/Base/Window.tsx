@@ -51,7 +51,7 @@ const Window = ({
         display: hidden ? "none" : "inline-block",
       }}
       onMouseDown={(_: MouseEvent) => {
-        setUniqueZ(uniqueZ + focusWindow(id));
+        setUniqueZ(focusWindow(id));
       }}
     >
       <div className="draggable_handle">
