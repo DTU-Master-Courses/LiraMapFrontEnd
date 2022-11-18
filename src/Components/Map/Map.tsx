@@ -11,10 +11,11 @@ import {
   ZoomControl,
 } from "react-leaflet";
 import "./Map.css";
+import { Hotline } from "leaflet-hotline-react";
 
 interface MapDemoProps {
   position: LatLng;
-  polyLinePoints: [number, number][][];
+  polyLinePoints: [number, number, number][][];
 }
 
 const MapDemo: FC<MapDemoProps> = ({
@@ -52,10 +53,16 @@ const MapDemo: FC<MapDemoProps> = ({
             </LayersControl.BaseLayer>
           </LayersControl>
           {polyLinePoints.map((component, i) => (
-            <Polyline
-              key={`Poly ${i}`}
+            <Hotline
               positions={component}
-              color={"rgb(255, 99, 132)"}
+              weight={3}
+              min={0}
+              max={1000}
+              palette={{
+                0.0: 'red',
+                0.5: 'yellow',
+                1.0: 'green',
+              }}
             />
           ))}
         </MapContainer>
