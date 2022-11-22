@@ -20,6 +20,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GraphChart from "../GraphChart/GraphChart";
 
 ChartJS.register(
   CategoryScale,
@@ -68,26 +69,6 @@ const GraphComponent: FC<GraphComponentProps> = ({
     fetchTripDetails();
   }, []);
 
-  let xValues = [];
-  let yValues = [];
-  let zValues = [];
-  let timestamps = [];
-  let date;
-  try {
-    if (graphContent) {
-      date = graphContent[0]["ts_date"];
-      for (let i = 0; i < graphContent.length; i++) {
-        xValues[i] = graphContent[i]["ax"];
-        yValues[i] = graphContent[i]["ay"];
-        zValues[i] = graphContent[i]["az"];
-        timestamps[i] =
-          graphContent[i]["ts_time"];
-      }
-    }
-  } catch (err) {
-    console.log(err);
-  }
-
   const tripDetailsKeysHTML: any = [];
   const tripDetailsValuesHTML: any = [];
   const startPositionKeysHTML: any = [];
@@ -128,47 +109,9 @@ const GraphComponent: FC<GraphComponentProps> = ({
     }
   } catch (err) {}
 
-  const data = {
-    labels: timestamps,
-    datasets: [
-      {
-        label: "Acceleration-x",
-        data: xValues,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Acceleration-y",
-        data: yValues,
-        borderColor: "rgb(100, 99, 158)",
-        backgroundColor: "rgba(100, 99, 158, 0.5)",
-      },
-      {
-        label: "Acceleration-z",
-        data: zValues,
-        borderColor: "rgb(0, 255, 0)",
-        backgroundColor: "rgba(0, 255, 0, 0.5)",
-      },
-    ],
-  };
-
   return (
     <div>
-      <Line
-        options={{
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top" as const,
-            },
-            title: {
-              display: true,
-              text: [`Trip: ${graphTaskID}`, date],
-            },
-          },
-        }}
-        data={data}
-      />
+      <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Trip Details</Typography>
