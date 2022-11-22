@@ -20,9 +20,9 @@ const queryClient = new QueryClient({
 
 const App: FC = () => {
   const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
-  const [polyLinePoints, setPolyLinePoints] = useState<[number, number, number][][]>(
-    []
-  );
+  const [polyLinePoints, setPolyLinePoints] = useState<
+    [number, number, number][][]
+  >([]);
   const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);

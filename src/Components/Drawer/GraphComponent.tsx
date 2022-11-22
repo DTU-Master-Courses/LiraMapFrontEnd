@@ -80,8 +80,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
         xValues[i] = graphContent[i]["ax"];
         yValues[i] = graphContent[i]["ay"];
         zValues[i] = graphContent[i]["az"];
-        timestamps[i] =
-          graphContent[i]["ts_time"];
+        timestamps[i] = graphContent[i]["ts_time"];
       }
     }
   } catch (err) {
