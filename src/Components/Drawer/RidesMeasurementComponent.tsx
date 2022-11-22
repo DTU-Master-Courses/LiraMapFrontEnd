@@ -22,6 +22,7 @@ import { Add } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import { Clear, FilterList, Search } from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
+import { match } from "assert";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,6 +57,8 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [selectedRides, setSelectedRides] = useState<any[]>([]);
   const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
   const [rideInfos, setRideInfos] = useState<any[]>([]);
+  // For the filtering work
+  const [filteredRideInfos, setFilteredRideInfos] = useState<any[]>([]);
   const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
   const [filterBy, setFilterBy] = useState("");
 
@@ -83,6 +86,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const clear = () => {
     if (tab === 0) setSelectedRides([]);
     if (tab === 1) setSelectedMeasurements([]);
+    setFilterBy("");
   };
 
   const onSearch = (event: any) => {
@@ -127,6 +131,22 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     }
   }, [ridesQuery, measurementQuery]);
 
+  useEffect(() => {
+    if (filterBy) {
+      let matches = [];
+      for (let i = 0; i < rideInfos.length; i++) {
+        if (rideInfos[i]["start_position_city"] && rideInfos[i]["end_position_city"]) {
+          if (rideInfos[i]["start_position_city"].includes(filterBy) || rideInfos[i]["end_position_city"].includes(filterBy)) {
+            matches.push(rideInfos[i]);
+          }
+        }
+      }
+      setFilteredRideInfos(matches);
+    } else {
+      setFilteredRideInfos([]);
+    }
+  }, [filterBy]);
+
   return (
     <ThemeProvider theme={theme}>
       <Paper
@@ -156,7 +176,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           )}
           <List sx={{ background: "transparent", width: "100%", padding: "0" }}>
             <>
-              {Array.from(Array(rideInfos.length)).map((_, i) => {
+              {!filterBy && Array.from(Array(rideInfos.length)).map((_, i) => {
                 return (
                   <ListItem
                     key={"Trip " + rideInfos[i]["task_id"]}
@@ -193,6 +213,46 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
                             "city"
                           ] ?? "Empty"
                         }`}
+                        sx={{ wordWrap: "break-word" }}
+                      />
+                      <IconButton aria-label="icon">
+                        <Add />
+                      </IconButton>
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
+              {filterBy && Array.from(Array(filteredRideInfos.length)).map((_, i) => {
+                return (
+                  <ListItem
+                    key={"Trip " + filteredRideInfos[i]["task_id"]}
+                    sx={{
+                      padding: "0",
+                      width: "100%",
+                      background: "transparent",
+                    }}
+                  >
+                    <ListItemButton
+                      sx={{
+                        width: "100%",
+                        backgroundColor: "transparent",
+                        borderBottom: 1,
+                        borderColor: "rgba(0,0,0,0.3)",
+                      }}
+                      selected={selectedRides.includes(filteredRideInfos[i]["task_id"])}
+                      onClick={(event) =>
+                        handleRideItemClick(
+                          event,
+                          filteredRideInfos[i]["task_id"],
+                          filteredRideInfos[i]["id"]
+                        )
+                      }
+                    >
+                      <ListItemText
+                        primary={`Trip ${filteredRideInfos[i]["task_id"]}`}
+                        secondary={`${
+                          filteredRideInfos[i]["start_position_city"] ?? "Empty"
+                        } → ${filteredRideInfos[i]["end_position_city"] ?? "Empty"}`}
                         sx={{ wordWrap: "break-word" }}
                       />
                       <IconButton aria-label="icon">
@@ -318,6 +378,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             color="error"
             sx={{ p: "10px", mr: 1 }}
             aria-label="directions"
+            // There is a UX bug here to clear this out
             disabled={
               tab === 0
                 ? selectedRides.length < 1
