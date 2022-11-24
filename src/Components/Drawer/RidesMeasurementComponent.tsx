@@ -186,9 +186,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
                         primary={`Trip ${rideInfos[i]["task_id"]}`}
                         secondary={`${
                           rideInfos[i]["start_position_city"] ?? "Empty"
-                        } → ${
-                        rideInfos[i]["end_position_city"]?? "Empty"
-                        }`}
+                        } → ${rideInfos[i]["end_position_city"] ?? "Empty"}`}
                         sx={{ wordWrap: "break-word" }}
                       />
                       <IconButton aria-label="icon">

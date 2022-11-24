@@ -59,9 +59,9 @@ const MapDemo: FC<MapDemoProps> = ({
               min={0}
               max={1000}
               palette={{
-                0.0: 'red',
-                0.5: 'yellow',
-                1.0: 'green',
+                0.0: "red",
+                0.5: "yellow",
+                1.0: "green",
               }}
             />
           ))}
