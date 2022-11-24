@@ -1,7 +1,7 @@
 import { Rnd } from "react-rnd";
 import React, { useState } from "react";
 import "../Drawer/DrawerComponents.css";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 
 interface WindowProps {
   id: number;
@@ -66,10 +66,13 @@ const Window = ({
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
-        <Button sx={{marginLeft: -1.8}}
+        <Tooltip title="Download CSV to see all data for the trip">
+          <Button sx={{marginLeft: -1.8}}
           style={{ display: hidable ? "inline-block" : "none" }}
           className="download_csv_button"
-        ></Button>
+          ></Button>
+        </Tooltip>
+
       </div>
       <div className="draggable_component_container_content">
         {React.Children.only(children)}
