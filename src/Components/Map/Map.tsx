@@ -24,8 +24,6 @@ const MapDemo: FC<MapDemoProps> = ({
   position,
   polyLinePoints,
 }: MapDemoProps) => {
-  const [showAntPath, setShowAntPath] = useState(false);
-
   return (
     <>
       <div className="leaflet-container">
@@ -61,35 +59,21 @@ const MapDemo: FC<MapDemoProps> = ({
             >
               <LayerGroup>
                 {polyLinePoints.map((component, i) => (
-                  <Hotline
-                    positions={component}
-                    weight={3}
-                    min={0}
-                    max={1000}
-                    palette={{
-                      0.0: "red",
-                      0.5: "yellow",
-                      1.0: "green",
-                    }}
-                  />
-                ))}
-              </LayerGroup>
-            </LayersControl.Overlay>
-            <LayersControl.Overlay name={"ant path".toUpperCase()}>
-              <LayerGroup
-                eventHandlers={{
-                  add: (e) => {
-                    setShowAntPath(true);
-                  },
-                  remove: (e) => {
-                    setShowAntPath(false);
-                  },
-                }}
-              >
-                {showAntPath &&
-                  polyLinePoints.map((component, i) => (
+                  <>
+                    <Hotline
+                      positions={component}
+                      weight={3}
+                      min={0}
+                      max={1000}
+                      palette={{
+                        0.0: "red",
+                        0.5: "yellow",
+                        1.0: "green",
+                      }}
+                    />
                     <Path positions={component}></Path>
-                  ))}
+                  </>
+                ))}
               </LayerGroup>
             </LayersControl.Overlay>
           </LayersControl>
