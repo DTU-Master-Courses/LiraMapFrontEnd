@@ -81,7 +81,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
     Object.entries(jsonConvert).forEach(([key, value]) => {
       keyHTML.push(<Typography>{key}</Typography>);
       if (value == null) {
-        valueHTML.push(<Typography>NULL</Typography>);
+        valueHTML.push(<Typography>Empty</Typography>);
       } else {
         valueHTML.push(<Typography>{String(value)}</Typography>);
       }
@@ -92,17 +92,17 @@ const GraphComponent: FC<GraphComponentProps> = ({
       Object.entries(tripDetails).forEach(([key, value]) => {
         tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
         if (value == null) {
-          tripDetailsValuesHTML.push(<Typography>NULL</Typography>);
+          tripDetailsValuesHTML.push(<Typography>Empty</Typography>);
         } else {
           tripDetailsValuesHTML.push(<Typography>{String(value)}</Typography>);
         }
-        if (key == "start_position_city") {
+        if (key == "start_position_display") {
           handleSubAccordion(
             key,
             startPositionKeysHTML,
             startPositionValuesHTML
           );
-        } else if (key == "end_position_city") {
+        } else if (key == "end_position_display") {
           handleSubAccordion(key, endPositionKeysHTML, endPositionValuesHTML);
         }
       });
