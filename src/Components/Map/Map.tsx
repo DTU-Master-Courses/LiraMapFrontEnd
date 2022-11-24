@@ -1,17 +1,19 @@
 import { LatLng } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
-  Circle,
+  LayerGroup,
   LayersControl,
   MapContainer,
-  Polyline,
   TileLayer,
+  useMap,
+  useMapEvents,
   ZoomControl,
 } from "react-leaflet";
 import "./Map.css";
 import { Hotline } from "leaflet-hotline-react";
+import Path from "./Path";
 
 interface MapDemoProps {
   position: LatLng;
@@ -51,20 +53,30 @@ const MapDemo: FC<MapDemoProps> = ({
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
             </LayersControl.BaseLayer>
+            <LayersControl.Overlay
+              name={"hotline".toUpperCase()}
+              checked={true}
+            >
+              <LayerGroup>
+                {polyLinePoints.map((component, i) => (
+                  <>
+                    <Hotline
+                      positions={component}
+                      weight={3}
+                      min={0}
+                      max={1000}
+                      palette={{
+                        0.0: "red",
+                        0.5: "yellow",
+                        1.0: "green",
+                      }}
+                    />
+                    <Path positions={component}></Path>
+                  </>
+                ))}
+              </LayerGroup>
+            </LayersControl.Overlay>
           </LayersControl>
-          {polyLinePoints.map((component, i) => (
-            <Hotline
-              positions={component}
-              weight={3}
-              min={0}
-              max={1000}
-              palette={{
-                0.0: "red",
-                0.5: "yellow",
-                1.0: "green",
-              }}
-            />
-          ))}
         </MapContainer>
       </div>
     </>

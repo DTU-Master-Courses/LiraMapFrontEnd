@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.0.0",
     "chart.js": "^3.9.1",
     "leaflet": "^1.9.1",
+    "leaflet-ant-path": "^1.3.0",
     "leaflet-hotline-react": "^1.0.0",
     "leaflet.gridlayer.googlemutant": "^0.13.5",
     "react": "^18.2.0",
