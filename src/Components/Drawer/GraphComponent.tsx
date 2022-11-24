@@ -12,7 +12,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { useQuery } from "@tanstack/react-query";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import {
   Accordion,
@@ -21,6 +20,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import GraphChart from "../GraphChart/GraphChart";
 
 ChartJS.register(
   CategoryScale,
@@ -46,12 +46,12 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://localhost:8000/trips/acceleration/${graphTripID}`,
+      `http://localhost:8000/trips/list_of_variables/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
 
-    return Promise.resolve(acceleration);
+    setGraphContent(acceleration);
   };
 
   const fetchTripDetails = async () => {
@@ -61,40 +61,13 @@ const GraphComponent: FC<GraphComponentProps> = ({
     );
     const tripDetails = await tripDetailsResponse.json();
 
-    return Promise.resolve(tripDetails);
+    setTripDetailsContent(tripDetails);
   };
 
-  const { data: query, isLoading: isQueryLoading } = useQuery(
-    ["accelGraph"],
-    fetchGraphContent
-  );
-  const { data: tripQuery, isLoading: isTripQueryLoading } = useQuery(
-    ["tripDetails"],
-    fetchTripDetails
-  );
-
   useEffect(() => {
-    if (query) setGraphContent(query);
-    if (tripQuery) setTripDetailsContent(tripQuery);
-  }, [query, tripQuery]);
-
-  let xValues = [];
-  let yValues = [];
-  let timestamps = [];
-  let date;
-  try {
-    if (!isQueryLoading && graphContent) {
-      date = graphContent["variables"][0]["created_date"].split("T")[0];
-      for (let i = 0; i < graphContent["variables"].length; i++) {
-        xValues[i] = graphContent["variables"][i]["x"];
-        yValues[i] = graphContent["variables"][i]["y"];
-        timestamps[i] =
-          graphContent["variables"][i]["created_date"].split("T")[1];
-      }
-    }
-  } catch (err) {
-    console.log(err);
-  }
+    fetchGraphContent();
+    fetchTripDetails();
+  }, []);
 
   const tripDetailsKeysHTML: any = [];
   const tripDetailsValuesHTML: any = [];
@@ -115,7 +88,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
     });
   };
   try {
-    if (!isTripQueryLoading && tripDetails) {
+    if (tripDetails) {
       Object.entries(tripDetails).forEach(([key, value]) => {
         tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
         if (value == null) {
@@ -123,55 +96,22 @@ const GraphComponent: FC<GraphComponentProps> = ({
         } else {
           tripDetailsValuesHTML.push(<Typography>{String(value)}</Typography>);
         }
-        if (key == "start_position_display") {
+        if (key == "start_position_city") {
           handleSubAccordion(
             key,
             startPositionKeysHTML,
             startPositionValuesHTML
           );
-        } else if (key == "end_position_display") {
+        } else if (key == "end_position_city") {
           handleSubAccordion(key, endPositionKeysHTML, endPositionValuesHTML);
         }
       });
     }
   } catch (err) {}
 
-  const data = {
-    labels: timestamps,
-    datasets: [
-      {
-        label: "Acceleration-x",
-        data: xValues,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Acceleration-y",
-        data: yValues,
-        borderColor: "rgb(100, 99, 158)",
-        backgroundColor: "rgba(100, 99, 158, 0.5)",
-      },
-    ],
-  };
-
   return (
     <div>
-      <Line
-        options={{
-          responsive: true,
-          plugins: {
-            legend: {
-              position: "top" as const,
-            },
-            title: {
-              display: true,
-              text: [`Trip: ${graphTaskID}`, date],
-            },
-          },
-        }}
-        data={data}
-      />
-      {/* TODO: Make component to set in, instead of redundency */}
+      <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Trip Details</Typography>

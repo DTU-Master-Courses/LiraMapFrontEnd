@@ -20,9 +20,9 @@ const queryClient = new QueryClient({
 
 const App: FC = () => {
   const [graphComponentsList, setGraphComponentsList] = useState<any[]>([]);
-  const [polyLinePoints, setPolyLinePoints] = useState<[number, number][][]>(
-    []
-  );
+  const [polyLinePoints, setPolyLinePoints] = useState<
+    [number, number, number][][]
+  >([]);
   const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
@@ -59,9 +59,9 @@ const App: FC = () => {
       console.log(err);
     }
 
-    let newPolyPoints: [number, number][] = [];
+    let newPolyPoints: [number, number, number][] = [];
     for (let i = 0; i < points.length; i++) {
-      newPolyPoints.push([points[i]["lat"], points[i]["lon"]]);
+      newPolyPoints.push([points[i]["lat"], points[i]["lon"], i]);
     }
     setPolyLinePoints([...polyLinePoints, newPolyPoints]);
   };
