@@ -29,7 +29,6 @@ const Window = ({
   hideWindow,
   closeWindow,
   focusWindow,
-
   children,
 }: WindowProps) => {
   const [uniqueZ, setUniqueZ] = useState(0);
