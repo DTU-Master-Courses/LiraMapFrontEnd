@@ -21,6 +21,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
+import React from "react";
 
 ChartJS.register(
   CategoryScale,

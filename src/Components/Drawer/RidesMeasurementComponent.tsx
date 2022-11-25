@@ -22,6 +22,8 @@ import { Add } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import { Clear, FilterList, Search } from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
+import { Button } from "@mui/material";
+import React from "react";
 import { match } from "assert";
 import useDebounce from "../../Hooks/UseDebounce";
 
@@ -61,6 +63,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [filteredRideInfos, setFilteredRideInfos] = useState<any[]>([]);
   const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
   const [filterBy, setFilterBy] = useState("");
+  const [dayNightFilter, setDayNightFilter] = useState(0);
 
   const debouncedSearchTerm: string = useDebounce<string>(filterBy, 500);
 
@@ -373,14 +376,22 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <Search />
           </IconButton>
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton
-            color="primary"
-            sx={{ p: "10px" }}
-            aria-label="directions"
-          >
-            <FilterList />
-          </IconButton>
+          <Divider sx={{ height: 28, m: 0.5}} orientation="vertical" />
+          <Button sx={{height: 20}} className={
+            `
+            day_night_filter_button 
+            ${dayNightFilter == 0 ? "button_clock" : ""}
+            ${dayNightFilter == 1 ? "button_day" : ""}
+            ${dayNightFilter == 2 ? "button_night" : ""}
+            `
+          } onClick={() => {
+            if(dayNightFilter == 2) {
+              setDayNightFilter(0);
+            } else {
+              setDayNightFilter(dayNightFilter + 1);
+            }
+          }}>
+          </Button>
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
             color="error"

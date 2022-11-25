@@ -1,6 +1,7 @@
 import { Rnd } from "react-rnd";
 import React, { useState } from "react";
 import "../Drawer/DrawerComponents.css";
+import { Button, Tooltip } from "@mui/material";
 
 interface WindowProps {
   id: number;
@@ -65,6 +66,13 @@ const Window = ({
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
+        <Tooltip title="Download CSV to see all data for the trip">
+          <Button sx={{marginLeft: -1.8, height: 17, marginTop: 0.2}}
+          style={{ display: hidable ? "inline-block" : "none" }}
+          className="download_csv_button"
+          ></Button>
+        </Tooltip>
+
       </div>
       <div className="draggable_component_container_content">
         {React.Children.only(children)}

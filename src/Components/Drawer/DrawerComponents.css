@@ -119,3 +119,45 @@
 .MuiAccordionDetails-root {
   display: grid !important;
 }
+
+.download_csv_button {
+  height: clamp(100%, 100%, 100%);
+  width: clamp(40px, 40px, 40px);
+  background-image: url("/public/csv-logo.svg");
+  background-color: #ffffff;
+  filter: invert(21%) sepia(75%) saturate(7174%) hue-rotate(118deg) brightness(98%) contrast(103%);
+  background-repeat: no-repeat;
+  background-position: center;
+  border-width: 0px;
+  border-style: solid;
+  float: right;
+  margin-right: 30px;
+  float: left;
+  border: 10px solid #008000;
+}
+
+.download_csv_button:hover {
+  filter: invert(21%) sepia(75%) saturate(7174%) hue-rotate(118deg) brightness(150%) contrast(103%);
+  cursor: pointer;
+}
+
+/* day night filter button classes*/
+.day_night_filter_button {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.button_clock {
+  background-image: url("/public/clock.svg");
+}
+
+.button_day {
+  background-image: url("/public/sun.svg");
+  filter: invert(71%) sepia(96%) saturate(974%) hue-rotate(347deg) brightness(100%) contrast(99%);
+}
+
+.button_night {
+  background-image: url("/public/moon.svg");
+  filter: invert(26%) sepia(9%) saturate(4526%) hue-rotate(212deg) brightness(99%) contrast(90%);
+}
