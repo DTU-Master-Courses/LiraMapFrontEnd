@@ -47,7 +47,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://localhost:8000/trips/list_of_variables/${graphTripID}`,
+      `http://${Hostname}:8000/trips/list_of_variables/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
@@ -57,7 +57,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchTripDetails = async () => {
     const tripDetailsResponse = await fetch(
-      `http://localhost:8000/trips/id/${graphTripID}`,
+      `http://${Hostname}:8000/trips/id/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const tripDetails = await tripDetailsResponse.json();

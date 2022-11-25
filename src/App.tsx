@@ -8,6 +8,7 @@ import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClientRequestHeaders from "./Components/Utils/client-request-headers";
+import Hostname from "./Components/Utils/hostname";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,7 +53,7 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://localhost:8000/trips/segments/${tripID}`, {
+      points = await fetch(`http://${Hostname}:8000/trips/segments/${tripID}`, {
         headers: ClientRequestHeaders,
       }).then((response) => response.json());
     } catch (err) {
