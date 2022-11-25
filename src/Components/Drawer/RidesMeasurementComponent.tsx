@@ -65,7 +65,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [filterBy, setFilterBy] = useState("");
   const [dayNightFilter, setDayNightFilter] = useState(0);
 
-  const debouncedSearchTerm: string = useDebounce<string>(filterBy, 500);
+  const debouncedSearchTerm: string = useDebounce<string>(filterBy, 250);
 
   const handleRideItemClick = (
     _: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -91,6 +91,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     if (tab === 0) setSelectedRides([]);
     if (tab === 1) setSelectedMeasurements([]);
     setFilterBy("");
+    setDayNightFilter(0);
   };
 
   const onSearch = (event: any) => {
@@ -372,6 +373,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             placeholder="Search"
             inputProps={{ "aria-label": "" }}
             onChange={onSearch}
+            value={filterBy}
           />
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <Search />
@@ -380,12 +382,12 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           <Button sx={{height: 20}} className={
             `
             day_night_filter_button 
-            ${dayNightFilter == 0 ? "button_clock" : ""}
-            ${dayNightFilter == 1 ? "button_day" : ""}
-            ${dayNightFilter == 2 ? "button_night" : ""}
+            ${dayNightFilter === 0 ? "button_clock" : ""}
+            ${dayNightFilter === 1 ? "button_day" : ""}
+            ${dayNightFilter === 2 ? "button_night" : ""}
             `
           } onClick={() => {
-            if(dayNightFilter == 2) {
+            if(dayNightFilter === 2) {
               setDayNightFilter(0);
             } else {
               setDayNightFilter(dayNightFilter + 1);
@@ -398,9 +400,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             sx={{ p: "10px", mr: 1 }}
             aria-label="directions"
             disabled={
-              tab === 0
-                ? selectedRides.length < 1
-                : selectedMeasurements.length < 1
+              (selectedRides.length || selectedMeasurements.length || filterBy !== "" || dayNightFilter) ? false : true
             }
             onClick={clear}
           >
