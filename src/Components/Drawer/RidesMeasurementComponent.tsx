@@ -119,31 +119,28 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     return Promise.all(measurementTypes);
   };
 
-  const filterTrips = (filterBy: string, dayNightFilter: number) => {
-    // Return the children that match and the component
-
-    // let matches = []
-    if (filterBy) {
-      rideInfos.forEach(ride => {
-        if (
-          rideInfos[ride]["start_position_city"].includes(filterBy) ||
-          rideInfos[ride]["end_position_city"].includes(filterBy)
-        ) {
-          // matches.push(rideInfos[ride]);
-          <TripCard key={"Trip " + rideInfos[ride]["task_id"]} selectedRides={selectedRides}
-                              rideInfos={rideInfos} i={ride} onClick={(event) =>
-                        handleRideItemClick(
-                            event,
-                            rideInfos[ride]["task_id"],
-                            rideInfos[ride]["id"]
-                        )}/>
-        } 
-      })
-    };
-    if (dayNightFilter) {
-      // TODO: Put in the logic for the datetime manipulation
+  const filterCity = (ridesArray: any) => {
+    if (ridesArray["start_position_city"] && ridesArray["end_position_city"]) {
+      if (
+        ridesArray["start_position_city"].includes(filterBy) ||
+        ridesArray["end_position_city"].includes(filterBy)
+      ) {
+        return ridesArray;
+      }
     }
+  };
 
+  const filterDayNight = (ridesArray: any) => {
+    const start_time_hours = new Date(ridesArray["start_time_utc"]).getHours();
+    if (dayNightFilter === 1) {
+      if (start_time_hours >= 0 && start_time_hours <= 12) {
+        return ridesArray;
+      }
+    } else {
+      if (start_time_hours > 12 && start_time_hours <= 24) {
+        return ridesArray;
+      }
+    }
   };
 
   const { data: ridesQuery, isLoading: ridesIsLoading } = useQuery(
@@ -163,26 +160,19 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   }, [ridesQuery, measurementQuery]);
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
-      let matches = [];
-      for (let i = 0; i < rideInfos.length; i++) {
-        if (
-          rideInfos[i]["start_position_city"] &&
-          rideInfos[i]["end_position_city"]
-        ) {
-          if (
-            rideInfos[i]["start_position_city"].includes(filterBy) ||
-            rideInfos[i]["end_position_city"].includes(filterBy)
-          ) {
-            matches.push(rideInfos[i]);
-          }
-        }
-      }
+    let matches: any = [];
+    if (debouncedSearchTerm && dayNightFilter) {
+      matches = rideInfos.filter(filterCity);
+      matches = matches.filter(filterDayNight);
       setFilteredRideInfos(matches);
-    } else {
-      setFilteredRideInfos([]);
+    } else if (debouncedSearchTerm && !dayNightFilter) {
+      matches = rideInfos.filter(filterCity);
     }
-  }, [debouncedSearchTerm]);
+    if (dayNightFilter && !debouncedSearchTerm) {
+      matches = rideInfos.filter(filterDayNight);
+    }
+    setFilteredRideInfos(matches);
+  }, [debouncedSearchTerm, dayNightFilter]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -212,81 +202,45 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             </Stack>
           )}
           <List sx={{ background: "transparent", width: "100%", padding: "0" }}>
-            {/* We create some type of filter function that handles dayNightFilter and filterBy and then take the results to be rendered by a new component */}
             <>
-            {(!filterBy && !dayNightFilter) && Array.from(Array(rideInfos.length)).map((_, i) => {
-                  return (
-                    <TripCard key={"Trip " + rideInfos[i]["task_id"]} selectedRides={selectedRides}
-                              rideInfos={rideInfos} i={i} onClick={(event) =>
-                        handleRideItemClick(
-                            event,
-                            rideInfos[i]["task_id"],
-                            rideInfos[i]["id"]
-                        )}/>
-                  );
-                }) }
-            {(filterBy || dayNightFilter) && filterTrips}
-            </>
-            {/* <>
               {!filterBy &&
+                !dayNightFilter &&
                 Array.from(Array(rideInfos.length)).map((_, i) => {
                   return (
-                    <TripCard key={"Trip " + rideInfos[i]["task_id"]} selectedRides={selectedRides}
-                              rideInfos={rideInfos} i={i} onClick={(event) =>
+                    <TripCard
+                      key={"Trip " + rideInfos[i]["task_id"]}
+                      selectedRides={selectedRides}
+                      rideInfos={rideInfos}
+                      i={i}
+                      onClick={(event) =>
                         handleRideItemClick(
-                            event,
-                            rideInfos[i]["task_id"],
-                            rideInfos[i]["id"]
-                        )}/>
+                          event,
+                          rideInfos[i]["task_id"],
+                          rideInfos[i]["id"]
+                        )
+                      }
+                    />
                   );
                 })}
-              {filterBy &&
+              {(filterBy || dayNightFilter) &&
                 Array.from(Array(filteredRideInfos.length)).map((_, i) => {
                   return (
-                    <ListItem
+                    <TripCard
                       key={"Trip " + filteredRideInfos[i]["task_id"]}
-                      sx={{
-                        padding: "0",
-                        width: "100%",
-                        background: "transparent",
-                      }}
-                    >
-                      <ListItemButton
-                        sx={{
-                          width: "100%",
-                          backgroundColor: "transparent",
-                          borderBottom: 1,
-                          borderColor: "rgba(0,0,0,0.3)",
-                        }}
-                        selected={selectedRides.includes(
-                          filteredRideInfos[i]["task_id"]
-                        )}
-                        onClick={(event) =>
-                          handleRideItemClick(
-                            event,
-                            filteredRideInfos[i]["task_id"],
-                            filteredRideInfos[i]["id"]
-                          )
-                        }
-                      >
-                        <ListItemText
-                          primary={`Trip ${filteredRideInfos[i]["task_id"]}`}
-                          secondary={`${
-                            filteredRideInfos[i]["start_position_city"] ??
-                            "Empty"
-                          } → ${
-                            filteredRideInfos[i]["end_position_city"] ?? "Empty"
-                          }`}
-                          sx={{ wordWrap: "break-word" }}
-                        />
-                        <IconButton aria-label="icon">
-                          <Add />
-                        </IconButton>
-                      </ListItemButton>
-                    </ListItem>
+                      selectedRides={selectedRides}
+                      rideInfos={filteredRideInfos}
+                      i={i}
+                      onClick={(event) =>
+                        handleRideItemClick(
+                          event,
+                          filteredRideInfos[i]["task_id"],
+                          filteredRideInfos[i]["id"]
+                        )
+                      }
+                    />
                   );
                 })}
-            </> */}
+            </>
           </List>
         </TabPanel>
         <TabPanel value={tab} index={1}>
@@ -390,29 +344,35 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <Search />
           </IconButton>
-          <Divider sx={{ height: 28, m: 0.5}} orientation="vertical" />
-          <Button sx={{height: 20}} className={
-            `
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <Button
+            sx={{ height: 20 }}
+            className={`
             day_night_filter_button 
             ${dayNightFilter === 0 ? "button_clock" : ""}
             ${dayNightFilter === 1 ? "button_day" : ""}
             ${dayNightFilter === 2 ? "button_night" : ""}
-            `
-          } onClick={() => {
-            if(dayNightFilter === 2) {
-              setDayNightFilter(0);
-            } else {
-              setDayNightFilter(dayNightFilter + 1);
-            }
-          }}>
-          </Button>
+            `}
+            onClick={() => {
+              if (dayNightFilter === 2) {
+                setDayNightFilter(0);
+              } else {
+                setDayNightFilter(dayNightFilter + 1);
+              }
+            }}
+          ></Button>
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
             color="error"
             sx={{ p: "10px", mr: 1 }}
             aria-label="directions"
             disabled={
-              (selectedRides.length || selectedMeasurements.length || filterBy !== "" || dayNightFilter) ? false : true
+              !(
+                selectedRides.length ||
+                selectedMeasurements.length ||
+                filterBy !== "" ||
+                dayNightFilter
+              )
             }
             onClick={clear}
           >

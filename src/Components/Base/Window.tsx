@@ -67,12 +67,12 @@ const Window = ({
           onClick={() => closeWindow(id)}
         ></button>
         <Tooltip title="Download CSV to see all data for the trip">
-          <Button sx={{marginLeft: -1.8, height: 17, marginTop: 0.2}}
-          style={{ display: hidable ? "inline-block" : "none" }}
-          className="download_csv_button"
+          <Button
+            sx={{ marginLeft: -1.8, height: 17, marginTop: 0.2 }}
+            style={{ display: hidable ? "inline-block" : "none" }}
+            className="download_csv_button"
           ></Button>
         </Tooltip>
-
       </div>
       <div className="draggable_component_container_content">
         {React.Children.only(children)}

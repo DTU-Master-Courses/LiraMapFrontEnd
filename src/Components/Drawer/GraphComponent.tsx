@@ -48,7 +48,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://${Hostname}:8000/trips/list_of_variables/${graphTripID}`,
+      `http://${Hostname}:8000/trips/acceleration/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
