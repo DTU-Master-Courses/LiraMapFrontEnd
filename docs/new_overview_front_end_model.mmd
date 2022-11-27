@@ -1,0 +1,50 @@
+flowchart BT
+    API
+
+    subgraph App
+        ridesIsRendered{{ridesIsRendered}}
+        graphComponentsList{{graphComponentsList}}
+        polyLinePoints{{polyLinePoints}}
+        uniqueId{{uniqueId}}
+
+        addGraphComponent([addGraphComponent])
+        removeGraphComponent([removeGraphComponent])
+
+        subgraph NavBar
+        end
+        subgraph Map
+        end
+        subgraph WindowGraph
+            GraphComponent
+        end
+        subgraph WindowRides
+            RidesMeasurementsComponent
+        end
+
+        NavBar -- "setRidesIsRendered(true)" --> ridesIsRendered 
+        ridesIsRendered --> WindowRides
+        WindowRides -- "setRidesIsRendered(false)" --> ridesIsRendered
+
+        WindowRides -- taskID/tripID --> addGraphComponent
+        addGraphComponent -- setGraphComponentsList --> graphComponentsList
+        addGraphComponent -- setUniqueId --> uniqueId
+        uniqueId --> addGraphComponent
+        graphComponentsList -- taskID/tripID --> GraphComponent
+
+        addGraphComponent -- setPolyLinePoints --> polyLinePoints
+        polyLinePoints --> Map
+
+        WindowGraph -- index --> removeGraphComponent
+        removeGraphComponent -- setGraphComponentsList --> graphComponentsList
+        removeGraphComponent -- setPolyLinePoints --> polyLinePoints
+        
+
+
+
+
+    end
+
+    API -- /trips --> RidesMeasurementsComponent
+    API -- /measurement/types --> RidesMeasurementsComponent
+    API -- /trips/acceleration/tripID --> GraphComponent
+    API -- /trips/segments/tripID --> addGraphComponent
