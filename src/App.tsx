@@ -8,6 +8,7 @@ import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClientRequestHeaders from "./Components/Utils/client-request-headers";
+import Hostname from "./Components/Utils/hostname";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,7 +53,7 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://localhost:8000/trips/segments/${tripID}`, {
+      points = await fetch(`http://${Hostname}:8000/trips/segments/${tripID}`, {
         headers: ClientRequestHeaders,
       }).then((response) => response.json());
     } catch (err) {
@@ -60,8 +61,8 @@ const App: FC = () => {
     }
 
     let newPolyPoints: [number, number, number][] = [];
-    for (let i = 0; i < points.length; i++) {
-      newPolyPoints.push([points[i]["lat"], points[i]["lon"], i]);
+    for (let i = 0; i < points["segments"].length; i++) {
+      newPolyPoints.push([points["segments"][i]["lat"], points["segments"][i]["lon"], i]);
     }
     setPolyLinePoints([...polyLinePoints, newPolyPoints]);
   };

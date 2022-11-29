@@ -24,6 +24,9 @@ import { Clear, FilterList, Search } from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import { Button } from "@mui/material";
 import React from "react";
+import useDebounce from "../../Hooks/UseDebounce";
+import TripCard from "../Trip/TripCard";
+import Hostname from "../Utils/hostname";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,9 +61,12 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [selectedRides, setSelectedRides] = useState<any[]>([]);
   const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
   const [rideInfos, setRideInfos] = useState<any[]>([]);
+  const [filteredRideInfos, setFilteredRideInfos] = useState<any[]>([]);
   const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
   const [filterBy, setFilterBy] = useState("");
   const [dayNightFilter, setDayNightFilter] = useState(0);
+
+  const debouncedSearchTerm: string = useDebounce<string>(filterBy, 250);
 
   const handleRideItemClick = (
     _: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -75,7 +81,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     _: React.MouseEvent<HTMLDivElement, MouseEvent>,
     index: number
   ) => {
-    // TODO: handle measurement clicks
     setSelectedMeasurements([...selectedMeasurements, index]);
   };
 
@@ -86,32 +91,56 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const clear = () => {
     if (tab === 0) setSelectedRides([]);
     if (tab === 1) setSelectedMeasurements([]);
+    setFilterBy("");
+    setDayNightFilter(0);
   };
 
   const onSearch = (event: any) => {
-    // TODO: do something with search
-    //console.log(event.target.value);
     setFilterBy(event.target.value);
   };
 
   const fetchRides = async () => {
-    const ridesResponse = await fetch(`http://localhost:8000/trips`, {
+    const ridesResponse = await fetch(`http://${Hostname}:8000/trips`, {
       headers: ClientRequestHeaders,
     });
 
     const rides = await ridesResponse.json();
 
-    return Promise.all(rides);
+    return Promise.all(rides["trips"]);
   };
 
   const fetchMeasurements = async () => {
     const measurementResponse = await fetch(
-      `http://localhost:8000/measurement/types`,
+      `http://${Hostname}:8000/measurement/types`,
       { headers: ClientRequestHeaders }
     );
     const measurementTypes = await measurementResponse.json();
 
-    return Promise.all(measurementTypes);
+    return Promise.all(measurementTypes["measurement_types"]);
+  };
+
+  const filterCity = (ridesArray: any) => {
+    if (ridesArray["start_position_city"] && ridesArray["end_position_city"]) {
+      if (
+        ridesArray["start_position_city"].includes(filterBy) ||
+        ridesArray["end_position_city"].includes(filterBy)
+      ) {
+        return ridesArray;
+      }
+    }
+  };
+
+  const filterDayNight = (ridesArray: any) => {
+    const start_time_hours = new Date(ridesArray["start_time_utc"]).getHours();
+    if (dayNightFilter === 1) {
+      if (start_time_hours >= 0 && start_time_hours <= 12) {
+        return ridesArray;
+      }
+    } else {
+      if (start_time_hours > 12 && start_time_hours <= 24) {
+        return ridesArray;
+      }
+    }
   };
 
   const { data: ridesQuery, isLoading: ridesIsLoading } = useQuery(
@@ -129,6 +158,21 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
       setMeasurementInfos(measurementQuery);
     }
   }, [ridesQuery, measurementQuery]);
+
+  useEffect(() => {
+    let matches: any = [];
+    if (debouncedSearchTerm && dayNightFilter) {
+      matches = rideInfos.filter(filterCity);
+      matches = matches.filter(filterDayNight);
+      setFilteredRideInfos(matches);
+    } else if (debouncedSearchTerm && !dayNightFilter) {
+      matches = rideInfos.filter(filterCity);
+    }
+    if (dayNightFilter && !debouncedSearchTerm) {
+      matches = rideInfos.filter(filterDayNight);
+    }
+    setFilteredRideInfos(matches);
+  }, [debouncedSearchTerm, dayNightFilter]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -159,24 +203,15 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
           )}
           <List sx={{ background: "transparent", width: "100%", padding: "0" }}>
             <>
-              {Array.from(Array(rideInfos.length)).map((_, i) => {
-                return (
-                  <ListItem
-                    key={"Trip " + rideInfos[i]["task_id"]}
-                    sx={{
-                      padding: "0",
-                      width: "100%",
-                      background: "transparent",
-                    }}
-                  >
-                    <ListItemButton
-                      sx={{
-                        width: "100%",
-                        backgroundColor: "transparent",
-                        borderBottom: 1,
-                        borderColor: "rgba(0,0,0,0.3)",
-                      }}
-                      selected={selectedRides.includes(rideInfos[i]["task_id"])}
+              {!filterBy &&
+                !dayNightFilter &&
+                Array.from(Array(rideInfos.length)).map((_, i) => {
+                  return (
+                    <TripCard
+                      key={"Trip " + rideInfos[i]["task_id"]}
+                      selectedRides={selectedRides}
+                      rideInfos={rideInfos}
+                      i={i}
                       onClick={(event) =>
                         handleRideItemClick(
                           event,
@@ -184,21 +219,27 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
                           rideInfos[i]["id"]
                         )
                       }
-                    >
-                      <ListItemText
-                        primary={`Trip ${rideInfos[i]["task_id"]}`}
-                        secondary={`${
-                          rideInfos[i]["start_position_city"] ?? "Empty"
-                        } → ${rideInfos[i]["end_position_city"] ?? "Empty"}`}
-                        sx={{ wordWrap: "break-word" }}
-                      />
-                      <IconButton aria-label="icon">
-                        <Add />
-                      </IconButton>
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
+                    />
+                  );
+                })}
+              {(filterBy || dayNightFilter) &&
+                Array.from(Array(filteredRideInfos.length)).map((_, i) => {
+                  return (
+                    <TripCard
+                      key={"Trip " + filteredRideInfos[i]["task_id"]}
+                      selectedRides={selectedRides}
+                      rideInfos={filteredRideInfos}
+                      i={i}
+                      onClick={(event) =>
+                        handleRideItemClick(
+                          event,
+                          filteredRideInfos[i]["task_id"],
+                          filteredRideInfos[i]["id"]
+                        )
+                      }
+                    />
+                  );
+                })}
             </>
           </List>
         </TabPanel>
@@ -298,35 +339,40 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             placeholder="Search"
             inputProps={{ "aria-label": "" }}
             onChange={onSearch}
+            value={filterBy}
           />
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
             <Search />
           </IconButton>
-          <Divider sx={{ height: 28, m: 0.5}} orientation="vertical" />
-          <Button sx={{height: 20}} className={
-            `
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <Button
+            sx={{ height: 20 }}
+            className={`
             day_night_filter_button 
-            ${dayNightFilter == 0 ? "button_clock" : ""}
-            ${dayNightFilter == 1 ? "button_day" : ""}
-            ${dayNightFilter == 2 ? "button_night" : ""}
-            `
-          } onClick={() => {
-            if(dayNightFilter == 2) {
-              setDayNightFilter(0);
-            } else {
-              setDayNightFilter(dayNightFilter + 1);
-            }
-          }}>
-          </Button>
+            ${dayNightFilter === 0 ? "button_clock" : ""}
+            ${dayNightFilter === 1 ? "button_day" : ""}
+            ${dayNightFilter === 2 ? "button_night" : ""}
+            `}
+            onClick={() => {
+              if (dayNightFilter === 2) {
+                setDayNightFilter(0);
+              } else {
+                setDayNightFilter(dayNightFilter + 1);
+              }
+            }}
+          ></Button>
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
             color="error"
             sx={{ p: "10px", mr: 1 }}
             aria-label="directions"
             disabled={
-              tab === 0
-                ? selectedRides.length < 1
-                : selectedMeasurements.length < 1
+              !(
+                selectedRides.length ||
+                selectedMeasurements.length ||
+                filterBy !== "" ||
+                dayNightFilter
+              )
             }
             onClick={clear}
           >

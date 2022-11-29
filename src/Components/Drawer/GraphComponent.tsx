@@ -22,6 +22,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
 import React from "react";
+import Hostname from "../Utils/hostname";
 
 ChartJS.register(
   CategoryScale,
@@ -47,17 +48,17 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://localhost:8000/trips/list_of_variables/${graphTripID}`,
+      `http://${Hostname}:8000/trips/acceleration/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
 
-    setGraphContent(acceleration);
+    setGraphContent(acceleration["acceleration"]);
   };
 
   const fetchTripDetails = async () => {
     const tripDetailsResponse = await fetch(
-      `http://localhost:8000/trips/id/${graphTripID}`,
+      `http://${Hostname}:8000/trips/id/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const tripDetails = await tripDetailsResponse.json();
@@ -82,7 +83,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
     Object.entries(jsonConvert).forEach(([key, value]) => {
       keyHTML.push(<Typography>{key}</Typography>);
       if (value == null) {
-        valueHTML.push(<Typography>NULL</Typography>);
+        valueHTML.push(<Typography>Empty</Typography>);
       } else {
         valueHTML.push(<Typography>{String(value)}</Typography>);
       }
@@ -93,17 +94,17 @@ const GraphComponent: FC<GraphComponentProps> = ({
       Object.entries(tripDetails).forEach(([key, value]) => {
         tripDetailsKeysHTML.push(<Typography>{key}</Typography>);
         if (value == null) {
-          tripDetailsValuesHTML.push(<Typography>NULL</Typography>);
+          tripDetailsValuesHTML.push(<Typography>Empty</Typography>);
         } else {
           tripDetailsValuesHTML.push(<Typography>{String(value)}</Typography>);
         }
-        if (key == "start_position_city") {
+        if (key == "start_position_display") {
           handleSubAccordion(
             key,
             startPositionKeysHTML,
             startPositionValuesHTML
           );
-        } else if (key == "end_position_city") {
+        } else if (key == "end_position_display") {
           handleSubAccordion(key, endPositionKeysHTML, endPositionValuesHTML);
         }
       });
