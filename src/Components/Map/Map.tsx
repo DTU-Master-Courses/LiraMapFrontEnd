@@ -64,7 +64,7 @@ const MapDemo: FC<MapDemoProps> = ({
                       positions={component}
                       weight={3}
                       min={0}
-                      max={1000}
+                      max={1}
                       palette={{
                         0.0: "red",
                         0.5: "yellow",
