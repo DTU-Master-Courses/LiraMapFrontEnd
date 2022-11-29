@@ -61,8 +61,8 @@ const App: FC = () => {
     }
 
     let newPolyPoints: [number, number, number][] = [];
-    for (let i = 0; i < points.length; i++) {
-      newPolyPoints.push([points[i]["lat"], points[i]["lon"], i]);
+    for (let i = 0; i < points["segments"].length; i++) {
+      newPolyPoints.push([points["segments"][i]["lat"], points["segments"][i]["lon"], i]);
     }
     setPolyLinePoints([...polyLinePoints, newPolyPoints]);
   };

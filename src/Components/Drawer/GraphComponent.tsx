@@ -53,7 +53,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
     );
     const acceleration = await accelerationResponse.json();
 
-    setGraphContent(acceleration);
+    setGraphContent(acceleration["acceleration"]);
   };
 
   const fetchTripDetails = async () => {

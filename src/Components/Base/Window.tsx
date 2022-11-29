@@ -34,6 +34,9 @@ const Window = ({
 }: WindowProps) => {
   const [uniqueZ, setUniqueZ] = useState(0);
 
+  const example = windowName?.split(": ")[1];
+  console.log(example);
+
   return (
     <Rnd
       className={`draggable_component_container`}

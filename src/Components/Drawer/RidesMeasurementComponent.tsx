@@ -106,7 +106,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
 
     const rides = await ridesResponse.json();
 
-    return Promise.all(rides);
+    return Promise.all(rides["trips"]);
   };
 
   const fetchMeasurements = async () => {
@@ -116,7 +116,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     );
     const measurementTypes = await measurementResponse.json();
 
-    return Promise.all(measurementTypes);
+    return Promise.all(measurementTypes["measurement_types"]);
   };
 
   const filterCity = (ridesArray: any) => {
