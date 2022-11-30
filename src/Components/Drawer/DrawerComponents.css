@@ -122,13 +122,12 @@
 
 .download_csv_button {
   height: clamp(100%, 100%, 100%);
-  width: clamp(40px, 40px, 40px);
-  background-image: url("/public/csv-logo.svg");
+  width: 25px;
+  background-image: url("/public/json-icon.png");
   background-color: #ffffff;
-  filter: invert(21%) sepia(75%) saturate(7174%) hue-rotate(118deg)
-    brightness(98%) contrast(103%);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: contain;
   border-width: 0px;
   border-style: solid;
   float: right;
