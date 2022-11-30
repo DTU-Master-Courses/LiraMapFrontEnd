@@ -64,11 +64,11 @@ const MapDemo: FC<MapDemoProps> = ({
                       positions={component}
                       weight={3}
                       min={0}
-                      max={1}
+                      max={.3}
                       palette={{
-                        0.0: "red",
+                        0.0: "green",
                         0.5: "yellow",
-                        1.0: "green",
+                        1.0: "red",
                       }}
                     />
                     <Path positions={component}></Path>
