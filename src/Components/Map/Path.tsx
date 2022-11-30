@@ -1,6 +1,6 @@
-import {useLeafletContext} from "@react-leaflet/core";
-import {antPath} from "leaflet-ant-path";
-import {useEffect} from "react";
+import { useLeafletContext } from "@react-leaflet/core";
+import { antPath } from "leaflet-ant-path";
+import { useEffect } from "react";
 
 interface PathProps {
   positions: [number, number, number][];

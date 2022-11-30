@@ -1,7 +1,7 @@
-import {Rnd} from "react-rnd";
-import React, {useState} from "react";
+import { Rnd } from "react-rnd";
+import React, { useState } from "react";
 import "../Drawer/DrawerComponents.css";
-import {Button, Tooltip} from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import Hostname from "../Utils/hostname";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 
@@ -40,13 +40,15 @@ const Window = ({
 
   const downloadJson = async () => {
     const tripDetailsResponse = await fetch(
-        `http://${Hostname}:8000/trips/physics/id/${example}`,
-        { headers: ClientRequestHeaders }
+      `http://${Hostname}:8000/trips/physics/id/${example}`,
+      { headers: ClientRequestHeaders }
     );
     const physicsJson = await tripDetailsResponse.json();
 
     const a = document.createElement("a");
-    const file = new Blob([JSON.stringify(physicsJson, null, 2)], {type: "application/json"});
+    const file = new Blob([JSON.stringify(physicsJson, null, 2)], {
+      type: "application/json",
+    });
     a.href = URL.createObjectURL(file);
     a.download = `trip-${example}.json`;
     a.click();

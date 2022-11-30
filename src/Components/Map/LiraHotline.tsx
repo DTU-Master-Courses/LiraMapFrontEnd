@@ -1,13 +1,14 @@
-import {Hotline} from "leaflet-hotline-react";
-import {useLeafletContext} from "@react-leaflet/core";
-import {useEffect} from "react";
+import { Hotline } from "leaflet-hotline-react";
+import { useLeafletContext } from "@react-leaflet/core";
+import { useEffect } from "react";
 
 interface HotlineProps {
   positions: [number, number, number][];
 }
 
 const LiraHotline = ({ positions }: HotlineProps) => {
-  return <Hotline
+  return (
+    <Hotline
       positions={positions}
       weight={3}
       min={0}
@@ -17,7 +18,8 @@ const LiraHotline = ({ positions }: HotlineProps) => {
         0.5: "yellow",
         1.0: "green",
       }}
-  />
+    />
+  );
 };
 
 export default LiraHotline;

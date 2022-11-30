@@ -3,11 +3,19 @@ import Icon from "@material-ui/core/Icon";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import {alpha, Button, ListItemButton, Menu, MenuProps, styled, ThemeProvider,} from "@mui/material";
+import {
+  alpha,
+  Button,
+  ListItemButton,
+  Menu,
+  MenuProps,
+  styled,
+  ThemeProvider,
+} from "@mui/material";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
-import {useTheme} from "@mui/material/styles";
-import React, {FC} from "react";
+import { useTheme } from "@mui/material/styles";
+import React, { FC } from "react";
 import "../NavBar/NavBar.css";
 
 const StyledMenu = styled((props: MenuProps) => (

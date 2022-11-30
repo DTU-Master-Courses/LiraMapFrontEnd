@@ -1,5 +1,10 @@
-import {IconButton, ListItem, ListItemButton, ListItemText,} from "@mui/material";
-import {Add} from "@mui/icons-material";
+import {
+  IconButton,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from "@mui/material";
+import { Add } from "@mui/icons-material";
 import React from "react";
 
 const TripCard = (props: {

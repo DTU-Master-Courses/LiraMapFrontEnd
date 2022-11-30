@@ -1,12 +1,12 @@
 import "./App.css";
 import Map from "./Components/Map/Map";
-import {FC, useState} from "react";
+import { FC, useState } from "react";
 import * as L from "leaflet";
 import NavBar from "./Components/NavBar/NavBar";
 import GraphComponent from "./Components/Drawer/GraphComponent";
 import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClientRequestHeaders from "./Components/Utils/client-request-headers";
 import Hostname from "./Components/Utils/hostname";
 
@@ -51,16 +51,26 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://${Hostname}:8000/trips/acceleration/${tripID}`, {
-        headers: ClientRequestHeaders,
-      }).then((response) => response.json());
+      points = await fetch(
+        `http://${Hostname}:8000/trips/acceleration/${tripID}`,
+        {
+          headers: ClientRequestHeaders,
+        }
+      ).then((response) => response.json());
     } catch (err) {
       console.log(err);
     }
 
     let newPolyPoints: [number, number, number][] = [];
     for (let i = 0; i < points["acceleration"].length; i++) {
-      newPolyPoints.push([points["acceleration"][i]["lat"], points["acceleration"][i]["lon"], Math.sqrt(points["acceleration"][i]["ax"] ** 2 + points["acceleration"][i]["ay"] ** 2)]);
+      newPolyPoints.push([
+        points["acceleration"][i]["lat"],
+        points["acceleration"][i]["lon"],
+        Math.sqrt(
+          points["acceleration"][i]["ax"] ** 2 +
+            points["acceleration"][i]["ay"] ** 2
+        ),
+      ]);
     }
     setPolyLinePoints([...polyLinePoints, newPolyPoints]);
   };
