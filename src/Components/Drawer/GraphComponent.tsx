@@ -1,27 +1,20 @@
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
-import { FC, useState, useEffect } from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
 import ClientRequestHeaders from "../Utils/client-request-headers";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@material-ui/core";
+import {Accordion, AccordionDetails, AccordionSummary, Typography,} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
-import React from "react";
 import Hostname from "../Utils/hostname";
 
 ChartJS.register(

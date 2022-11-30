@@ -1,7 +1,7 @@
-import { Rnd } from "react-rnd";
-import React, { useState } from "react";
+import {Rnd} from "react-rnd";
+import React, {useState} from "react";
 import "../Drawer/DrawerComponents.css";
-import { Button, Tooltip } from "@mui/material";
+import {Button, Tooltip} from "@mui/material";
 import Hostname from "../Utils/hostname";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 
@@ -37,9 +37,8 @@ const Window = ({
   const [uniqueZ, setUniqueZ] = useState(0);
 
   const example = windowName?.split(": ")[1];
-  console.log(example);
 
-  const downloadCsv = async () => {
+  const downloadJson = async () => {
     const tripDetailsResponse = await fetch(
         `http://${Hostname}:8000/trips/physics/id/${example}`,
         { headers: ClientRequestHeaders }
@@ -47,7 +46,7 @@ const Window = ({
     const physicsJson = await tripDetailsResponse.json();
 
     const a = document.createElement("a");
-    const file = new Blob([JSON.stringify(physicsJson, null, 2)], {type: "text/json"});
+    const file = new Blob([JSON.stringify(physicsJson, null, 2)], {type: "application/json"});
     a.href = URL.createObjectURL(file);
     a.download = `trip-${example}.json`;
     a.click();
@@ -86,12 +85,12 @@ const Window = ({
           className="close_component_btn"
           onClick={() => closeWindow(id)}
         ></button>
-        <Tooltip title="Download CSV to see all data for the trip">
+        <Tooltip title="Download JSON to see all data for the trip">
           <Button
             sx={{ marginLeft: -1.8, height: 17, marginTop: 0.2 }}
             style={{ display: hidable ? "inline-block" : "none" }}
             className="download_csv_button"
-            onClick={downloadCsv}
+            onClick={downloadJson}
           ></Button>
         </Tooltip>
       </div>

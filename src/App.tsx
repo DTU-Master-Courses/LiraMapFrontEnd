@@ -1,12 +1,12 @@
 import "./App.css";
 import Map from "./Components/Map/Map";
-import { FC, useState } from "react";
+import {FC, useState} from "react";
 import * as L from "leaflet";
 import NavBar from "./Components/NavBar/NavBar";
 import GraphComponent from "./Components/Drawer/GraphComponent";
 import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import ClientRequestHeaders from "./Components/Utils/client-request-headers";
 import Hostname from "./Components/Utils/hostname";
 
@@ -24,8 +24,6 @@ const App: FC = () => {
   const [polyLinePoints, setPolyLinePoints] = useState<
     [number, number, number][][]
   >([]);
-  const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
-
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
 
   const position = L.marker([55.677240026834134, 12.567320700469025]);

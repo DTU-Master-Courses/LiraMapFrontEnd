@@ -1,29 +1,28 @@
 import "../Drawer/DrawerComponents.css";
-import { FC, useEffect, useState } from "react";
-import { theme } from "../Theme/Theme";
-import { ThemeProvider } from "@mui/material/styles";
+import React, {FC, useEffect, useState} from "react";
+import {theme} from "../Theme/Theme";
+import {ThemeProvider} from "@mui/material/styles";
 import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   Paper,
-  IconButton,
+  Skeleton,
+  Stack,
   Tab,
   Tabs,
-  Stack,
-  Box,
-  Skeleton,
-  InputBase,
-  Divider,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import {Add} from "@mui/icons-material";
 
-import { useQuery } from "@tanstack/react-query";
-import { Clear, FilterList, Search } from "@material-ui/icons";
+import {useQuery} from "@tanstack/react-query";
+import {Clear, Search} from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
-import { Button } from "@mui/material";
-import React from "react";
 import useDebounce from "../../Hooks/UseDebounce";
 import TripCard from "../Trip/TripCard";
 import Hostname from "../Utils/hostname";
@@ -284,9 +283,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
                         sx={{ wordWrap: "break-word" }}
                       />
                       <IconButton aria-label="icon">
-                        {/*
-                                                    TODO: change icon for editing measurement
-                                                */}
                         <Add />
                       </IconButton>
                     </ListItemButton>
