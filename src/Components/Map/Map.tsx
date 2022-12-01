@@ -1,18 +1,12 @@
-import { LatLng } from "leaflet";
+// Main Dev: johalexander
+// Supporting Devs: PossibleNPC
+import {LatLng} from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
-import { FC, useState } from "react";
-import {
-  LayerGroup,
-  LayersControl,
-  MapContainer,
-  TileLayer,
-  useMap,
-  useMapEvents,
-  ZoomControl,
-} from "react-leaflet";
+import {FC} from "react";
+import {LayerGroup, LayersControl, MapContainer, TileLayer, ZoomControl,} from "react-leaflet";
 import "./Map.css";
-import { Hotline } from "leaflet-hotline-react";
+import {Hotline} from "leaflet-hotline-react";
 import Path from "./Path";
 
 interface MapDemoProps {

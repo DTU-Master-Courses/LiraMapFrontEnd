@@ -1,28 +1,23 @@
+// Main Dev: CookieNess
+// Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
-import { FC, useState, useEffect } from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
 import ClientRequestHeaders from "../Utils/client-request-headers";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@material-ui/core";
+import {Accordion, AccordionDetails, AccordionSummary, Typography,} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
-import React from "react";
-import Hostname from "../Utils/hostname";
+import HOSTNAME from "../Utils/hostname";
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +43,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchGraphContent = async () => {
     const accelerationResponse = await fetch(
-      `http://${Hostname}:8000/trips/acceleration/${graphTripID}`,
+      `http://${HOSTNAME}:8000/trips/acceleration/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const acceleration = await accelerationResponse.json();
@@ -58,7 +53,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   const fetchTripDetails = async () => {
     const tripDetailsResponse = await fetch(
-      `http://${Hostname}:8000/trips/id/${graphTripID}`,
+      `http://${HOSTNAME}:8000/trips/id/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
     const tripDetails = await tripDetailsResponse.json();

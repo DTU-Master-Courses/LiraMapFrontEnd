@@ -1,3 +1,5 @@
+// Main Dev: Gustav
+// Supporting Devs: johalexander, CookieNess, PossibleNPC
 import "./App.css";
 import Map from "./Components/Map/Map";
 import { FC, useState } from "react";
@@ -8,7 +10,7 @@ import Window from "./Components/Base/Window";
 import RidesMeasurementComponent from "./Components/Drawer/RidesMeasurementComponent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ClientRequestHeaders from "./Components/Utils/client-request-headers";
-import Hostname from "./Components/Utils/hostname";
+import HOSTNAME from "./Components/Utils/hostname";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +26,6 @@ const App: FC = () => {
   const [polyLinePoints, setPolyLinePoints] = useState<
     [number, number, number][][]
   >([]);
-  const [hiddenGraphs, setHiddenGraphs] = useState<[String, number][]>([]);
 
   const [ridesIsRendered, setRidesIsRendered] = useState(false);
 
@@ -53,7 +54,7 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://${Hostname}:8000/trips/acceleration/${tripID}`, {
+      points = await fetch(`http://${HOSTNAME}:8000/trips/acceleration/${tripID}`, {
         headers: ClientRequestHeaders,
       }).then((response) => response.json());
     } catch (err) {
