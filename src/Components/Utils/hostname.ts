@@ -1,9 +1,11 @@
-let Hostname = "";
+// Main Dev: PossibleNPC
+// Supporting Devs: Gustav, johalexander, CookieNess
+let HOSTNAME = "";
 
 if (process.env.NODE_ENV === "production") {
-  Hostname = "se2-b.compute.dtu.dk";
+  HOSTNAME = "se2-b.compute.dtu.dk";
 } else {
-  Hostname = "localhost";
+  HOSTNAME = "localhost";
 }
 
-export default Hostname;
+export default HOSTNAME;

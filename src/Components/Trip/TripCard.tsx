@@ -1,3 +1,5 @@
+// Main Dev: PossibleNPC
+// Supporting Devs: Gustav, johalexander, CookieNess
 import {
   IconButton,
   ListItem,

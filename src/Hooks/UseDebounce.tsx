@@ -1,3 +1,5 @@
+// Main Dev: PossibleNPC
+// Supporting Devs: Gustav, johalexander, CookieNess
 import { useState, useEffect } from "react";
 
 export default function useDebounce<T>(value: T, delay: number): T {
