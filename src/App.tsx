@@ -54,9 +54,12 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://${HOSTNAME}:8000/trips/acceleration/${tripID}`, {
-        headers: ClientRequestHeaders,
-      }).then((response) => response.json());
+      points = await fetch(
+        `http://${HOSTNAME}:8000/trips/acceleration/${tripID}`,
+        {
+          headers: ClientRequestHeaders,
+        }
+      ).then((response) => response.json());
     } catch (err) {
       console.log(err);
     }

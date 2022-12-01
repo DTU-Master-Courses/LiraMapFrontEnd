@@ -4,9 +4,6 @@ import "../Drawer/DrawerComponents.css";
 import React, { FC, useEffect, useState } from "react";
 import { theme } from "../Theme/Theme";
 import { ThemeProvider } from "@mui/material/styles";
-import React, {FC, useEffect, useState} from "react";
-import {theme} from "../Theme/Theme";
-import {ThemeProvider} from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -23,7 +20,7 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import {Add} from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 
 import { useQuery } from "@tanstack/react-query";
 import { Clear, Search } from "@material-ui/icons";
