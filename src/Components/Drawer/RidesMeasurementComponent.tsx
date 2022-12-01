@@ -1,7 +1,12 @@
+// Main Dev: johalexander
+// Supporting Devs: Gustav, CookieNess, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import React, { FC, useEffect, useState } from "react";
 import { theme } from "../Theme/Theme";
 import { ThemeProvider } from "@mui/material/styles";
+import React, {FC, useEffect, useState} from "react";
+import {theme} from "../Theme/Theme";
+import {ThemeProvider} from "@mui/material/styles";
 import {
   Box,
   Button,
@@ -18,14 +23,14 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import {Add} from "@mui/icons-material";
 
 import { useQuery } from "@tanstack/react-query";
 import { Clear, Search } from "@material-ui/icons";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import useDebounce from "../../Hooks/UseDebounce";
 import TripCard from "../Trip/TripCard";
-import Hostname from "../Utils/hostname";
+import HOSTNAME from "../Utils/hostname";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -99,7 +104,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   };
 
   const fetchRides = async () => {
-    const ridesResponse = await fetch(`http://${Hostname}:8000/trips`, {
+    const ridesResponse = await fetch(`http://${HOSTNAME}:8000/trips`, {
       headers: ClientRequestHeaders,
     });
 
@@ -110,7 +115,7 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
 
   const fetchMeasurements = async () => {
     const measurementResponse = await fetch(
-      `http://${Hostname}:8000/measurement/types`,
+      `http://${HOSTNAME}:8000/measurement/types`,
       { headers: ClientRequestHeaders }
     );
     const measurementTypes = await measurementResponse.json();
