@@ -1,12 +1,18 @@
 // Main Dev: johalexander
 // Supporting Devs: PossibleNPC
-import {LatLng} from "leaflet";
+import { LatLng } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.gridlayer.googlemutant";
-import {FC} from "react";
-import {LayerGroup, LayersControl, MapContainer, TileLayer, ZoomControl,} from "react-leaflet";
+import { FC } from "react";
+import {
+  LayerGroup,
+  LayersControl,
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+} from "react-leaflet";
 import "./Map.css";
-import {Hotline} from "leaflet-hotline-react";
+import LiraHotline from "./LiraHotline";
 import Path from "./Path";
 
 interface MapDemoProps {
@@ -54,18 +60,8 @@ const MapDemo: FC<MapDemoProps> = ({
               <LayerGroup>
                 {polyLinePoints.map((component, i) => (
                   <>
-                    <Hotline
-                      positions={component}
-                      weight={3}
-                      min={0}
-                      max={.3}
-                      palette={{
-                        0.0: "green",
-                        0.5: "yellow",
-                        1.0: "red",
-                      }}
-                    />
-                    <Path positions={component}></Path>
+                    <LiraHotline key={`hotline-${i}`} positions={component} />
+                    <Path key={`path-${i}`} positions={component}></Path>
                   </>
                 ))}
               </LayerGroup>

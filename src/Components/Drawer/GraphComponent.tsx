@@ -2,7 +2,7 @@
 // Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
-import React, {FC, useEffect, useState} from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -14,7 +14,12 @@ import {
   Tooltip,
 } from "chart.js";
 import ClientRequestHeaders from "../Utils/client-request-headers";
-import {Accordion, AccordionDetails, AccordionSummary, Typography,} from "@material-ui/core";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
 import HOSTNAME from "../Utils/hostname";

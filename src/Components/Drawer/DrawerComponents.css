@@ -140,6 +140,7 @@
   filter: invert(21%) sepia(75%) saturate(7174%) hue-rotate(118deg)
     brightness(150%) contrast(103%);
   cursor: pointer;
+  z-index: 9999;
 }
 
 /* day night filter button classes*/

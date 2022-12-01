@@ -54,16 +54,26 @@ const App: FC = () => {
     let points;
     // TODO: Need to migrate to React Query
     try {
-      points = await fetch(`http://${HOSTNAME}:8000/trips/acceleration/${tripID}`, {
-        headers: ClientRequestHeaders,
-      }).then((response) => response.json());
+      points = await fetch(
+        `http://${HOSTNAME}:8000/trips/acceleration/${tripID}`,
+        {
+          headers: ClientRequestHeaders,
+        }
+      ).then((response) => response.json());
     } catch (err) {
       console.log(err);
     }
 
     let newPolyPoints: [number, number, number][] = [];
     for (let i = 0; i < points["acceleration"].length; i++) {
-      newPolyPoints.push([points["acceleration"][i]["lat"], points["acceleration"][i]["lon"], Math.sqrt(points["acceleration"][i]["ax"] ** 2 + points["acceleration"][i]["ay"] ** 2)]);
+      newPolyPoints.push([
+        points["acceleration"][i]["lat"],
+        points["acceleration"][i]["lon"],
+        Math.sqrt(
+          points["acceleration"][i]["ax"] ** 2 +
+            points["acceleration"][i]["ay"] ** 2
+        ),
+      ]);
     }
     setPolyLinePoints([...polyLinePoints, newPolyPoints]);
   };

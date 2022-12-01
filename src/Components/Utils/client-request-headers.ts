@@ -4,5 +4,4 @@ const ClientRequestHeaders = new Headers();
 
 ClientRequestHeaders.set("Access-Control-Allow-Origin", "*");
 
-
 export default ClientRequestHeaders;
