@@ -2,6 +2,7 @@
 // Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
+import {InputLabel, MenuItem} from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import {
   CategoryScale,
@@ -18,6 +19,8 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  FormControl,
+  Select,
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -45,8 +48,10 @@ const GraphComponent: FC<GraphComponentProps> = ({
 }) => {
   const [graphContent, setGraphContent] = useState<any>();
   const [tripDetails, setTripDetailsContent] = useState<any>();
+  const [measurementTypes, setMeasurementTypes] = useState<string[]>([]);
+  const [selectedMeasurementType, setSelectedMeasurementType] = useState<string>("");
 
-  const fetchGraphContent = async () => {
+  const fetchInitialGraphContent = async () => {
     const accelerationResponse = await fetch(
       `http://${HOSTNAME}:8000/trips/acceleration/${graphTripID}`,
       { headers: ClientRequestHeaders }
@@ -55,6 +60,33 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
     setGraphContent(acceleration["acceleration"]);
   };
+
+  const fetchMeasurementTypes = async () => {
+    const measurementResponse = await fetch(
+        `http://${HOSTNAME}:8000/measurement/types`,
+        { headers: ClientRequestHeaders }
+    );
+    const measurementTypes = await measurementResponse.json();
+
+    let all_types: string[] = [];
+
+    measurementTypes["measurement_types"].forEach((measurement: any) => {
+      all_types.push(measurement["type"]);
+    })
+
+    setMeasurementTypes(all_types);
+  };
+
+  const fetchMeasurementGraphContent = async () => {
+    const measurementsResponse = await fetch(
+        `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementType}`,
+        { headers: ClientRequestHeaders }
+    );
+
+    const measurements = await measurementsResponse.json();
+
+    setGraphContent(measurements);
+  }
 
   const fetchTripDetails = async () => {
     const tripDetailsResponse = await fetch(
@@ -67,9 +99,18 @@ const GraphComponent: FC<GraphComponentProps> = ({
   };
 
   useEffect(() => {
-    fetchGraphContent();
+    fetchInitialGraphContent();
     fetchTripDetails();
+    fetchMeasurementTypes();
   }, []);
+
+  useEffect(() => {
+    fetchMeasurementGraphContent();
+  }, [selectedMeasurementType])
+
+  const handleMeasurementSelection = (event: any) => {
+    setSelectedMeasurementType(event.target.value);
+  }
 
   const tripDetailsKeysHTML: any = [];
   const tripDetailsValuesHTML: any = [];
@@ -113,6 +154,24 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   return (
     <div>
+      {/* This is where we are going to add the stupid dropdown menu*/}
+      <FormControl>
+        <InputLabel id="demo-simple-select-label">MeasurementType</InputLabel>
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={selectedMeasurementType}
+            label="Measurement Type"
+            onChange={handleMeasurementSelection}
+        >
+          {/*This is where we need to make this dynamic... ALL THE DAMN THINGS*/}
+          {
+            measurementTypes?.map(measurement => (
+              <MenuItem value={measurement}>{measurement}</MenuItem>
+            ))
+          }
+        </Select>
+      </FormControl>
       <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
