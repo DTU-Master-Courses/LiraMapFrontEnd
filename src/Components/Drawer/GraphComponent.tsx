@@ -2,7 +2,7 @@
 // Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
-import {InputLabel, MenuItem} from "@mui/material";
+import { InputLabel, MenuItem } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import {
   CategoryScale,
@@ -14,6 +14,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import OtherGraph from "../OtherGraph/OtherGraph";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import {
   Accordion,
@@ -26,6 +27,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
 import HOSTNAME from "../Utils/hostname";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 ChartJS.register(
   CategoryScale,
@@ -49,22 +53,47 @@ const GraphComponent: FC<GraphComponentProps> = ({
   const [graphContent, setGraphContent] = useState<any>();
   const [tripDetails, setTripDetailsContent] = useState<any>();
   const [measurementTypes, setMeasurementTypes] = useState<string[]>([]);
-  const [selectedMeasurementType, setSelectedMeasurementType] = useState<string>("");
+  const [selectedMeasurementType, setSelectedMeasurementType] =
+    useState<string>("");
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  // TODO: We need to ensure that the data we get back from this is good
   const fetchInitialGraphContent = async () => {
     const accelerationResponse = await fetch(
       `http://${HOSTNAME}:8000/trips/acceleration/${graphTripID}`,
       { headers: ClientRequestHeaders }
     );
+
+    if (!accelerationResponse.ok) {
+      throw Error("Data unavailable");
+    }
+
     const acceleration = await accelerationResponse.json();
 
-    setGraphContent(acceleration["acceleration"]);
+    return Promise.all(acceleration["acceleration"]);
   };
+
+  useEffect(() => {
+    fetchInitialGraphContent().then(
+      (response) => setGraphContent(response),
+      (error) =>
+        toast.error(error.toString(), {
+          position: "top-right",
+          autoClose: 2500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        })
+    );
+  }, []);
 
   const fetchMeasurementTypes = async () => {
     const measurementResponse = await fetch(
-        `http://${HOSTNAME}:8000/measurement/types`,
-        { headers: ClientRequestHeaders }
+      `http://${HOSTNAME}:8000/measurement/types`,
+      { headers: ClientRequestHeaders }
     );
     const measurementTypes = await measurementResponse.json();
 
@@ -72,21 +101,26 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
     measurementTypes["measurement_types"].forEach((measurement: any) => {
       all_types.push(measurement["type"]);
-    })
+    });
 
     setMeasurementTypes(all_types);
   };
 
   const fetchMeasurementGraphContent = async () => {
     const measurementsResponse = await fetch(
-        `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementType}`,
-        { headers: ClientRequestHeaders }
+      `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementType}`,
+      { headers: ClientRequestHeaders }
     );
+
+    if (!measurementsResponse.ok) {
+      throw Error("Data unavailable");
+    }
 
     const measurements = await measurementsResponse.json();
 
     setGraphContent(measurements);
-  }
+    setIsInitialLoad(false);
+  };
 
   const fetchTripDetails = async () => {
     const tripDetailsResponse = await fetch(
@@ -99,18 +133,32 @@ const GraphComponent: FC<GraphComponentProps> = ({
   };
 
   useEffect(() => {
-    fetchInitialGraphContent();
     fetchTripDetails();
     fetchMeasurementTypes();
   }, []);
 
   useEffect(() => {
-    fetchMeasurementGraphContent();
-  }, [selectedMeasurementType])
+    if (selectedMeasurementType !== "") {
+      fetchMeasurementGraphContent().then(
+        (response) => setGraphContent(response),
+        (error) =>
+          toast.error(error.toString(), {
+            position: "top-right",
+            autoClose: 2500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          })
+      );
+    }
+  }, [selectedMeasurementType]);
 
   const handleMeasurementSelection = (event: any) => {
     setSelectedMeasurementType(event.target.value);
-  }
+  };
 
   const tripDetailsKeysHTML: any = [];
   const tripDetailsValuesHTML: any = [];
@@ -154,25 +202,27 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   return (
     <div>
-      {/* This is where we are going to add the stupid dropdown menu*/}
+      <ToastContainer />
       <FormControl>
         <InputLabel id="demo-simple-select-label">MeasurementType</InputLabel>
         <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedMeasurementType}
-            label="Measurement Type"
-            onChange={handleMeasurementSelection}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={selectedMeasurementType}
+          label="Measurement Type"
+          onChange={handleMeasurementSelection}
         >
-          {/*This is where we need to make this dynamic... ALL THE DAMN THINGS*/}
-          {
-            measurementTypes?.map(measurement => (
-              <MenuItem value={measurement}>{measurement}</MenuItem>
-            ))
-          }
+          {/* TODO This still needs to be worked on and styled. It's bare minimum, but doesn't look nice. */}
+          {measurementTypes?.map((measurement) => (
+            <MenuItem value={measurement}>{measurement}</MenuItem>
+          ))}
         </Select>
       </FormControl>
-      <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
+      {isInitialLoad ? (
+        <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
+      ) : (
+        <OtherGraph graphContent={graphContent} graphTaskID={graphTaskID} />
+      )}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Trip Details</Typography>
