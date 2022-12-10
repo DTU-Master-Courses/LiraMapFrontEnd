@@ -2,7 +2,7 @@
 // Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
-import { InputLabel, MenuItem } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import {
   CategoryScale,
@@ -20,8 +20,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  FormControl,
-  Select,
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -202,22 +200,19 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   return (
     <div>
-      <ToastContainer />
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">MeasurementType</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={selectedMeasurementType}
-          label="Measurement Type"
-          onChange={handleMeasurementSelection}
-        >
-          {/* TODO This still needs to be worked on and styled. It's bare minimum, but doesn't look nice. */}
-          {measurementTypes?.map((measurement) => (
-            <MenuItem value={measurement}>{measurement}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <ToastContainer style={{ overflowX: "hidden" }} />
+      {/*I think this is the POS we need to change*/}
+      <Autocomplete
+        style={{ marginTop: "1rem", marginLeft: "1rem" }}
+        disablePortal
+        id="measurement-type-combo-box"
+        options={measurementTypes}
+        sx={{ width: 400 }}
+        onChange={handleMeasurementSelection}
+        renderInput={(params) => (
+          <TextField {...params} label="Measurement Type" />
+        )}
+      />
       {isInitialLoad ? (
         <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
       ) : (
