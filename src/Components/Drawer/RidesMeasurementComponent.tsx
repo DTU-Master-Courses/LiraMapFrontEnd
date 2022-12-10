@@ -11,16 +11,12 @@ import {
   IconButton,
   InputBase,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Paper,
   Skeleton,
   Stack,
   Tab,
   Tabs,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
 
 import { useQuery } from "@tanstack/react-query";
 import { Clear, Search } from "@material-ui/icons";
@@ -63,7 +59,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   const [selectedMeasurements, setSelectedMeasurements] = useState<any[]>([]);
   const [rideInfos, setRideInfos] = useState<any[]>([]);
   const [filteredRideInfos, setFilteredRideInfos] = useState<any[]>([]);
-  const [measurementInfos, setMeasurementInfos] = useState<any[]>([]);
   const [filterBy, setFilterBy] = useState("");
   const [dayNightFilter, setDayNightFilter] = useState(0);
 
@@ -76,13 +71,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
   ) => {
     addGraphComponent(taskID, tripID);
     setSelectedRides([...selectedRides, taskID]);
-  };
-
-  const handleMeasurementItemClick = (
-    _: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number
-  ) => {
-    setSelectedMeasurements([...selectedMeasurements, index]);
   };
 
   const handleChange = (event: React.SyntheticEvent, newTab: number) => {
@@ -108,16 +96,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     const rides = await ridesResponse.json();
 
     return Promise.all(rides["trips"]);
-  };
-
-  const fetchMeasurements = async () => {
-    const measurementResponse = await fetch(
-      `http://${HOSTNAME}:8000/measurement/types`,
-      { headers: ClientRequestHeaders }
-    );
-    const measurementTypes = await measurementResponse.json();
-
-    return Promise.all(measurementTypes["measurement_types"]);
   };
 
   const filterCity = (ridesArray: any) => {
@@ -148,17 +126,12 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
     ["rides"],
     fetchRides
   );
-  const { data: measurementQuery, isLoading: measurementsIsLoading } = useQuery(
-    ["measurements"],
-    fetchMeasurements
-  );
 
   useEffect(() => {
-    if (ridesQuery && measurementQuery) {
+    if (ridesQuery) {
       setRideInfos(ridesQuery);
-      setMeasurementInfos(measurementQuery);
     }
-  }, [ridesQuery, measurementQuery]);
+  }, [ridesQuery]);
 
   useEffect(() => {
     let matches: any = [];
@@ -244,56 +217,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
             </>
           </List>
         </TabPanel>
-        <TabPanel value={tab} index={1}>
-          {measurementsIsLoading && (
-            <Stack sx={{ margin: "auto", width: "100%" }} spacing={0.1}>
-              {Array.from(Array(15)).map((_, i) => {
-                return (
-                  <Skeleton
-                    key={`Skeleton ${i}`}
-                    variant="rectangular"
-                    height={72}
-                  />
-                );
-              })}
-            </Stack>
-          )}
-          <List sx={{ background: "transparent", width: "100%", padding: "0" }}>
-            <>
-              {Array.from(Array(measurementInfos.length)).map((_, i) => {
-                return (
-                  <ListItem
-                    key={"Measurement " + i}
-                    sx={{
-                      padding: "0",
-                      width: "100%",
-                      background: "transparent",
-                    }}
-                  >
-                    <ListItemButton
-                      sx={{
-                        backgroundColor: "transparent",
-                        borderBottom: 1,
-                        borderColor: "rgba(0,0,0,0.3)",
-                      }}
-                      selected={selectedMeasurements.includes(i)}
-                      onClick={(event) => handleMeasurementItemClick(event, i)}
-                    >
-                      <ListItemText
-                        primary={`Measurement ${i + 1}`}
-                        secondary={measurementInfos[i]["type"]}
-                        sx={{ wordWrap: "break-word" }}
-                      />
-                      <IconButton aria-label="icon">
-                        <Add />
-                      </IconButton>
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </>
-          </List>
-        </TabPanel>
       </Paper>
       <Paper
         elevation={1}
@@ -307,7 +230,6 @@ const RidesMeasurementComponent: FC<RidesMeasurementComponentProps> = ({
       >
         <Tabs value={tab} onChange={handleChange} selectionFollowsFocus>
           <Tab label="Trips" />
-          <Tab label="Measurements" />
         </Tabs>
       </Paper>
 
