@@ -10,10 +10,10 @@ const OtherGraph = ({ graphContent, graphTaskID }: OtherGraphProps) => {
   let timestamps = [];
   let date;
   if (graphContent !== null) {
-    date = graphContent[0]["timestamp"];
+    date = graphContent[0]["date"];
     for (let i = 0; i < graphContent.length; i++) {
       xValues[i] = graphContent[i]["value"];
-      timestamps[i] = graphContent[i]["timestamp"];
+      timestamps[i] = graphContent[i]["time"];
     }
   }
 

@@ -136,7 +136,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
   }, []);
 
   useEffect(() => {
-    if (selectedMeasurementType !== "") {
+    if (selectedMeasurementType !== "" || selectedMeasurementType !== undefined || true) {
       fetchMeasurementGraphContent().then(
         (response) => setGraphContent(response),
         (error) =>
@@ -155,7 +155,8 @@ const GraphComponent: FC<GraphComponentProps> = ({
   }, [selectedMeasurementType]);
 
   const handleMeasurementSelection = (event: any) => {
-    setSelectedMeasurementType(event.target.value);
+    // console.log(event.target.innerText);
+    setSelectedMeasurementType(event.target.innerText);
   };
 
   const tripDetailsKeysHTML: any = [];
@@ -206,7 +207,9 @@ const GraphComponent: FC<GraphComponentProps> = ({
         style={{ marginTop: "1rem", marginLeft: "1rem" }}
         disablePortal
         id="measurement-type-combo-box"
+        defaultValue={"acc.xyz"}
         options={measurementTypes}
+        getOptionLabel={(measurementType) => measurementType}
         sx={{ width: 400 }}
         onChange={handleMeasurementSelection}
         renderInput={(params) => (
