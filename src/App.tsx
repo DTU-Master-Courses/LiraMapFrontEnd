@@ -47,10 +47,7 @@ const App: FC = () => {
   const addGraphComponent = async (taskID: number, tripID: string) => {
     setUniqueId(uniqueId + 1);
     setUniqueZ(uniqueZ + 1);
-    setGraphComponentsList([
-      ...graphComponentsList,
-      { componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID },
-    ]);
+
     let points;
     // TODO: Need to migrate to React Query
     try {
@@ -62,6 +59,12 @@ const App: FC = () => {
       ).then((response) => response.json());
     } catch (err) {
       console.log(err);
+    }
+    if (points) {
+      setGraphComponentsList([
+        ...graphComponentsList,
+        { componentId: uniqueId, graphTaskID: taskID, graphTripID: tripID, initData: points },
+      ]);
     }
 
     let newPolyPoints: [number, number, number][] = [];
@@ -128,8 +131,8 @@ const App: FC = () => {
           <Window
             key={component.componentId}
             id={component.componentId}
-            x={350}
-            y={300}
+            x={450}
+            y={100}
             width={"70%"}
             height={"60%"}
             windowName={`Trip: ${component.graphTaskID}`}
@@ -142,6 +145,7 @@ const App: FC = () => {
             <GraphComponent
               graphTaskID={component.graphTaskID}
               graphTripID={component.graphTripID}
+              initData={component.initData}
             />
           </Window>
         ))}

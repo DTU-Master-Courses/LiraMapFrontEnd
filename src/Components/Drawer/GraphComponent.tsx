@@ -42,51 +42,21 @@ ChartJS.register(
 interface GraphComponentProps {
   graphTaskID: number;
   graphTripID: string;
+  initData: any;
 }
 
 const GraphComponent: FC<GraphComponentProps> = ({
   graphTaskID,
   graphTripID,
+    initData
 }) => {
   const [graphContent, setGraphContent] = useState<any>();
+  const [initialData, setInitialData] = useState<any>(initData);
   const [tripDetails, setTripDetailsContent] = useState<any>();
   const [measurementTypes, setMeasurementTypes] = useState<string[]>([]);
   const [selectedMeasurementType, setSelectedMeasurementType] =
     useState<string>("");
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
-  // TODO: We need to ensure that the data we get back from this is good
-  const fetchInitialGraphContent = async () => {
-    const accelerationResponse = await fetch(
-      `http://${HOSTNAME}:8000/trips/acceleration/${graphTripID}`,
-      { headers: ClientRequestHeaders }
-    );
-
-    if (!accelerationResponse.ok) {
-      throw Error("Data unavailable");
-    }
-
-    const acceleration = await accelerationResponse.json();
-
-    return Promise.all(acceleration["acceleration"]);
-  };
-
-  useEffect(() => {
-    fetchInitialGraphContent().then(
-      (response) => setGraphContent(response),
-      (error) =>
-        toast.error(error.toString(), {
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        })
-    );
-  }, []);
 
   const fetchMeasurementTypes = async () => {
     const measurementResponse = await fetch(
@@ -98,26 +68,37 @@ const GraphComponent: FC<GraphComponentProps> = ({
     let all_types: string[] = [];
 
     measurementTypes["measurement_types"].forEach((measurement: any) => {
-      all_types.push(measurement["type"]);
+      if (measurement["type"] !== "acc.xyz") {
+        all_types.push(measurement["type"]);
+      }
     });
 
     setMeasurementTypes(all_types);
   };
 
-  const fetchMeasurementGraphContent = async () => {
+  const fetchMeasurementGraphContent = async (selectedMeasurementTypeInnerHTML: string) => {
     const measurementsResponse = await fetch(
-      `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementType}`,
+      `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementTypeInnerHTML}`,
       { headers: ClientRequestHeaders }
     );
 
     if (!measurementsResponse.ok) {
-      throw Error("Data unavailable");
+      toast.error("Data not found", {
+                  position: "top-right",
+                  autoClose: 2500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: false,
+                  progress: undefined,
+                  theme: "light",
+                });
+      return;
     }
 
     const measurements = await measurementsResponse.json();
 
-    setGraphContent(measurements);
-    setIsInitialLoad(false);
+    return measurements;
   };
 
   const fetchTripDetails = async () => {
@@ -135,28 +116,13 @@ const GraphComponent: FC<GraphComponentProps> = ({
     fetchMeasurementTypes();
   }, []);
 
-  useEffect(() => {
-    if (selectedMeasurementType !== "" || selectedMeasurementType !== undefined || true) {
-      fetchMeasurementGraphContent().then(
-        (response) => setGraphContent(response),
-        (error) =>
-          toast.error(error.toString(), {
-            position: "top-right",
-            autoClose: 2500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            progress: undefined,
-            theme: "light",
-          })
-      );
-    }
-  }, [selectedMeasurementType]);
-
-  const handleMeasurementSelection = (event: any) => {
-    // console.log(event.target.innerText);
+  const handleMeasurementSelection = async (event: any) => {
     setSelectedMeasurementType(event.target.innerText);
+    const results = await fetchMeasurementGraphContent(event.target.innerText);
+    if (results) {
+      setGraphContent(results);
+      setIsInitialLoad(false);
+    }
   };
 
   const tripDetailsKeysHTML: any = [];
@@ -202,12 +168,10 @@ const GraphComponent: FC<GraphComponentProps> = ({
   return (
     <div>
       <ToastContainer style={{ overflowX: "hidden" }} />
-      {/*I think this is the POS we need to change*/}
       <Autocomplete
         style={{ marginTop: "1rem", marginLeft: "1rem" }}
         disablePortal
         id="measurement-type-combo-box"
-        defaultValue={"acc.xyz"}
         options={measurementTypes}
         getOptionLabel={(measurementType) => measurementType}
         sx={{ width: 400 }}
@@ -217,7 +181,7 @@ const GraphComponent: FC<GraphComponentProps> = ({
         )}
       />
       {isInitialLoad ? (
-        <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
+        <GraphChart graphContent={initialData} graphTaskID={graphTaskID} />
       ) : (
         <OtherGraph graphContent={graphContent} graphTaskID={graphTaskID} />
       )}

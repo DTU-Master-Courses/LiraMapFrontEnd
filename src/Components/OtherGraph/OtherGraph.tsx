@@ -9,7 +9,7 @@ const OtherGraph = ({ graphContent, graphTaskID }: OtherGraphProps) => {
   let xValues = [];
   let timestamps = [];
   let date;
-  if (graphContent !== null) {
+  if (graphContent !== null || graphContent !== undefined) {
     date = graphContent[0]["date"];
     for (let i = 0; i < graphContent.length; i++) {
       xValues[i] = graphContent[i]["value"];

@@ -17,12 +17,12 @@ const GraphChart: FC<GraphChartProps> = ({ graphContent, graphTaskID }) => {
   let date;
   try {
     if (graphContent !== null) {
-      date = graphContent[0]["ts_date"];
-      for (let i = 0; i < graphContent.length; i++) {
-        xValues[i] = graphContent[i]["ax"];
-        yValues[i] = graphContent[i]["ay"];
-        zValues[i] = graphContent[i]["az"];
-        timestamps[i] = graphContent[i]["ts_time"];
+      date = graphContent["acceleration"][0]["ts_date"];
+      for (let i = 0; i < graphContent["acceleration"].length; i++) {
+        xValues[i] = graphContent["acceleration"][i]["ax"];
+        yValues[i] = graphContent["acceleration"][i]["ay"];
+        zValues[i] = graphContent["acceleration"][i]["az"];
+        timestamps[i] = graphContent["acceleration"][i]["ts_time"];
       }
     }
   } catch (err) {
