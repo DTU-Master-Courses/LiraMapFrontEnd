@@ -1,0 +1,15 @@
+flowchart LR
+    polyLinePoints{{polyLinePoints}}
+    polyLinePoints --> PolyLine
+    subgraph MapContainer
+        ZoomControl
+        subgraph LayersControl
+            satellite
+            osm
+            Light-gray
+        end
+        subgraph PolyLine
+            LiraHotline
+            Path
+        end
+    end

@@ -1,0 +1,53 @@
+flowchart LR
+
+    API
+
+    fetchTripDetails -- /trips/id/tripID --> API
+    API --> fetchTripDetails
+
+    fetchMeasurementGraphContent -- /trips/id/tripID?tag=measurementType --> API
+    API --> fetchMeasurementGraphContent
+
+    fetchMeasurementTypes -- /measurement/types --> API
+    API --> fetchMeasurementTypes
+
+    subgraph WindowGraph
+        subgraph GraphComponent
+            graphContent{{graphContent}}
+            tripDetails{{tripDetails}}
+            measurementTypes{{measurementTypes}}
+            isInitialLoad{{isInitialLoad}}
+
+            fetchMeasurementTypes([fetchMeasurementsTypes])
+            fetchMeasurementGraphContent([fetchMeasurementGraphContent])
+            fetchTripDetails([fetchTripDetails])
+            handleMeasurementSelection([handleMeasurementSelection])
+
+            handleMeasurementSelection --> fetchMeasurementGraphContent
+            fetchMeasurementGraphContent -- setGraphContent --> graphContent
+            handleMeasurementSelection -- setIsInitialLoad --> isInitialLoad
+
+            fetchTripDetails -- setTripDetails --> tripDetails
+            
+            fetchMeasurementTypes -- setMeasurementTypes --> measurementTypes
+
+
+            subgraph GraphChart
+                Line.
+            end
+            subgraph OtherGraph
+                Line
+            end
+            subgraph Accordion
+            end
+            subgraph Autocomplete
+            end
+
+            isInitialLoad -- initialData --> GraphChart
+            isInitialLoad -- graphContent --> OtherGraph
+
+            tripDetails --> Accordion
+
+            Autocomplete --> handleMeasurementSelection
+        end
+    end

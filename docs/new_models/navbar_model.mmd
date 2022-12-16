@@ -1,0 +1,31 @@
+flowchart TB
+    subgraph App
+    graphComponentsList{{graphComponentsList}}
+    ridesIsRendered{{ridesIsRendered}}
+    graphComponentsList --> ListItemButton
+
+    ListItemButton -- "setRideIsRendered(true)" --> ridesIsRendered
+        subgraph NavBar
+        handleClose([handleClose])
+        handleClick([handleClick])
+        anchorEl{{anchorEl}}
+
+        ListItemButton --> handleClose
+        handleClose -- null --> anchorEl
+
+        Button --> handleClick
+        handleClick -- setAnchorEl --> anchorEl
+
+        
+         
+        subgraph AppBar
+            subgraph Toolbar
+                subgraph Button
+                end
+                subgraph List
+                    ListItemButton
+                end
+            end
+        end
+    end
+    end

@@ -1,0 +1,41 @@
+flowchart TB
+    API
+    addGraphComponent([addGraphComponent])
+
+    fetchRides -- /trips --> API
+    API --> fetchRides
+
+    handleRideItemClick -- taskID, tripID --> addGraphComponent
+
+    WindowRides --> setRidesIsRendered
+    subgraph WindowRides
+
+        subgraph RidesMeasurementsComponent
+            rideInfos{{rideInfos}}
+            filteredRideInfos{{filteredRideInfos}}
+            filterBy{{filterBy}}
+            dayNightFilter{{dayNightFilter}}
+
+            handleRideItemClick([handleRideItemClick])
+            onSearch([onSearch])
+            fetchRides([fetchRides])
+            filterCity([filterCity])
+            filterDayNight([filterDayNight])
+
+            fetchRides -- setRidesInfo --> rideInfos
+            rideInfos --> filterCity
+            filterCity --> filterDayNight
+            filterDayNight -- setFilteredRideInfos --> filteredRideInfos
+            filterBy --> filterCity
+            dayNightFilter --> filterDayNight
+
+            filteredRideInfos --> TripCard
+            onSearch --> filterCity
+            handleRideItemClick --> TripCard
+            TripCard -- onClick --> handleRideItemClick
+            
+            subgraph TripCard 
+            end
+
+        end
+    end
