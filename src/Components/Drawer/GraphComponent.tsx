@@ -2,6 +2,7 @@
 // Supporting Devs: Gustav, johalexander, PossibleNPC
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
+import { Autocomplete, TextField } from "@mui/material";
 import React, { FC, useEffect, useState } from "react";
 import {
   CategoryScale,
@@ -13,6 +14,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import OtherGraph from "../OtherGraph/OtherGraph";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import {
   Accordion,
@@ -23,6 +25,9 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import GraphChart from "../GraphChart/GraphChart";
 import HOSTNAME from "../Utils/hostname";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 ChartJS.register(
   CategoryScale,
@@ -37,23 +42,63 @@ ChartJS.register(
 interface GraphComponentProps {
   graphTaskID: number;
   graphTripID: string;
+  initData: any;
 }
 
 const GraphComponent: FC<GraphComponentProps> = ({
   graphTaskID,
   graphTripID,
+    initData
 }) => {
   const [graphContent, setGraphContent] = useState<any>();
+  const [initialData, setInitialData] = useState<any>(initData);
   const [tripDetails, setTripDetailsContent] = useState<any>();
+  const [measurementTypes, setMeasurementTypes] = useState<string[]>([]);
+  const [selectedMeasurementType, setSelectedMeasurementType] =
+    useState<string>("");
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  const fetchGraphContent = async () => {
-    const accelerationResponse = await fetch(
-      `http://${HOSTNAME}:8000/trips/acceleration/${graphTripID}`,
+  const fetchMeasurementTypes = async () => {
+    const measurementResponse = await fetch(
+      `http://${HOSTNAME}:8000/measurement/types`,
       { headers: ClientRequestHeaders }
     );
-    const acceleration = await accelerationResponse.json();
+    const measurementTypes = await measurementResponse.json();
 
-    setGraphContent(acceleration["acceleration"]);
+    let all_types: string[] = [];
+
+    measurementTypes["measurement_types"].forEach((measurement: any) => {
+      if (measurement["type"] !== "acc.xyz") {
+        all_types.push(measurement["type"]);
+      }
+    });
+
+    setMeasurementTypes(all_types);
+  };
+
+  const fetchMeasurementGraphContent = async (selectedMeasurementTypeInnerHTML: string) => {
+    const measurementsResponse = await fetch(
+      `http://${HOSTNAME}:8000/trips/id/${graphTripID}?tag=${selectedMeasurementTypeInnerHTML}`,
+      { headers: ClientRequestHeaders }
+    );
+
+    if (!measurementsResponse.ok) {
+      toast.error("Data not found", {
+                  position: "top-right",
+                  autoClose: 2500,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                  draggable: false,
+                  progress: undefined,
+                  theme: "light",
+                });
+      return;
+    }
+
+    const measurements = await measurementsResponse.json();
+
+    return measurements;
   };
 
   const fetchTripDetails = async () => {
@@ -67,9 +112,18 @@ const GraphComponent: FC<GraphComponentProps> = ({
   };
 
   useEffect(() => {
-    fetchGraphContent();
     fetchTripDetails();
+    fetchMeasurementTypes();
   }, []);
+
+  const handleMeasurementSelection = async (event: any) => {
+    setSelectedMeasurementType(event.target.innerText);
+    const results = await fetchMeasurementGraphContent(event.target.innerText);
+    if (results) {
+      setGraphContent(results);
+      setIsInitialLoad(false);
+    }
+  };
 
   const tripDetailsKeysHTML: any = [];
   const tripDetailsValuesHTML: any = [];
@@ -113,7 +167,24 @@ const GraphComponent: FC<GraphComponentProps> = ({
 
   return (
     <div>
-      <GraphChart graphContent={graphContent} graphTaskID={graphTaskID} />
+      <ToastContainer style={{ overflowX: "hidden" }} />
+      <Autocomplete
+        style={{ marginTop: "1rem", marginLeft: "1rem" }}
+        disablePortal
+        id="measurement-type-combo-box"
+        options={measurementTypes}
+        getOptionLabel={(measurementType) => measurementType}
+        sx={{ width: 400 }}
+        onChange={handleMeasurementSelection}
+        renderInput={(params) => (
+          <TextField {...params} label="Measurement Type" />
+        )}
+      />
+      {isInitialLoad ? (
+        <GraphChart graphContent={initialData} graphTaskID={graphTaskID} />
+      ) : (
+        <OtherGraph graphContent={graphContent} graphTaskID={graphTaskID} />
+      )}
       <Accordion>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Trip Details</Typography>
