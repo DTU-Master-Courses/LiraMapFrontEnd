@@ -1,5 +1,5 @@
 // Main Dev: CookieNess
-// Supporting Devs: Gustav, johalexander, PossibleNPC
+// Supporting Devs: Gustav, johalexander, PossibleNPC, ViktorRindom
 import { Rnd } from "react-rnd";
 import React, { useState } from "react";
 import "../Drawer/DrawerComponents.css";

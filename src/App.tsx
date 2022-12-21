@@ -1,5 +1,5 @@
 // Main Dev: Gustav
-// Supporting Devs: johalexander, CookieNess, PossibleNPC
+// Supporting Devs: johalexander, CookieNess, PossibleNPC, ViktorRindom
 import "./App.css";
 import Map from "./Components/Map/Map";
 import { FC, useState } from "react";

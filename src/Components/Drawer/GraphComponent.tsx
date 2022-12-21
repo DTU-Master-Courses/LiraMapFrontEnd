@@ -1,5 +1,5 @@
 // Main Dev: CookieNess
-// Supporting Devs: Gustav, johalexander, PossibleNPC
+// Supporting Devs: Gustav, johalexander, PossibleNPC, ViktorRindom
 import "../Drawer/DrawerComponents.css";
 import "../Utils/client-request-headers";
 import { Autocomplete, TextField } from "@mui/material";
