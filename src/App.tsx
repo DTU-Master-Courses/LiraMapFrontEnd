@@ -41,7 +41,7 @@ const App: FC = () => {
       setUniqueZ(uniqueZ + 100);
       return uniqueZ;
     }
-    return 0;
+    return uniqueZ;
   };
 
   const addGraphComponent = async (taskID: number, tripID: string) => {

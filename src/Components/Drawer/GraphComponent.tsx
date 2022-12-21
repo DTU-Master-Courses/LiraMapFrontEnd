@@ -14,6 +14,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import useDebounce from "../../Hooks/UseDebounce";
 import OtherGraph from "../OtherGraph/OtherGraph";
 import ClientRequestHeaders from "../Utils/client-request-headers";
 import {
@@ -55,8 +56,10 @@ const GraphComponent: FC<GraphComponentProps> = ({
   const [tripDetails, setTripDetailsContent] = useState<any>();
   const [measurementTypes, setMeasurementTypes] = useState<string[]>([]);
   const [selectedMeasurementType, setSelectedMeasurementType] =
-    useState<string>("");
+    useState<string | null>("");
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const debouncedSearchTerm = useDebounce<string | null>(selectedMeasurementType, 250);
 
   const fetchMeasurementTypes = async () => {
     const measurementResponse = await fetch(
@@ -116,12 +119,19 @@ const GraphComponent: FC<GraphComponentProps> = ({
     fetchMeasurementTypes();
   }, []);
 
-  const handleMeasurementSelection = async (event: any) => {
-    setSelectedMeasurementType(event.target.innerText);
-    const results = await fetchMeasurementGraphContent(event.target.innerText);
-    if (results) {
-      setGraphContent(results);
-      setIsInitialLoad(false);
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      handleMeasurementSelection();
+    }
+  }, [debouncedSearchTerm]);
+
+  const handleMeasurementSelection = async () => {
+    if (debouncedSearchTerm) {
+      const results = await fetchMeasurementGraphContent(debouncedSearchTerm);
+      if (results) {
+        setGraphContent(results);
+        setIsInitialLoad(false);
+      }
     }
   };
 
@@ -175,7 +185,9 @@ const GraphComponent: FC<GraphComponentProps> = ({
         options={measurementTypes}
         getOptionLabel={(measurementType) => measurementType}
         sx={{ width: 400 }}
-        onChange={handleMeasurementSelection}
+        onChange={(event: any, newValue: string | null) => {
+          setSelectedMeasurementType(newValue);
+        }}
         renderInput={(params) => (
           <TextField {...params} label="Measurement Type" />
         )}
