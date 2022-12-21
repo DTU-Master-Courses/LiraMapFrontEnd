@@ -20,6 +20,7 @@ interface WindowProps {
   closeWindow: (windowId: number) => any;
   focusWindow: (windowId: number) => number;
   children: React.ReactNode;
+  zIndex: number;
 }
 
 const Window = ({
@@ -35,8 +36,9 @@ const Window = ({
   closeWindow,
   focusWindow,
   children,
+    zIndex
 }: WindowProps) => {
-  const [uniqueZ, setUniqueZ] = useState(0);
+  const [uniqueZ, setUniqueZ] = useState(zIndex);
 
   const example = windowName?.split(": ")[1];
 

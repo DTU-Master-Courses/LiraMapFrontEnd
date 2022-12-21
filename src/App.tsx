@@ -141,6 +141,7 @@ const App: FC = () => {
             focusWindow={focusWindow}
             hidable={true}
             hidden={component.hidden}
+            zIndex={uniqueZ + 1}
           >
             <GraphComponent
               graphTaskID={component.graphTaskID}
@@ -159,6 +160,7 @@ const App: FC = () => {
             windowName="Trips"
             closeWindow={removeTripComponent}
             focusWindow={focusWindow}
+            zIndex={uniqueZ}
           >
             <RidesMeasurementComponent addGraphComponent={addGraphComponent} />
           </Window>
